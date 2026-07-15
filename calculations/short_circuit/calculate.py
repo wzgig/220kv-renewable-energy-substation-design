@@ -88,6 +88,12 @@ def _attach_renewable_sensitivity(
             "arithmetic_upper_bound_for_course_sensitivity"
         ),
     }
+    point["course_total_peak_sensitivity_ka"] = (
+        math.sqrt(2)
+        * float(point["peak_factor_k"])
+        * point["conservative_total_symmetrical_current_range_ka"]["maximum"]
+    )
+    point["current_scope"] = "grid_plus_current_limited_converter_course_upper_bound"
 
 
 def _section_renewable_contribution(
@@ -186,6 +192,25 @@ def calculate_short_circuit(
     if transformer_x_pu <= 0:
         raise ValueError("main-transformer reactance must be positive")
 
+    sections = baseline["connection_35kv"]["sections"]
+    multiplier_range = rules["renewable_short_circuit_contribution"][
+        "sensitivity_multiplier_range"
+    ]
+    section_220_contributions = [
+        _section_renewable_contribution(
+            section=section,
+            load_items=inputs["loads_35kv"]["items"],
+            nominal_voltage_kv=220.0,
+            multiplier_range=multiplier_range,
+        )
+        for section in sections
+    ]
+    total_220_contribution = {
+        "minimum": sum(item["minimum"] for item in section_220_contributions),
+        "maximum": sum(item["maximum"] for item in section_220_contributions),
+        "basis": "all_connected_renewable_MVA_referred_to_220kV",
+    }
+
     points: dict[str, dict[str, Any]] = {}
     points["SC-220-BUS-CLOSED"] = _fault_point(
         point_id="SC-220-BUS-CLOSED",
@@ -199,8 +224,11 @@ def calculate_short_circuit(
             "conditional_pending_system_parallel_permission"
         ),
     )
+    _attach_renewable_sensitivity(
+        points["SC-220-BUS-CLOSED"], total_220_contribution
+    )
     points["SC-220-BUS-CLOSED"]["renewable_contribution_status"] = (
-        "not_modelled_pending_converter_transformer_line_model"
+        "course_current_limited_upper_bound"
     )
     points["SC-220-I-SEPARATE"] = _fault_point(
         point_id="SC-220-I-SEPARATE",
@@ -212,8 +240,11 @@ def calculate_short_circuit(
         operating_status="separate_bus_sensitivity",
         normal_operation_status="permitted_separate_operation",
     )
+    _attach_renewable_sensitivity(
+        points["SC-220-I-SEPARATE"], section_220_contributions[0]
+    )
     points["SC-220-I-SEPARATE"]["renewable_contribution_status"] = (
-        "not_modelled_pending_converter_transformer_line_model"
+        "course_current_limited_upper_bound"
     )
     points["SC-220-II-SEPARATE"] = _fault_point(
         point_id="SC-220-II-SEPARATE",
@@ -225,15 +256,14 @@ def calculate_short_circuit(
         operating_status="separate_bus_sensitivity",
         normal_operation_status="permitted_separate_operation",
     )
+    _attach_renewable_sensitivity(
+        points["SC-220-II-SEPARATE"], section_220_contributions[1]
+    )
     points["SC-220-II-SEPARATE"]["renewable_contribution_status"] = (
-        "not_modelled_pending_converter_transformer_line_model"
+        "course_current_limited_upper_bound"
     )
 
     normal_35kv_reactance_pu = source_parallel_pu + transformer_x_pu
-    sections = baseline["connection_35kv"]["sections"]
-    multiplier_range = rules["renewable_short_circuit_contribution"][
-        "sensitivity_multiplier_range"
-    ]
     section_contributions: dict[str, dict[str, float]] = {}
     for index, section in enumerate(sections, start=1):
         section_key = f"SC-35-{'I' if index == 1 else 'II'}-220-CLOSED"
@@ -322,25 +352,113 @@ def calculate_short_circuit(
     aux_transformer_rating = baseline["connection_10kv"]["source_transformers"][
         "rated_capacity_mva_each"
     ]
-    pending_points: dict[str, dict[str, str]] = {}
     if aux_transformer_rating is None:
-        pending_points["10kv_bus"] = {
-            "status": "pending_input",
+        raise ValueError("35/10.5kV source-transformer rating is required")
+    aux_transformer_x_pu = (
+        float(
+            baseline["connection_10kv"]["source_transformers"][
+                "short_circuit_voltage_percent"
+            ]
+        )
+        / 100
+        * base_capacity_mva
+        / float(aux_transformer_rating)
+    )
+    if aux_transformer_x_pu <= 0:
+        raise ValueError("35/10.5kV source-transformer reactance must be positive")
+
+    svg_units = baseline["connection_10kv"]["reactive_compensation"]["units"]
+    if len(svg_units) != 2:
+        raise ValueError("the frozen 10kV scheme requires two SVG units")
+
+    def svg_contribution(unit: dict[str, Any]) -> dict[str, float]:
+        rated_current_ka = float(unit["rated_mvar"]) / (
+            math.sqrt(3) * voltage_10kv
+        )
+        minimum_multiplier, maximum_multiplier = _validated_multiplier_range(
+            multiplier_range
+        )
+        return {
+            "section_apparent_power_mva": float(unit["rated_mvar"]),
+            "section_rated_current_ka": rated_current_ka,
+            "minimum_multiplier": minimum_multiplier,
+            "maximum_multiplier": maximum_multiplier,
+            "minimum": rated_current_ka * minimum_multiplier,
+            "maximum": rated_current_ka * maximum_multiplier,
+            "basis": "local_SVG_rated_current_course_upper_bound",
+        }
+
+    svg_contributions = [svg_contribution(unit) for unit in svg_units]
+    normal_10kv_paths = [
+        source_1_path_pu + transformer_x_pu + aux_transformer_x_pu,
+        source_2_path_pu + transformer_x_pu + aux_transformer_x_pu,
+    ]
+    for index, (path_reactance, contribution) in enumerate(
+        zip(normal_10kv_paths, svg_contributions), start=1
+    ):
+        section_label = "I" if index == 1 else "II"
+        point = _fault_point(
+            point_id=f"SC-10-{section_label}-220-SEPARATE",
+            voltage_level="10kV",
+            base_capacity_mva=base_capacity_mva,
+            base_voltage_kv=voltage_10kv,
+            equivalent_reactance_pu=path_reactance,
+            peak_factor_k=peak_factor_k,
+            operating_status="normal_separate_10kv_source",
+            normal_operation_status="permitted_separate_operation",
+        )
+        _attach_renewable_sensitivity(point, contribution)
+        point["renewable_contribution_status"] = "local_svg_course_upper_bound"
+        points[point["point_id"]] = point
+
+        closed_point = _fault_point(
+            point_id=f"SC-10-{section_label}-220-CLOSED",
+            voltage_level="10kV",
+            base_capacity_mva=base_capacity_mva,
+            base_voltage_kv=voltage_10kv,
+            equivalent_reactance_pu=(
+                source_parallel_pu + transformer_x_pu + aux_transformer_x_pu
+            ),
+            peak_factor_k=peak_factor_k,
+            operating_status="10kv_sectioned_with_220kv_bus_tie_closed",
+            normal_operation_status="conditional_dispatch_permission_only",
+        )
+        _attach_renewable_sensitivity(closed_point, contribution)
+        closed_point["renewable_contribution_status"] = "local_svg_course_upper_bound"
+        points[closed_point["point_id"]] = closed_point
+
+    both_t10_grid_reactance = source_parallel_pu + parallel_equivalent(
+        transformer_x_pu + aux_transformer_x_pu,
+        transformer_x_pu + aux_transformer_x_pu,
+    )
+    both_t10 = _fault_point(
+        point_id="SC-10-BOTH-T10-SENSITIVITY",
+        voltage_level="10kV",
+        base_capacity_mva=base_capacity_mva,
+        base_voltage_kv=voltage_10kv,
+        equivalent_reactance_pu=both_t10_grid_reactance,
+        peak_factor_k=peak_factor_k,
+        operating_status="non_normal_both_T10_parallel_sensitivity",
+        normal_operation_status="not_permitted_non_normal_sensitivity",
+    )
+    total_svg_contribution = {
+        "minimum": sum(item["minimum"] for item in svg_contributions),
+        "maximum": sum(item["maximum"] for item in svg_contributions),
+        "basis": "two_local_SVG_units_course_upper_bound",
+    }
+    _attach_renewable_sensitivity(both_t10, total_svg_contribution)
+    both_t10["renewable_contribution_status"] = "two_svg_course_upper_bound"
+    points[both_t10["point_id"]] = both_t10
+
+    pending_points: dict[str, dict[str, str]] = {
+        "10kv_bus": {
+            "status": "implemented_course_model",
             "reason": (
-                "35/10.5kV source-transformer rated capacity is unknown; "
-                "reactive-compensation Mvar must be confirmed before the "
-                "10kV short-circuit current can be finalized."
+                "31.5MVA T10 reactance and local SVG current-limited sensitivity are modelled; "
+                "exact vendor converter and motor-feedback data remain a final special-study item."
             ),
         }
-    else:
-        pending_points["10kv_bus"] = {
-            "status": "not_implemented",
-            "reason": (
-                "A 35/10.5kV source-transformer rating is present, but the "
-                "10kV fault model must still be implemented and verified "
-                "before a result is published."
-            ),
-        }
+    }
 
     return {
         "basis": {
@@ -389,6 +507,7 @@ def calculate_short_circuit(
             },
             "parallel_source_equivalent_220kv_pu": source_parallel_pu,
             "main_transformer_reactance_pu_each": transformer_x_pu,
+            "auxiliary_transformer_reactance_pu_each": aux_transformer_x_pu,
         },
         "points": points,
         "pending_points": pending_points,
@@ -397,8 +516,8 @@ def calculate_short_circuit(
             "35kV正常保持分段运行，不允许两台健康主变低压侧长期并列。",
             "两台主变低压侧并列值仅保留为非正常敏感性场景。",
             "新能源贡献采用算术相加的课程设计保守上界，不等同于变流器电磁暂态模型。",
-            "峰值仅表示电网贡献；固定k值是待按R/X复核的课程假设，并非由忽略电阻自动推导。",
-            "220kV故障点的新能源贡献及35kV新能源峰值贡献尚未建模，设备最终校验前必须补充。",
+            "grid_peak_current_ka字段仅表示电网贡献；报告中的课程综合峰值另把固定k用于变流器RMS算术上界，二者均待按R/X和厂家模型复核。",
+            "220kV与35kV新能源、10kV SVG贡献采用额定电流1.1～1.2倍算术上界；精确变流器和电动机反馈仍需专题复核。",
             "第三回220kV线路L3不参加本期基准计算，远期投入场景另行计算。",
         ],
     }
@@ -430,6 +549,7 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
         "renewable_minimum_ka",
         "renewable_maximum_ka",
         "conservative_total_maximum_ka",
+        "course_total_peak_sensitivity_ka",
     ]
     with csv_path.open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.DictWriter(
@@ -469,6 +589,9 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
                     "conservative_total_maximum_ka": total_range.get(
                         "maximum", ""
                     ),
+                    "course_total_peak_sensitivity_ka": point.get(
+                        "course_total_peak_sensitivity_ka", ""
+                    ),
                 }
             )
 
@@ -485,6 +608,9 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
         ),
         "220kv_bus_sections_separate": "220kV分列",
         "non_normal_parallel_sensitivity": "主变低压侧非正常并列",
+        "normal_separate_10kv_source": "10kV分段、单台T10供本段",
+        "10kv_sectioned_with_220kv_bus_tie_closed": "10kV分段、220kV分段条件闭合",
+        "non_normal_both_T10_parallel_sensitivity": "两台T10非正常并列",
     }
     permission_labels = {
         "conditional_pending_system_parallel_permission": (
@@ -492,9 +618,10 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
         ),
         "permitted_separate_operation": "允许分列运行",
         "not_permitted_non_normal_sensitivity": "不允许，仅敏感性",
+        "conditional_dispatch_permission_only": "仅调度许可后条件允许",
     }
     lines = [
-        "# 220kV与35kV三相短路电流初算",
+        "# 220kV、35kV与10kV三相短路电流初算",
         "",
         (
             f"基准：{base_capacity:g}MVA；平均额定电压"
@@ -513,8 +640,8 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
         "",
         (
             "| 计算点 | 运行方式 | 正常运行许可 | XΣ/pu | "
-            "电网对称电流/kA | 新能源RMS范围/kA | "
-            "保守综合上限/kA | 电网峰值/kA |"
+            "电网对称电流/kA | 变流器RMS范围/kA | "
+            "保守综合上限/kA | 课程综合峰值/kA |"
         ),
         "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
     ]
@@ -541,7 +668,7 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
             f"{point['equivalent_reactance_pu']:.6f} | "
             f"{point['grid_symmetrical_current_ka']:.3f} | "
             f"{renewable_text} | {total_text} | "
-            f"{point['grid_peak_current_ka']:.3f} |"
+            f"{point.get('course_total_peak_sensitivity_ka', point['grid_peak_current_ka']):.3f} |"
         )
 
     lines.extend(
@@ -570,8 +697,17 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
                 "计入新能源RMS保守上界后为"
                 f"{result['points']['SC-35-BOTH-TRANSFORMERS-SENSITIVITY']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA。"
             ),
-            "- 峰值列仅含电网贡献，不能直接作为已计及新能源的动稳定最终值。",
-            "- 10kV短路电流等待35/10.5kV电源变容量及10kV无功补偿Mvar确认。",
+            (
+                "- 10kV单台T10供电、220kV分段闭合的条件性最大电网贡献："
+                f"{result['points']['SC-10-I-220-CLOSED']['grid_symmetrical_current_ka']:.3f}kA；"
+                "计入单套SVG课程上界后为"
+                f"{result['points']['SC-10-I-220-CLOSED']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA。"
+            ),
+            (
+                "- 两台健康T10经10kV母联并列属于禁止方式，仅保留敏感性："
+                f"{result['points']['SC-10-BOTH-T10-SENSITIVITY']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA。"
+            ),
+            "- 峰值列把固定课程系数k应用于电网与变流器RMS算术上界，只用于设备等级预筛，不替代标准短路峰值与厂家变流器模型。",
             "",
             "## 注意",
             "",
@@ -586,7 +722,7 @@ def write_outputs(result: dict[str, Any], output_dir: str | Path) -> list[Path]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Calculate preliminary 220kV and 35kV short-circuit currents."
+        description="Calculate preliminary 220kV, 35kV, and 10kV short-circuit currents."
     )
     parser.add_argument(
         "--inputs",

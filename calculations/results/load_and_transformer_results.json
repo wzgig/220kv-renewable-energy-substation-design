@@ -7,8 +7,15 @@
     "nominal_voltage_kv": 35.0,
     "group_factor": 0.95,
     "loss_rate": 0.05,
+    "gross_active_mw": 270.0,
+    "gross_reactive_mvar": 76.18216394380715,
     "gross_apparent_mva": 280.98818474758326,
+    "after_simultaneity_active_mw": 256.5,
+    "after_simultaneity_reactive_mvar": 72.3730557466168,
     "after_simultaneity_mva": 266.9387755102041,
+    "with_losses_active_mw": 269.325,
+    "with_losses_reactive_mvar": 75.99170853394764,
+    "vector_with_losses_mva": 279.8404820445184,
     "with_losses_mva": 280.28571428571433,
     "alternative_divide_by_one_minus_loss_mva": 280.98818474758326,
     "bus_current_a": 4623.515216938963,
@@ -20,6 +27,7 @@
         "power_factor": 0.95,
         "circuits": 4,
         "base_apparent_mva": 84.21052631578948,
+        "base_reactive_mvar": 26.294728414309073,
         "base_per_circuit_mva": 21.05263157894737,
         "base_per_circuit_current_a": 347.27835740729375,
         "design_apparent_mva_with_losses": 88.42105263157896,
@@ -34,6 +42,7 @@
         "power_factor": 0.95,
         "circuits": 3,
         "base_apparent_mva": 63.15789473684211,
+        "base_reactive_mvar": 19.721046310731804,
         "base_per_circuit_mva": 21.05263157894737,
         "base_per_circuit_current_a": 347.27835740729375,
         "design_apparent_mva_with_losses": 66.31578947368422,
@@ -48,6 +57,7 @@
         "power_factor": 0.98,
         "circuits": 2,
         "base_apparent_mva": 61.224489795918366,
+        "base_reactive_mvar": 12.183519638040234,
         "base_per_circuit_mva": 30.612244897959183,
         "base_per_circuit_current_a": 504.971080923871,
         "design_apparent_mva_with_losses": 64.28571428571429,
@@ -62,6 +72,7 @@
         "power_factor": 0.98,
         "circuits": 2,
         "base_apparent_mva": 40.816326530612244,
+        "base_reactive_mvar": 8.122346425360153,
         "base_per_circuit_mva": 20.408163265306122,
         "base_per_circuit_current_a": 336.64738728258067,
         "design_apparent_mva_with_losses": 42.85714285714286,
@@ -76,6 +87,7 @@
         "power_factor": 0.95,
         "circuits": 1,
         "base_apparent_mva": 31.578947368421055,
+        "base_reactive_mvar": 9.860523155365902,
         "base_per_circuit_mva": 31.578947368421055,
         "base_per_circuit_current_a": 520.9175361109407,
         "design_apparent_mva_with_losses": 33.15789473684211,
@@ -90,8 +102,15 @@
     "nominal_voltage_kv": 10.0,
     "group_factor": 0.8,
     "loss_rate": 0.05,
+    "gross_active_mw": 1.7999999999999998,
+    "gross_reactive_mvar": 1.0613709156994844,
     "gross_apparent_mva": 2.0915032679738563,
+    "after_simultaneity_active_mw": 1.44,
+    "after_simultaneity_reactive_mvar": 0.8490967325595875,
     "after_simultaneity_mva": 1.6732026143790852,
+    "with_losses_active_mw": 1.512,
+    "with_losses_reactive_mvar": 0.891551569187567,
+    "vector_with_losses_mva": 1.7552800917576696,
     "with_losses_mva": 1.7568627450980396,
     "alternative_divide_by_one_minus_loss_mva": 1.7612659098727215,
     "bus_current_a": 101.4325178811578,
@@ -103,6 +122,7 @@
         "power_factor": 0.85,
         "circuits": 1,
         "base_apparent_mva": 0.9411764705882354,
+        "base_reactive_mvar": 0.49579547072248187,
         "base_per_circuit_mva": 0.9411764705882354,
         "base_per_circuit_current_a": 54.33884886490597,
         "design_apparent_mva_with_losses": 0.9882352941176472,
@@ -117,6 +137,7 @@
         "power_factor": 0.85,
         "circuits": 1,
         "base_apparent_mva": 0.7058823529411765,
+        "base_reactive_mvar": 0.3718466030418615,
         "base_per_circuit_mva": 0.7058823529411765,
         "base_per_circuit_current_a": 40.75413664867948,
         "design_apparent_mva_with_losses": 0.7411764705882353,
@@ -131,6 +152,7 @@
         "power_factor": 0.9,
         "circuits": 1,
         "base_apparent_mva": 0.4444444444444445,
+        "base_reactive_mvar": 0.193728841935141,
         "base_per_circuit_mva": 0.4444444444444445,
         "base_per_circuit_current_a": 25.660011963983372,
         "design_apparent_mva_with_losses": 0.46666666666666673,
@@ -139,6 +161,104 @@
         "simultaneity_applied_to_circuit": false
       }
     ]
+  },
+  "reactive_compensation": {
+    "technology": "dynamic_svg",
+    "status": "provisional_frozen_for_course_design",
+    "target_power_factor": 0.98,
+    "basis": {
+      "p35_mw": 269.325,
+      "q35_mvar": 75.99170853394764,
+      "p10_mw": 1.512,
+      "q10_mvar": 0.891551569187567,
+      "inverter_reactive_headroom_credited": false
+    },
+    "calculated_required_mvar_35kv_only": 21.302934758694477,
+    "calculated_required_mvar_conservative_with_10kv_auxiliary": 21.887461633003433,
+    "selected_total_mvar": 24.0,
+    "selected_margin_percent": 9.651819852015798,
+    "final_conservative_power_factor": 0.9814653697810729,
+    "units": [
+      {
+        "id": "SVG-1",
+        "source_section": "10kV-I",
+        "rated_mvar": 12,
+        "rated_range_mvar": [
+          -12,
+          12
+        ]
+      },
+      {
+        "id": "SVG-2",
+        "source_section": "10kV-II",
+        "rated_mvar": 12,
+        "rated_range_mvar": [
+          -12,
+          12
+        ]
+      }
+    ],
+    "source_transformers": {
+      "count": 2,
+      "rated_capacity_mva_each": 31.5,
+      "voltage_ratio_kv": [
+        35,
+        10.5
+      ],
+      "short_circuit_voltage_percent": 8.0,
+      "normal_balanced_mva_each": 12.468715686885357,
+      "normal_balanced_loading_percent": 39.58322440281066,
+      "normal_one_section_with_all_auxiliary_mva": 12.979917020575378,
+      "normal_one_section_with_all_auxiliary_loading_percent": 41.20608577960437,
+      "n_minus_one_full_absorbing_mva": 24.937431373770714,
+      "n_minus_one_full_absorbing_loading_percent": 79.16644880562131,
+      "n_minus_one_full_injecting_mva": 23.157861146477185,
+      "n_minus_one_full_injecting_loading_percent": 73.51701951262598,
+      "rated_current_a": {
+        "35kv": 519.6152422706632,
+        "10_5kv": 1732.0508075688772
+      },
+      "rated_current_with_1_05_margin_a": {
+        "35kv": 545.5960043841964,
+        "10_5kv": 1818.6533479473212,
+        "10kv_equipment_basis": 1909.5860153446874
+      }
+    },
+    "svg_rated_current_a": {
+      "10_5kv_each": 659.828879073858,
+      "10_5kv_each_with_1_05_margin": 692.820323027551
+    },
+    "notes": [
+      "0.98 is a course-design target, not a mandatory grid-code value for this site.",
+      "The conservative basis adds the 10kV auxiliary-load reactive demand and does not credit inverter headroom.",
+      "The 31.5MVA T10 rating retains the full two-SVG range under N-1 with loading below 80 percent."
+    ]
+  },
+  "auxiliary_transformer": {
+    "count": 2,
+    "rated_capacity_mva_each": 31.5,
+    "voltage_ratio_kv": [
+      35,
+      10.5
+    ],
+    "short_circuit_voltage_percent": 8.0,
+    "normal_balanced_mva_each": 12.468715686885357,
+    "normal_balanced_loading_percent": 39.58322440281066,
+    "normal_one_section_with_all_auxiliary_mva": 12.979917020575378,
+    "normal_one_section_with_all_auxiliary_loading_percent": 41.20608577960437,
+    "n_minus_one_full_absorbing_mva": 24.937431373770714,
+    "n_minus_one_full_absorbing_loading_percent": 79.16644880562131,
+    "n_minus_one_full_injecting_mva": 23.157861146477185,
+    "n_minus_one_full_injecting_loading_percent": 73.51701951262598,
+    "rated_current_a": {
+      "35kv": 519.6152422706632,
+      "10_5kv": 1732.0508075688772
+    },
+    "rated_current_with_1_05_margin_a": {
+      "35kv": 545.5960043841964,
+      "10_5kv": 1818.6533479473212,
+      "10kv_equipment_basis": 1909.5860153446874
+    }
   },
   "main_transformer": {
     "primary_case_basis": "35kV renewable aggregate",

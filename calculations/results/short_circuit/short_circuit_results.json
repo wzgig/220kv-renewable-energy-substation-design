@@ -32,7 +32,8 @@
       "source_2": 0.08677221172022684
     },
     "parallel_source_equivalent_220kv_pu": 0.03862059693742504,
-    "main_transformer_reactance_pu_each": 0.07777777777777779
+    "main_transformer_reactance_pu_each": 0.07777777777777779,
+    "auxiliary_transformer_reactance_pu_each": 0.25396825396825395
   },
   "points": {
     "SC-220-BUS-CLOSED": {
@@ -46,8 +47,19 @@
       "grid_short_circuit_capacity_mva": 2589.2919304697657,
       "operating_status": "maximum_base_case",
       "normal_operation_status": "conditional_pending_system_parallel_permission",
-      "current_scope": "grid_contribution_only",
-      "renewable_contribution_status": "not_modelled_pending_converter_transformer_line_model"
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "minimum": 0.8111430205156076,
+        "maximum": 0.8848832951079354,
+        "basis": "all_connected_renewable_MVA_referred_to_220kV"
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 7.310831686025368,
+        "maximum": 7.384571960617697,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 18.798051274246124,
+      "renewable_contribution_status": "course_current_limited_upper_bound"
     },
     "SC-220-I-SEPARATE": {
       "point_id": "SC-220-I-SEPARATE",
@@ -60,8 +72,22 @@
       "grid_short_circuit_capacity_mva": 1436.8492530556814,
       "operating_status": "separate_bus_sensitivity",
       "normal_operation_status": "permitted_separate_operation",
-      "current_scope": "grid_contribution_only",
-      "renewable_contribution_status": "not_modelled_pending_converter_transformer_line_model"
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 135.23093447905478,
+        "section_rated_current_ka": 0.35488916556475875,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 0.39037808212123465,
+        "maximum": 0.4258669986777105
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 3.9971837474978016,
+        "maximum": 4.032672664054277,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 10.265508673410238,
+      "renewable_contribution_status": "course_current_limited_upper_bound"
     },
     "SC-220-II-SEPARATE": {
       "point_id": "SC-220-II-SEPARATE",
@@ -74,8 +100,22 @@
       "grid_short_circuit_capacity_mva": 1152.4426774140843,
       "operating_status": "separate_bus_sensitivity",
       "normal_operation_status": "permitted_separate_operation",
-      "current_scope": "grid_contribution_only",
-      "renewable_contribution_status": "not_modelled_pending_converter_transformer_line_model"
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 145.75725026852848,
+        "section_rated_current_ka": 0.3825135803585208,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 0.4207649383943729,
+        "maximum": 0.4590162964302249
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 3.3136479385275672,
+        "maximum": 3.351899296563419,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 8.532542600835885,
+      "renewable_contribution_status": "course_current_limited_upper_bound"
     },
     "SC-35-I-220-CLOSED": {
       "point_id": "SC-35-I-220-CLOSED",
@@ -88,7 +128,7 @@
       "grid_short_circuit_capacity_mva": 859.1185250195675,
       "operating_status": "35kv_sectioned_with_220kv_bus_tie_closed",
       "normal_operation_status": "conditional_pending_system_parallel_permission",
-      "current_scope": "grid_contribution_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
       "renewable_contribution_sensitivity_ka": {
         "section_apparent_power_mva": 135.23093447905478,
         "section_rated_current_ka": 2.2307318978356263,
@@ -101,7 +141,8 @@
         "minimum": 15.859543241290584,
         "maximum": 16.082616431074147,
         "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
-      }
+      },
+      "course_total_peak_sensitivity_ka": 40.939657695484996
     },
     "SC-35-II-220-CLOSED": {
       "point_id": "SC-35-II-220-CLOSED",
@@ -114,7 +155,7 @@
       "grid_short_circuit_capacity_mva": 859.1185250195675,
       "operating_status": "35kv_sectioned_with_220kv_bus_tie_closed",
       "normal_operation_status": "conditional_pending_system_parallel_permission",
-      "current_scope": "grid_contribution_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
       "renewable_contribution_sensitivity_ka": {
         "section_apparent_power_mva": 145.75725026852848,
         "section_rated_current_ka": 2.4043710765392734,
@@ -127,7 +168,8 @@
         "minimum": 16.050546337864596,
         "maximum": 16.290983445518524,
         "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
-      }
+      },
+      "course_total_peak_sensitivity_ka": 41.47007351948617
     },
     "SC-35-I-220-SEPARATE": {
       "point_id": "SC-35-I-220-SEPARATE",
@@ -140,7 +182,7 @@
       "grid_short_circuit_capacity_mva": 678.5434333357086,
       "operating_status": "220kv_bus_sections_separate",
       "normal_operation_status": "permitted_separate_operation",
-      "current_scope": "grid_contribution_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
       "renewable_contribution_sensitivity_ka": {
         "section_apparent_power_mva": 135.23093447905478,
         "section_rated_current_ka": 2.2307318978356263,
@@ -153,7 +195,8 @@
         "minimum": 13.041838436084712,
         "maximum": 13.264911625868274,
         "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
-      }
+      },
+      "course_total_peak_sensitivity_ka": 33.76695226497023
     },
     "SC-35-II-220-SEPARATE": {
       "point_id": "SC-35-II-220-SEPARATE",
@@ -166,7 +209,7 @@
       "grid_short_circuit_capacity_mva": 607.7180576253553,
       "operating_status": "220kv_bus_sections_separate",
       "normal_operation_status": "permitted_separate_operation",
-      "current_scope": "grid_contribution_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
       "renewable_contribution_sensitivity_ka": {
         "section_apparent_power_mva": 145.75725026852848,
         "section_rated_current_ka": 2.4043710765392734,
@@ -179,7 +222,8 @@
         "minimum": 12.127678026393077,
         "maximum": 12.368115134047006,
         "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
-      }
+      },
+      "course_total_peak_sensitivity_ka": 31.484081094410175
     },
     "SC-35-BOTH-TRANSFORMERS-SENSITIVITY": {
       "point_id": "SC-35-BOTH-TRANSFORMERS-SENSITIVITY",
@@ -192,7 +236,7 @@
       "grid_short_circuit_capacity_mva": 1290.1646673812752,
       "operating_status": "non_normal_parallel_sensitivity",
       "normal_operation_status": "not_permitted_non_normal_sensitivity",
-      "current_scope": "grid_contribution_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
       "renewable_contribution_sensitivity_ka": {
         "minimum": 5.09861327181239,
         "maximum": 5.562123569249879
@@ -201,13 +245,155 @@
         "minimum": 25.230421866718427,
         "maximum": 25.693932164155918,
         "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
-      }
+      },
+      "course_total_peak_sensitivity_ka": 65.40607320703846
+    },
+    "SC-10-I-220-SEPARATE": {
+      "point_id": "SC-10-I-220-SEPARATE",
+      "voltage_level": "10kV",
+      "base_voltage_kv": 10.5,
+      "equivalent_reactance_pu": 0.40134275512347345,
+      "grid_symmetrical_current_ka": 13.700444126842427,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 34.87563701048768,
+      "grid_short_circuit_capacity_mva": 249.16358579647195,
+      "operating_status": "normal_separate_10kv_source",
+      "normal_operation_status": "permitted_separate_operation",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 12.0,
+        "section_rated_current_ka": 0.659828879073858,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 0.7258117669812438,
+        "maximum": 0.7917946548886295,
+        "basis": "local_SVG_rated_current_course_upper_bound"
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 14.42625589382367,
+        "maximum": 14.492238781731057,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 36.891217141692124,
+      "renewable_contribution_status": "local_svg_course_upper_bound"
+    },
+    "SC-10-I-220-CLOSED": {
+      "point_id": "SC-10-I-220-CLOSED",
+      "voltage_level": "10kV",
+      "base_voltage_kv": 10.5,
+      "equivalent_reactance_pu": 0.3703666286834568,
+      "grid_symmetrical_current_ka": 14.846299764716775,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 37.79250926097412,
+      "grid_short_circuit_capacity_mva": 270.00272771731693,
+      "operating_status": "10kv_sectioned_with_220kv_bus_tie_closed",
+      "normal_operation_status": "conditional_dispatch_permission_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 12.0,
+        "section_rated_current_ka": 0.659828879073858,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 0.7258117669812438,
+        "maximum": 0.7917946548886295,
+        "basis": "local_SVG_rated_current_course_upper_bound"
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 15.572111531698019,
+        "maximum": 15.638094419605405,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 39.808089392178566,
+      "renewable_contribution_status": "local_svg_course_upper_bound"
+    },
+    "SC-10-II-220-SEPARATE": {
+      "point_id": "SC-10-II-220-SEPARATE",
+      "voltage_level": "10kV",
+      "base_voltage_kv": 10.5,
+      "equivalent_reactance_pu": 0.4185182434662586,
+      "grid_symmetrical_current_ka": 13.138194279756531,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 33.44438256394375,
+      "grid_short_circuit_capacity_mva": 238.9382101286156,
+      "operating_status": "normal_separate_10kv_source",
+      "normal_operation_status": "permitted_separate_operation",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 12.0,
+        "section_rated_current_ka": 0.659828879073858,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 0.7258117669812438,
+        "maximum": 0.7917946548886295,
+        "basis": "local_SVG_rated_current_course_upper_bound"
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 13.864006046737774,
+        "maximum": 13.929988934645161,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 35.45996269514819,
+      "renewable_contribution_status": "local_svg_course_upper_bound"
+    },
+    "SC-10-II-220-CLOSED": {
+      "point_id": "SC-10-II-220-CLOSED",
+      "voltage_level": "10kV",
+      "base_voltage_kv": 10.5,
+      "equivalent_reactance_pu": 0.3703666286834568,
+      "grid_symmetrical_current_ka": 14.846299764716775,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 37.79250926097412,
+      "grid_short_circuit_capacity_mva": 270.00272771731693,
+      "operating_status": "10kv_sectioned_with_220kv_bus_tie_closed",
+      "normal_operation_status": "conditional_dispatch_permission_only",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 12.0,
+        "section_rated_current_ka": 0.659828879073858,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 0.7258117669812438,
+        "maximum": 0.7917946548886295,
+        "basis": "local_SVG_rated_current_course_upper_bound"
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 15.572111531698019,
+        "maximum": 15.638094419605405,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 39.808089392178566,
+      "renewable_contribution_status": "local_svg_course_upper_bound"
+    },
+    "SC-10-BOTH-T10-SENSITIVITY": {
+      "point_id": "SC-10-BOTH-T10-SENSITIVITY",
+      "voltage_level": "10kV",
+      "base_voltage_kv": 10.5,
+      "equivalent_reactance_pu": 0.2044936128104409,
+      "grid_symmetrical_current_ka": 26.888732203969393,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 68.4475375641691,
+      "grid_short_circuit_capacity_mva": 489.0128284480789,
+      "operating_status": "non_normal_both_T10_parallel_sensitivity",
+      "normal_operation_status": "not_permitted_non_normal_sensitivity",
+      "current_scope": "grid_plus_current_limited_converter_course_upper_bound",
+      "renewable_contribution_sensitivity_ka": {
+        "minimum": 1.4516235339624877,
+        "maximum": 1.583589309777259,
+        "basis": "two_local_SVG_units_course_upper_bound"
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 28.34035573793188,
+        "maximum": 28.472321513746653,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      },
+      "course_total_peak_sensitivity_ka": 72.478697826578,
+      "renewable_contribution_status": "two_svg_course_upper_bound"
     }
   },
   "pending_points": {
     "10kv_bus": {
-      "status": "pending_input",
-      "reason": "35/10.5kV source-transformer rated capacity is unknown; reactive-compensation Mvar must be confirmed before the 10kV short-circuit current can be finalized."
+      "status": "implemented_course_model",
+      "reason": "31.5MVA T10 reactance and local SVG current-limited sensitivity are modelled; exact vendor converter and motor-feedback data remain a final special-study item."
     }
   },
   "notes": [
@@ -215,8 +401,8 @@
     "35kV正常保持分段运行，不允许两台健康主变低压侧长期并列。",
     "两台主变低压侧并列值仅保留为非正常敏感性场景。",
     "新能源贡献采用算术相加的课程设计保守上界，不等同于变流器电磁暂态模型。",
-    "峰值仅表示电网贡献；固定k值是待按R/X复核的课程假设，并非由忽略电阻自动推导。",
-    "220kV故障点的新能源贡献及35kV新能源峰值贡献尚未建模，设备最终校验前必须补充。",
+    "grid_peak_current_ka字段仅表示电网贡献；报告中的课程综合峰值另把固定k用于变流器RMS算术上界，二者均待按R/X和厂家模型复核。",
+    "220kV与35kV新能源、10kV SVG贡献采用额定电流1.1～1.2倍算术上界；精确变流器和电动机反馈仍需专题复核。",
     "第三回220kV线路L3不参加本期基准计算，远期投入场景另行计算。"
   ]
 }

@@ -20,9 +20,10 @@ connection_220kv:
   line_circuits_in_service: ["L1", "L2"]
   reserved_line_circuits: ["L3"]
   transformer_bays: ["T1", "T2"]
-  normal_bus_tie_state: "closed_if_system_1_and_system_2_parallel_operation_is_permitted"
-  maximum_short_circuit_bus_tie_state: "closed"
-  fallback_if_parallel_operation_is_not_permitted: "normally_open_with_separate_bus_sections"
+  normal_bus_tie_state: "open"
+  close_permission: "dispatch_authorization_and_synchrocheck_required"
+  maximum_short_circuit_bus_tie_state: "closed_conditional_sensitivity"
+  healthy_system_parallel_operation: "prohibited_without_dispatch_permission"
   upgrade_trigger: "teacher_requires_bus_maintenance_without_line_or_transformer_outage"
   upgrade_option: "double_bus_without_bypass"
 
@@ -55,23 +56,39 @@ connection_35kv:
       reserved_bays: 1
       allocated_active_power_mw: 140
   auxiliary_transformer_bays:
-    - {id: "T10-1-HV", transformer: "T10-1", source_section: "35kV-I", rating_status: "pending_10kv_reactive_compensation"}
-    - {id: "T10-2-HV", transformer: "T10-2", source_section: "35kV-II", rating_status: "pending_10kv_reactive_compensation"}
+    - {id: "T10-1-HV", transformer: "T10-1", source_section: "35kV-I", rated_capacity_mva: 31.5, rating_status: "provisional_frozen_for_course_design"}
+    - {id: "T10-2-HV", transformer: "T10-2", source_section: "35kV-II", rated_capacity_mva: 31.5, rating_status: "provisional_frozen_for_course_design"}
 
 connection_10kv:
   scheme: "single_bus_two_sections"
   bus_tie_normal_state: "open"
   bus_tie_close_condition: "one_35_10_5kv_source_isolated_and_fault_cleared"
+  healthy_sources_parallel_operation: "prohibited"
   source_transformers:
     count: 2
     voltage_ratio_kv: [35, 10.5]
     short_circuit_voltage_percent: 8
-    rated_capacity_mva_each: null
+    rated_capacity_mva_each: 31.5
     identifiers: ["T10-1", "T10-2"]
     source_bays_35kv: ["T10-1-HV", "T10-2-HV"]
     source_sections_35kv: ["35kV-I", "35kV-II"]
-    rating_dependency: "confirm_reactive_compensation_Mvar_and_starting_requirements"
-  load_allocation_status: "to_be_finalized_after_reactive_compensation_capacity_is_known"
+    type_envelope: "35kv_oil_immersed_power_transformer"
+    exact_model_status: "pending_41C_environment_and_grounding_review"
+    rated_current_a: {35kv: 519.615, 10_5kv: 1732.051}
+  reactive_compensation:
+    status: "provisional_frozen_for_course_design"
+    technology: "dynamic_svg"
+    target_power_factor: 0.98
+    inverter_reactive_headroom_credited: false
+    calculated_required_mvar_35kv_only: 21.3029
+    calculated_required_mvar_conservative_with_10kv_auxiliary: 21.8875
+    total_dynamic_range_mvar: [-24, 24]
+    units:
+      - {id: "SVG-1", rated_range_mvar: [-12, 12], rated_mvar: 12, source_section: "10kV-I"}
+      - {id: "SVG-2", rated_range_mvar: [-12, 12], rated_mvar: 12, source_section: "10kV-II"}
+    harmonic_study_status: "pending"
+    exact_vendor_model_status: "pending"
+  load_allocation_status: "frozen_two_symmetric_sections_with_one_svg_each"
 
 connection_0_4kv:
   scheme: "single_bus_sectionalized"
@@ -95,7 +112,7 @@ operating_modes:
     active_main_transformers: ["T1", "T2"]
     reserved_220kv_lines: ["L3"]
     bus_ties:
-      220kv: "conditional_on_grid_parallel_permission"
+      220kv: "open"
       35kv: "open"
       10kv: "open"
       0_4kv: "closed_under_single_transformer_operation"
@@ -115,12 +132,47 @@ operating_modes:
     full_export_current_a_approx: 735.559
   auxiliary_source_n_minus_one:
     action_10kv: "isolate_failed_35_10_5kv_source_then_close_10kv_bus_tie_after_fault_clearance"
+    full_svg_range_retained: true
+    worst_case_transformer_loading_percent: 79.166
+    priority: "retain_station_service_control_communications_and_cooling_then_coordinate_svg_output_with_voltage_and_transformer_limits"
     action_0_4kv: "isolate_failed_station_service_incomer_then_close_standby_transformer_incomer_with_0_4kv_bus_tie_remaining_closed"
+  prohibited:
+    - "parallel_operation_of_system_1_and_system_2_through_220kv_bus_tie_without_dispatch_permission_and_synchrocheck"
+    - "parallel_operation_of_two_healthy_main_transformers_through_closed_35kv_bus_tie"
+    - "parallel_operation_of_two_healthy_T10_transformers_through_closed_10kv_bus_tie"
+
+site_conditions:
+  altitude_m_max: 1000
+  altitude_status: "course_design_assumption"
+  pollution_level: "d"
+  pollution_status: "conservative_course_design_assumption"
+
+protection_and_thermal_duty:
+  main_protection_operating_s: 0.05
+  backup_protection_operating_s: 1.00
+  breaker_intrinsic_opening_s: 0.04
+  breaker_total_clearing_s: 0.08
+  contact_separation_s: 0.09
+  thermal_equivalent_duration_s: 1.10
+  status: "course_design_assumption_pending_final_coordination_and_exact_device_data"
+
+switchyard_220kv:
+  arrangement: "outdoor_AIS_phase_segregated_medium_type"
+  plan_sheet: {format: "A1", orientation: "landscape", scale: "1:200"}
+  section_sheet: {format: "A1", orientation: "landscape", scale: "1:100"}
+  minimum_clearances_mm:
+    A1: 1800
+    A2: 2000
+    B1: 2550
+    B2: 1900
+    C: 4300
+    D: 3800
+  course_source: "chapter_7_table_7_2_page_13_220J_column"
+  final_standard_review: "DL_T_5352_2018_full_text_required_for_construction_use"
 
 open_engineering_inputs:
-  - "10kv_reactive_compensation_capacity_mvar"
-  - "permission_for_system_1_and_system_2_parallel_operation"
   - "L3_role_and_expected_in_service_date"
   - "teacher_reliability_requirement_for_220kv_bus_maintenance"
   - "LGJ_400_50_ampacity_at_41C"
-  - "altitude_and_pollution_level"
+  - "final_reactive_power_voltage_harmonic_and_svg_short_circuit_study"
+  - "T10_SVG_and_switchgear_exact_vendor_models_for_41C_service"

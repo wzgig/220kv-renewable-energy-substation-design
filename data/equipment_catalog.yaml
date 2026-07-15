@@ -141,6 +141,72 @@ candidates:
       pollution_level: null
       current_correction_factor: null
 
+  - id: "TARGET-SWGR-10-2000"
+    kind: "switchgear"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "indoor_metal_clad_withdrawable"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    availability_evidence:
+      - manufacturer: "Siemens"
+        family: "NXAirS or equivalent 12kV metal-clad switchgear"
+        scope: "Official manufacturer family availability only; exact 2000A/31.5kA project panel and 41C service data remain to be verified"
+        url: "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/"
+        verified_on: "2026-07-15"
+    ratings:
+      highest_voltage_kv: 12
+      continuous_current_a: 2000
+      short_circuit_breaking_current_ka_rms: 31.5
+      short_circuit_making_current_ka_peak: 80
+      peak_withstand_current_ka: 80
+      short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "TARGET-SWGR-10-1250"
+    kind: "switchgear"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "indoor_metal_clad_withdrawable"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    availability_evidence:
+      - manufacturer: "Siemens"
+        family: "NXAirS or equivalent 12kV metal-clad switchgear"
+        scope: "Official manufacturer family availability only; exact 1250A/31.5kA project panel and 41C service data remain to be verified"
+        url: "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/"
+        verified_on: "2026-07-15"
+    ratings:
+      highest_voltage_kv: 12
+      continuous_current_a: 1250
+      short_circuit_breaking_current_ka_rms: 31.5
+      short_circuit_making_current_ka_peak: 80
+      peak_withstand_current_ka: 80
+      short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
   - id: "FAMILY-CT-220-CHINT-LB-LVB"
     kind: "current_transformer"
     manufacturer: "CHINT"

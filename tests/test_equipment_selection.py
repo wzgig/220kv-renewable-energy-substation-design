@@ -131,13 +131,22 @@ class EquipmentSelectionTests(unittest.TestCase):
         )
         self.assertFalse(profile_35["final_peak_scope_complete"])
 
-    def test_220kv_and_10kv_missing_scope_stays_pending(self) -> None:
+    def test_220kv_and_10kv_course_converter_scope_is_explicit(self) -> None:
         profiles = self.result["duty_registry"]["fault_profiles"]
 
-        self.assertIn("grid_only", profiles["220_bus"]["rms_scope"])
+        self.assertIn("renewable", profiles["220_bus"]["rms_scope"])
         self.assertFalse(profiles["220_bus"]["final_breaking_scope_complete"])
-        self.assertEqual(profiles["10_bus"]["status"], "pending_input")
-        self.assertIsNone(profiles["10_bus"]["provisional_required_rms_ka"])
+        self.assertIn("svg", profiles["10_bus"]["rms_scope"])
+        self.assertAlmostEqual(
+            profiles["10_bus"]["provisional_required_rms_ka"],
+            15.6380944196,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            profiles["10_bus"]["advisory_rms_ka"],
+            28.4723215137,
+            places=9,
+        )
 
     def test_target_ratings_only_provisionally_pass_numeric_checks(self) -> None:
         selections = {item["id"]: item for item in self.result["selections"]}
@@ -187,16 +196,38 @@ class EquipmentSelectionTests(unittest.TestCase):
         self.assertEqual(bus_section["numeric_precheck_status"], "pending")
         self.assertEqual(bus_section["final_selection_status"], "pending")
 
-    def test_auxiliary_transformer_feeder_duty_is_explicitly_pending(self) -> None:
+    def test_auxiliary_transformer_and_svg_duties_are_known(self) -> None:
         groups = self.result["duty_registry"]["circuit_groups"]
         duty = groups["35-aux-transformer-feeders"]["continuous"]
 
-        self.assertEqual(duty["status"], "pending_input")
-        self.assertIsNone(duty["required_current_a"])
+        self.assertEqual(duty["status"], "known")
+        self.assertAlmostEqual(duty["required_current_a"], 545.5960043842, places=8)
         self.assertEqual(
             groups["35-aux-transformer-feeders"]["members"],
             ["T10-1-HV", "T10-2-HV"],
         )
+        self.assertAlmostEqual(
+            groups["10-transformer-incomers"]["continuous"]["required_current_a"],
+            1909.5860153447,
+            places=8,
+        )
+        self.assertAlmostEqual(
+            groups["10-svg-feeders"]["continuous"]["required_current_a"],
+            692.8203230276,
+            places=8,
+        )
+
+    def test_10kv_switchgear_and_thermal_i2t_prechecks_pass(self) -> None:
+        selections = {item["id"]: item for item in self.result["selections"]}
+        incomer = selections["SEL-SWGR-10-IN"]
+        thermal = next(
+            check for check in incomer["numeric_checks"] if check["id"] == "thermal_energy"
+        )
+
+        self.assertEqual(incomer["numeric_precheck_status"], "provisional_pass")
+        self.assertEqual(thermal["status"], "provisional_pass")
+        self.assertAlmostEqual(thermal["required"], 269.0049967841, places=8)
+        self.assertAlmostEqual(thermal["available"], 3969.0, places=8)
 
     def test_minimum_check_boundary(self) -> None:
         equal = minimum_check(
@@ -240,7 +271,8 @@ class EquipmentSelectionTests(unittest.TestCase):
 
         self.assertIn("35kV条件性预校核", summary)
         self.assertIn("25.694kA仅作禁止方式提示", summary)
-        self.assertIn("热稳定最终校验等待", summary)
+        self.assertIn("热稳定采用后备保护1.00s", summary)
+        self.assertIn("10kV采用2×±12Mvar SVG", summary)
         self.assertIn("最终选型总状态：`pending`", summary)
 
 

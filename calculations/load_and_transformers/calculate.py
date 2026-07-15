@@ -29,6 +29,12 @@ def apparent_power_mva(active_power_mw: float, power_factor: float) -> float:
     return active_power_mw / power_factor
 
 
+def reactive_power_mvar(active_power_mw: float, power_factor: float) -> float:
+    """Return the inductive reactive-power magnitude for a P/cos(phi) load."""
+    apparent = apparent_power_mva(active_power_mw, power_factor)
+    return math.sqrt(max(apparent**2 - active_power_mw**2, 0.0))
+
+
 def three_phase_current_a(apparent_power_mva: float, nominal_voltage_kv: float) -> float:
     """Calculate line current from apparent power and nominal line voltage."""
     if apparent_power_mva < 0:
@@ -62,6 +68,8 @@ def _calculate_voltage_level_load(
         raise ValueError("line loss rate must be within [0, 1)")
 
     calculated_items: list[dict[str, Any]] = []
+    gross_active_mw = 0.0
+    gross_reactive_mvar = 0.0
     gross_apparent_mva = 0.0
 
     for item in items:
@@ -72,6 +80,9 @@ def _calculate_voltage_level_load(
             raise ValueError(f"{item['name']} must have at least one circuit")
 
         base_apparent_mva = apparent_power_mva(active_power_mw, power_factor)
+        base_reactive_mvar = reactive_power_mvar(active_power_mw, power_factor)
+        gross_active_mw += active_power_mw
+        gross_reactive_mvar += base_reactive_mvar
         gross_apparent_mva += base_apparent_mva
 
         # The taskbook limits the 0.95 factor to main-transformer sizing.
@@ -88,6 +99,7 @@ def _calculate_voltage_level_load(
                 "power_factor": power_factor,
                 "circuits": circuits,
                 "base_apparent_mva": base_apparent_mva,
+                "base_reactive_mvar": base_reactive_mvar,
                 "base_per_circuit_mva": base_per_circuit_mva,
                 "base_per_circuit_current_a": three_phase_current_a(
                     base_per_circuit_mva, nominal_voltage_kv
@@ -104,17 +116,163 @@ def _calculate_voltage_level_load(
     after_group_factor_mva = gross_apparent_mva * group_factor
     with_losses_mva = after_group_factor_mva * (1 + loss_rate)
     exact_loss_interpretation_mva = after_group_factor_mva / (1 - loss_rate)
+    after_group_active_mw = gross_active_mw * group_factor
+    after_group_reactive_mvar = gross_reactive_mvar * group_factor
+    with_losses_active_mw = after_group_active_mw * (1 + loss_rate)
+    with_losses_reactive_mvar = after_group_reactive_mvar * (1 + loss_rate)
 
     return {
         "nominal_voltage_kv": nominal_voltage_kv,
         "group_factor": group_factor,
         "loss_rate": loss_rate,
+        "gross_active_mw": gross_active_mw,
+        "gross_reactive_mvar": gross_reactive_mvar,
         "gross_apparent_mva": gross_apparent_mva,
+        "after_simultaneity_active_mw": after_group_active_mw,
+        "after_simultaneity_reactive_mvar": after_group_reactive_mvar,
         "after_simultaneity_mva": after_group_factor_mva,
+        "with_losses_active_mw": with_losses_active_mw,
+        "with_losses_reactive_mvar": with_losses_reactive_mvar,
+        "vector_with_losses_mva": math.hypot(
+            with_losses_active_mw, with_losses_reactive_mvar
+        ),
         "with_losses_mva": with_losses_mva,
         "alternative_divide_by_one_minus_loss_mva": exact_loss_interpretation_mva,
         "bus_current_a": three_phase_current_a(with_losses_mva, nominal_voltage_kv),
         "items": calculated_items,
+    }
+
+
+def _calculate_reactive_compensation(
+    config: dict[str, Any],
+    load_35kv: dict[str, Any],
+    load_10kv: dict[str, Any],
+) -> dict[str, Any]:
+    compensation = config["loads_10kv"]["reactive_compensation"]
+    target_power_factor = float(compensation["target_power_factor"])
+    if not 0 < target_power_factor <= 1:
+        raise ValueError("reactive-compensation target power factor must be within (0, 1]")
+
+    units = list(compensation["units"])
+    if len(units) != 2:
+        raise ValueError("the frozen course design requires exactly two SVG units")
+    selected_total_mvar = sum(float(item["rated_mvar"]) for item in units)
+    configured_total_mvar = float(compensation["selected_total_mvar"])
+    if not math.isclose(selected_total_mvar, configured_total_mvar, rel_tol=0, abs_tol=1e-9):
+        raise ValueError("SVG unit ratings do not add up to selected_total_mvar")
+
+    target_tangent = math.tan(math.acos(target_power_factor))
+    p35 = float(load_35kv["with_losses_active_mw"])
+    q35 = float(load_35kv["with_losses_reactive_mvar"])
+    p10 = float(load_10kv["with_losses_active_mw"])
+    q10 = float(load_10kv["with_losses_reactive_mvar"])
+
+    required_35_only = max(q35 - p35 * target_tangent, 0.0)
+    conservative_active = p35 + p10
+    conservative_reactive = q35 + q10
+    required_conservative = max(
+        conservative_reactive - conservative_active * target_tangent,
+        0.0,
+    )
+    final_reactive = conservative_reactive - selected_total_mvar
+    final_power_factor = conservative_active / math.hypot(
+        conservative_active, final_reactive
+    )
+
+    transformer = config["system"]["auxiliary_transformer_proposal"]
+    rated_capacity_mva = float(transformer["rated_capacity_mva_each"])
+    if rated_capacity_mva <= 0:
+        raise ValueError("auxiliary-transformer rating must be positive")
+    per_svg_mvar = selected_total_mvar / len(units)
+    normal_balanced_mva = math.hypot(
+        p10 / 2,
+        per_svg_mvar + q10 / 2,
+    )
+    normal_aux_concentrated_mva = math.hypot(
+        p10,
+        per_svg_mvar + q10,
+    )
+    n_minus_one_absorbing_mva = math.hypot(
+        p10,
+        selected_total_mvar + q10,
+    )
+    n_minus_one_injecting_mva = math.hypot(
+        p10,
+        selected_total_mvar - q10,
+    )
+
+    rated_current_35kv = three_phase_current_a(rated_capacity_mva, 35.0)
+    rated_current_10_5kv = three_phase_current_a(rated_capacity_mva, 10.5)
+    svg_rated_current_10_5kv = three_phase_current_a(per_svg_mvar, 10.5)
+
+    return {
+        "technology": compensation["technology"],
+        "status": compensation["status"],
+        "target_power_factor": target_power_factor,
+        "basis": {
+            "p35_mw": p35,
+            "q35_mvar": q35,
+            "p10_mw": p10,
+            "q10_mvar": q10,
+            "inverter_reactive_headroom_credited": compensation[
+                "inverter_reactive_headroom_credited"
+            ],
+        },
+        "calculated_required_mvar_35kv_only": required_35_only,
+        "calculated_required_mvar_conservative_with_10kv_auxiliary": required_conservative,
+        "selected_total_mvar": selected_total_mvar,
+        "selected_margin_percent": (
+            (selected_total_mvar / required_conservative - 1) * 100
+            if required_conservative > 0
+            else None
+        ),
+        "final_conservative_power_factor": final_power_factor,
+        "units": units,
+        "source_transformers": {
+            "count": int(transformer["count"]),
+            "rated_capacity_mva_each": rated_capacity_mva,
+            "voltage_ratio_kv": transformer["voltage_ratio_kv"],
+            "short_circuit_voltage_percent": float(
+                transformer["short_circuit_voltage_percent"]
+            ),
+            "normal_balanced_mva_each": normal_balanced_mva,
+            "normal_balanced_loading_percent": normal_balanced_mva
+            / rated_capacity_mva
+            * 100,
+            "normal_one_section_with_all_auxiliary_mva": normal_aux_concentrated_mva,
+            "normal_one_section_with_all_auxiliary_loading_percent": normal_aux_concentrated_mva
+            / rated_capacity_mva
+            * 100,
+            "n_minus_one_full_absorbing_mva": n_minus_one_absorbing_mva,
+            "n_minus_one_full_absorbing_loading_percent": n_minus_one_absorbing_mva
+            / rated_capacity_mva
+            * 100,
+            "n_minus_one_full_injecting_mva": n_minus_one_injecting_mva,
+            "n_minus_one_full_injecting_loading_percent": n_minus_one_injecting_mva
+            / rated_capacity_mva
+            * 100,
+            "rated_current_a": {
+                "35kv": rated_current_35kv,
+                "10_5kv": rated_current_10_5kv,
+            },
+            "rated_current_with_1_05_margin_a": {
+                "35kv": rated_current_35kv * 1.05,
+                "10_5kv": rated_current_10_5kv * 1.05,
+                "10kv_equipment_basis": three_phase_current_a(
+                    rated_capacity_mva, 10.0
+                )
+                * 1.05,
+            },
+        },
+        "svg_rated_current_a": {
+            "10_5kv_each": svg_rated_current_10_5kv,
+            "10_5kv_each_with_1_05_margin": svg_rated_current_10_5kv * 1.05,
+        },
+        "notes": [
+            "0.98 is a course-design target, not a mandatory grid-code value for this site.",
+            "The conservative basis adds the 10kV auxiliary-load reactive demand and does not credit inverter headroom.",
+            "The 31.5MVA T10 rating retains the full two-SVG range under N-1 with loading below 80 percent.",
+        ],
     }
 
 
@@ -245,6 +403,9 @@ def calculate_design(config: dict[str, Any]) -> dict[str, Any]:
         group_factor=float(config["loads_10kv"]["simultaneity_factor"]),
         loss_rate=loss_rate,
     )
+    reactive_compensation = _calculate_reactive_compensation(
+        config, load_35kv, load_10kv
+    )
 
     transformer_config = config["system"]["main_transformer_proposal"]
     transformer_count = int(transformer_config["count"])
@@ -308,6 +469,8 @@ def calculate_design(config: dict[str, Any]) -> dict[str, Any]:
         },
         "load_35kv": load_35kv,
         "load_10kv": load_10kv,
+        "reactive_compensation": reactive_compensation,
+        "auxiliary_transformer": reactive_compensation["source_transformers"],
         "main_transformer": main_transformer,
         "outgoing_220kv": {
             "in_service_circuits": outgoing_circuits,
@@ -403,6 +566,8 @@ def _write_markdown_summary(result: dict[str, Any], path: Path) -> None:
     load_35 = result["load_35kv"]
     load_10 = result["load_10kv"]
     transformer = result["main_transformer"]
+    compensation = result["reactive_compensation"]
+    auxiliary_transformer = result["auxiliary_transformer"]
     station = result["station_service"]
 
     lines = [
@@ -483,6 +648,30 @@ def _write_markdown_summary(result: dict[str, Any], path: Path) -> None:
         ]
     )
     lines.extend(f"- {note}" for note in result["calculation_notes"])
+
+    lines.extend(
+        [
+            "",
+            "## 10kV动态无功补偿与35/10.5kV电源变",
+            "",
+            "| 项目 | 结果 |",
+            "| --- | ---: |",
+            f"| 目标功率因数 | {compensation['target_power_factor']:.3f} |",
+            f"| 仅35kV汇集负荷所需补偿 | {compensation['calculated_required_mvar_35kv_only']:.4f} Mvar |",
+            f"| 保守叠加10kV辅助负荷所需补偿 | {compensation['calculated_required_mvar_conservative_with_10kv_auxiliary']:.4f} Mvar |",
+            f"| 选定SVG容量 | 2×±{compensation['selected_total_mvar'] / 2:.0f} Mvar |",
+            f"| 选定容量裕度 | {compensation['selected_margin_percent']:.2f}% |",
+            f"| 补偿后保守口径功率因数 | {compensation['final_conservative_power_factor']:.5f} |",
+            f"| T10配置 | 2×{auxiliary_transformer['rated_capacity_mva_each']:.1f} MVA，35/10.5kV，uk={auxiliary_transformer['short_circuit_voltage_percent']:.0f}% |",
+            f"| T10正常均衡负载率 | {auxiliary_transformer['normal_balanced_loading_percent']:.2f}% |",
+            f"| T10 N-1最严满额吸收负载率 | {auxiliary_transformer['n_minus_one_full_absorbing_loading_percent']:.2f}% |",
+            f"| T10 35kV侧1.05倍电流 | {auxiliary_transformer['rated_current_with_1_05_margin_a']['35kv']:.2f} A |",
+            f"| T10 10.5kV侧1.05倍电流 | {auxiliary_transformer['rated_current_with_1_05_margin_a']['10_5kv']:.2f} A |",
+            f"| 单套SVG 10.5kV侧1.05倍电流 | {compensation['svg_rated_current_a']['10_5kv_each_with_1_05_margin']:.2f} A |",
+            "",
+            "`2×±12Mvar SVG`与`2×31.5MVA T10`属于任务书缺项下的课程设计冻结值。最终接入系统无功电压专题、谐波研究和41℃设备确认可覆盖本结果。",
+        ]
+    )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 

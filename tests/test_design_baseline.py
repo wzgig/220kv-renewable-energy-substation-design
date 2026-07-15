@@ -71,6 +71,10 @@ class DesignBaselineTests(unittest.TestCase):
             "open",
         )
         self.assertEqual(
+            self.baseline["connection_220kv"]["normal_bus_tie_state"],
+            "open",
+        )
+        self.assertEqual(
             self.baseline["connection_0_4kv"]["station_service_transformers"][
                 "rated_capacity_kva_each"
             ],
@@ -94,6 +98,30 @@ class DesignBaselineTests(unittest.TestCase):
         self.assertEqual(
             [bay["source_section"] for bay in bays],
             ["35kV-I", "35kV-II"],
+        )
+        self.assertEqual(
+            [bay["rated_capacity_mva"] for bay in bays],
+            [31.5, 31.5],
+        )
+
+    def test_10kv_svg_site_and_protection_assumptions_are_explicit(self) -> None:
+        connection = self.baseline["connection_10kv"]
+
+        self.assertEqual(
+            connection["source_transformers"]["rated_capacity_mva_each"],
+            31.5,
+        )
+        self.assertEqual(
+            [unit["rated_mvar"] for unit in connection["reactive_compensation"]["units"]],
+            [12, 12],
+        )
+        self.assertEqual(self.baseline["site_conditions"]["altitude_m_max"], 1000)
+        self.assertEqual(self.baseline["site_conditions"]["pollution_level"], "d")
+        self.assertEqual(
+            self.baseline["protection_and_thermal_duty"][
+                "thermal_equivalent_duration_s"
+            ],
+            1.10,
         )
 
 

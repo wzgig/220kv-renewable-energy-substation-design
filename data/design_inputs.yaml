@@ -13,7 +13,9 @@ submission_requirements:
   switchyard_plan_drawing: true
   course_summary_and_defense: true
   document_mode: "generally_handwritten_per_taskbook"
-  drawing_mode: "generally_hand_drawn_per_taskbook; direct_CAD_submission_pending_confirmation"
+  drawing_mode: "CAD_engineering_base_confirmed_by_user; final_submission_to_be_hand_copied"
+  cad_engineering_base_authorized: true
+  final_hand_copy_required: true
 
 system:
   voltage_levels_kv: [220, 35, 10, 0.4]
@@ -21,7 +23,14 @@ system:
     count: 2
     rated_capacity_mva_each: 180
     installation: "outdoor_oil_immersed_on_load_tap_changing"
-    winding_scheme: "to_decide_between_220_35_two_winding_plus_auxiliary_transformer_and_three_winding_scheme"
+    winding_scheme: "220_35_two_winding_plus_two_35_10_5kv_source_transformers"
+  auxiliary_transformer_proposal:
+    count: 2
+    rated_capacity_mva_each: 31.5
+    voltage_ratio_kv: [35, 10.5]
+    short_circuit_voltage_percent: 8
+    installation: "oil_immersed_power_transformer"
+    evidence_class: "course_design_assumption_supported_by_official_standard_metadata_and_manufacturer_catalog"
   outgoing_220kv:
     in_service_circuits: 2
     reserved_circuits: 1
@@ -67,6 +76,20 @@ loads_10kv:
     - {name: "station_service_backup", label_zh: "站用电备用电源", active_power_mw: 0.8, power_factor: 0.85, circuits: 1}
     - {name: "reactive_compensation_and_cooling", label_zh: "无功补偿及冷却系统", active_power_mw: 0.6, power_factor: 0.85, circuits: 1}
     - {name: "control_communications_and_monitoring", label_zh: "集控通信及监控系统", active_power_mw: 0.4, power_factor: 0.90, circuits: 1}
+  reactive_compensation:
+    status: "provisional_frozen_for_course_design"
+    technology: "dynamic_svg"
+    target_power_factor: 0.98
+    inverter_reactive_headroom_credited: false
+    selected_total_mvar: 24
+    selected_dynamic_range_mvar: [-24, 24]
+    units:
+      - {id: "SVG-1", source_section: "10kV-I", rated_mvar: 12, rated_range_mvar: [-12, 12]}
+      - {id: "SVG-2", source_section: "10kV-II", rated_mvar: 12, rated_range_mvar: [-12, 12]}
+    control_modes: ["voltage", "reactive_power", "power_factor"]
+    harmonic_study_status: "pending_final_special_study"
+    exact_vendor_model_status: "pending"
+    assumption_note: "Taskbook omits Mvar; selected from project P-Q calculation with conservative 10kV auxiliary-load inclusion."
 
 station_service_loads:
   low_voltage_system: "380_220V_three_phase_four_wire"
@@ -101,8 +124,10 @@ natural_conditions:
   maximum_temperature_c: 41
   minimum_temperature_c: -12
   annual_average_temperature_c: 15
-  altitude_m: null
-  pollution_level: null
+  altitude_m: 1000
+  altitude_basis: "course_design_assumption_as_normal_service_upper_limit"
+  pollution_level: "d"
+  pollution_basis: "conservative_heavy_pollution_course_design_assumption"
 
 calculation_rules:
   line_loss_rate: 0.05
@@ -130,11 +155,26 @@ calculation_rules:
     base_case: "ignored"
     sensitivity_case: "1.1_to_1.2_times_rated_current"
     sensitivity_multiplier_range: [1.1, 1.2]
+  protection_and_breaker_times:
+    main_protection_operating_s: 0.05
+    backup_protection_operating_s: 1.00
+    breaker_intrinsic_opening_s: 0.04
+    breaker_total_clearing_s: 0.08
+    contact_separation_s: 0.09
+    thermal_equivalent_duration_s: 1.10
+    evidence_class: "course_design_assumption_pending_final_protection_coordination_and_exact_breaker_model"
+  switchyard_clearances_220kv_outdoor_mm:
+    A1_phase_to_earth: 1800
+    A2_phase_to_phase: 2000
+    B1_live_to_rail_barrier: 2550
+    B2_live_to_mesh_barrier: 1900
+    C_unfenced_live_to_ground: 4300
+    D_non_simultaneous_maintenance_or_structure: 3800
+    source: "course_chapter_7_table_7_2_page_13_220J_column"
+    final_standard_review: "DL_T_5352_2018_full_text_required_for_construction_use"
 
 open_decisions:
-  - "220kv_bus_scheme"
-  - "main_transformer_winding_scheme_and_10kv_supply_path"
-  - "35kv_and_10kv_normal_bus_coupler_operating_state"
-  - "direct_CAD_submission_permission"
-  - "voltage_level_and_sheet_size_for_section_and_plan_drawings"
-  - "altitude_and_pollution_level_if_required_for_equipment_selection"
+  - "L3_role_and_expected_in_service_date"
+  - "teacher_reliability_requirement_for_220kv_bus_maintenance"
+  - "final_reactive_power_voltage_and_harmonic_study"
+  - "exact_T10_SVG_and_switchgear_models_for_41C_service"

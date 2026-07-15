@@ -24,13 +24,13 @@ policy:
 voltage_classes:
   v220:
     nominal_kv: 220
-    highest_system_voltage_kv: null
+    highest_system_voltage_kv: 252
   v35:
     nominal_kv: 35
-    highest_system_voltage_kv: null
+    highest_system_voltage_kv: 40.5
   v10:
     nominal_kv: 10
-    highest_system_voltage_kv: null
+    highest_system_voltage_kv: 12
 
 circuit_groups:
   - id: "220-line-bays"
@@ -86,7 +86,7 @@ circuit_groups:
     role: "35_10_5kv_source_transformer_feeder"
     voltage_class: "v35"
     members: ["T10-1-HV", "T10-2-HV"]
-    continuous_duty: {type: "pending_10kv_source_transformer_rating"}
+    continuous_duty: {type: "aux_transformer_35kv"}
     fault_profile: "35_bus"
 
   - id: "35-feeder-wind-A"
@@ -131,6 +131,27 @@ circuit_groups:
     continuous_duty: {type: "10kv_feeder_source", source_key: "station_service_backup"}
     fault_profile: "10_bus"
 
+  - id: "10-transformer-incomers"
+    role: "35_10_5kv_source_transformer_low_side"
+    voltage_class: "v10"
+    members: ["T10-1-IN", "T10-2-IN"]
+    continuous_duty: {type: "aux_transformer_10kv"}
+    fault_profile: "10_bus"
+
+  - id: "10-bus-tie"
+    role: "bus_tie_n_minus_one_transfer"
+    voltage_class: "v10"
+    members: ["10-BT"]
+    continuous_duty: {type: "aux_transformer_10kv"}
+    fault_profile: "10_bus"
+
+  - id: "10-svg-feeders"
+    role: "dynamic_reactive_compensation_feeder"
+    voltage_class: "v10"
+    members: ["SVG-1", "SVG-2"]
+    continuous_duty: {type: "svg_feeder_10kv"}
+    fault_profile: "10_bus"
+
   - id: "10-load-reactive-and-cooling"
     role: "load_feeder"
     voltage_class: "v10"
@@ -158,3 +179,10 @@ selections:
   - {id: "SEL-SWGR-35-PVA", circuit_group: "35-feeder-pv-A", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
   - {id: "SEL-SWGR-35-PVB", circuit_group: "35-feeder-pv-B", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
   - {id: "SEL-SWGR-35-ES", circuit_group: "35-feeder-storage", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-35-T10", circuit_group: "35-aux-transformer-feeders", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-10-IN", circuit_group: "10-transformer-incomers", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-2000"}
+  - {id: "SEL-SWGR-10-BT", circuit_group: "10-bus-tie", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-2000"}
+  - {id: "SEL-SWGR-10-SVG", circuit_group: "10-svg-feeders", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
+  - {id: "SEL-SWGR-10-SSB", circuit_group: "10-load-station-service-backup", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
+  - {id: "SEL-SWGR-10-RC", circuit_group: "10-load-reactive-and-cooling", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
+  - {id: "SEL-SWGR-10-CM", circuit_group: "10-load-control-and-monitoring", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}

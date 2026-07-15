@@ -62,6 +62,40 @@ class LoadAndTransformerCalculationTests(unittest.TestCase):
             places=8,
         )
 
+    def test_reactive_compensation_and_t10_are_frozen_from_p_q_calculation(self) -> None:
+        compensation = self.result["reactive_compensation"]
+        transformer = self.result["auxiliary_transformer"]
+
+        self.assertAlmostEqual(
+            compensation["calculated_required_mvar_35kv_only"],
+            21.3029347587,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            compensation[
+                "calculated_required_mvar_conservative_with_10kv_auxiliary"
+            ],
+            21.8874616330,
+            places=9,
+        )
+        self.assertEqual(compensation["selected_total_mvar"], 24.0)
+        self.assertAlmostEqual(
+            compensation["final_conservative_power_factor"],
+            0.9814653698,
+            places=9,
+        )
+        self.assertEqual(transformer["rated_capacity_mva_each"], 31.5)
+        self.assertAlmostEqual(
+            transformer["n_minus_one_full_absorbing_loading_percent"],
+            79.1664488056,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            transformer["rated_current_with_1_05_margin_a"]["35kv"],
+            545.5960043842,
+            places=8,
+        )
+
     def test_station_service_excludes_110kv_items_and_selects_200kva(self) -> None:
         result = self.result["station_service"]
 
@@ -87,6 +121,15 @@ class LoadAndTransformerCalculationTests(unittest.TestCase):
         invalid["loads_35kv"]["items"][0]["power_factor"] = 0
 
         with self.assertRaisesRegex(ValueError, "power factor"):
+            calculate_design(invalid)
+
+    def test_svg_unit_sum_must_match_selected_total(self) -> None:
+        invalid = copy.deepcopy(self.config)
+        invalid["loads_10kv"]["reactive_compensation"]["units"][0][
+            "rated_mvar"
+        ] = 11
+
+        with self.assertRaisesRegex(ValueError, "do not add up"):
             calculate_design(invalid)
 
 

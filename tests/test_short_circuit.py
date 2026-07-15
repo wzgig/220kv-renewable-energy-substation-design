@@ -93,23 +93,45 @@ class ShortCircuitCalculationTests(unittest.TestCase):
             places=9,
         )
 
-    def test_10kv_result_remains_pending_without_source_transformer_rating(self) -> None:
-        pending = self.result["pending_points"]["10kv_bus"]
+    def test_10kv_faults_are_implemented_after_t10_and_svg_freeze(self) -> None:
+        status = self.result["pending_points"]["10kv_bus"]
+        normal_i = self.result["points"]["SC-10-I-220-SEPARATE"]
+        conditional = self.result["points"]["SC-10-I-220-CLOSED"]
+        advisory = self.result["points"]["SC-10-BOTH-T10-SENSITIVITY"]
 
-        self.assertEqual(pending["status"], "pending_input")
-        self.assertIn("rated capacity", pending["reason"])
+        self.assertEqual(status["status"], "implemented_course_model")
+        self.assertAlmostEqual(
+            self.result["network"]["auxiliary_transformer_reactance_pu_each"],
+            0.253968253968,
+            places=11,
+        )
+        self.assertAlmostEqual(normal_i["grid_symmetrical_current_ka"], 13.7004438, places=6)
+        self.assertAlmostEqual(conditional["grid_symmetrical_current_ka"], 14.8462998, places=6)
+        self.assertAlmostEqual(
+            conditional["conservative_total_symmetrical_current_range_ka"]["maximum"],
+            15.6380944,
+            places=6,
+        )
+        self.assertAlmostEqual(advisory["grid_symmetrical_current_ka"], 26.8887319, places=6)
 
-    def test_non_null_10kv_rating_never_silently_drops_result(self) -> None:
+    def test_missing_10kv_rating_is_rejected_and_non_null_rating_changes_result(self) -> None:
+        missing = copy.deepcopy(self.baseline)
+        missing["connection_10kv"]["source_transformers"][
+            "rated_capacity_mva_each"
+        ] = None
+        with self.assertRaisesRegex(ValueError, "rating is required"):
+            calculate_short_circuit(self.inputs, missing)
+
         baseline = copy.deepcopy(self.baseline)
         baseline["connection_10kv"]["source_transformers"][
             "rated_capacity_mva_each"
         ] = 20
 
         result = calculate_short_circuit(self.inputs, baseline)
-
-        self.assertEqual(
-            result["pending_points"]["10kv_bus"]["status"],
-            "not_implemented",
+        self.assertEqual(result["pending_points"]["10kv_bus"]["status"], "implemented_course_model")
+        self.assertLess(
+            result["points"]["SC-10-I-220-CLOSED"]["grid_symmetrical_current_ka"],
+            self.result["points"]["SC-10-I-220-CLOSED"]["grid_symmetrical_current_ka"],
         )
 
     def test_invalid_multiplier_range_and_reactance_are_rejected(self) -> None:
@@ -132,7 +154,8 @@ class ShortCircuitCalculationTests(unittest.TestCase):
         self.assertIn("正常运行许可", summary)
         self.assertIn("16.083kA", summary)
         self.assertIn("16.291kA", summary)
-        self.assertIn("峰值列仅含电网贡献", summary)
+        self.assertIn("10kV单台T10供电", summary)
+        self.assertIn("峰值列把固定课程系数k", summary)
 
 
 if __name__ == "__main__":

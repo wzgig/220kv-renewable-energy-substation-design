@@ -55,23 +55,31 @@ def build_fault_profiles(short_circuit: dict[str, Any]) -> dict[str, dict[str, A
         points["SC-220-II-SEPARATE"],
     ]
     closed_220 = points["SC-220-BUS-CLOSED"]
+
+    def conservative_max(point: dict[str, Any]) -> float:
+        return float(
+            point["conservative_total_symmetrical_current_range_ka"][
+                "maximum"
+            ]
+        )
+
     profile_220 = {
-        "status": "known_with_incomplete_scope",
+        "status": "course_model_complete_exact_converter_model_pending",
         "mandatory_rms_ka": max(
-            point["grid_symmetrical_current_ka"] for point in separated_220
+            conservative_max(point) for point in separated_220
         ),
-        "conditional_rms_ka": closed_220["grid_symmetrical_current_ka"],
-        "provisional_required_rms_ka": closed_220[
-            "grid_symmetrical_current_ka"
-        ],
+        "conditional_rms_ka": conservative_max(closed_220),
+        "provisional_required_rms_ka": conservative_max(closed_220),
         "advisory_rms_ka": None,
         "known_grid_peak_ka": closed_220["grid_peak_current_ka"],
-        "course_total_peak_sensitivity_ka": None,
-        "rms_scope": "grid_only_missing_220kv_renewable_contribution",
-        "peak_scope": "grid_only_fixed_course_peak_factor",
+        "course_total_peak_sensitivity_ka": closed_220[
+            "course_total_peak_sensitivity_ka"
+        ],
+        "rms_scope": "grid_plus_renewable_current_limited_course_upper_bound",
+        "peak_scope": "fixed_course_k_applied_to_conservative_total_rms",
         "final_breaking_scope_complete": False,
         "final_peak_scope_complete": False,
-        "conditional_reason": "system_1_and_system_2_parallel_permission",
+        "conditional_reason": "220kv_bus_tie_closed_only_with_dispatch_permission",
     }
 
     separated_35 = [
@@ -83,13 +91,6 @@ def build_fault_profiles(short_circuit: dict[str, Any]) -> dict[str, dict[str, A
         points["SC-35-II-220-CLOSED"],
     ]
     advisory_35 = points["SC-35-BOTH-TRANSFORMERS-SENSITIVITY"]
-
-    def conservative_max(point: dict[str, Any]) -> float:
-        return float(
-            point["conservative_total_symmetrical_current_range_ka"][
-                "maximum"
-            ]
-        )
 
     conditional_35_rms = max(conservative_max(point) for point in closed_35)
     profile_35 = {
@@ -119,22 +120,44 @@ def build_fault_profiles(short_circuit: dict[str, Any]) -> dict[str, dict[str, A
         "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited",
     }
 
+    separated_10 = [
+        points["SC-10-I-220-SEPARATE"],
+        points["SC-10-II-220-SEPARATE"],
+    ]
+    closed_10 = [
+        points["SC-10-I-220-CLOSED"],
+        points["SC-10-II-220-CLOSED"],
+    ]
+    advisory_10 = points["SC-10-BOTH-T10-SENSITIVITY"]
+    conditional_10_rms = max(conservative_max(point) for point in closed_10)
+    profile_10 = {
+        "status": "course_model_complete_exact_svg_and_motor_model_pending",
+        "mandatory_rms_ka": max(conservative_max(point) for point in separated_10),
+        "conditional_rms_ka": conditional_10_rms,
+        "provisional_required_rms_ka": conditional_10_rms,
+        "advisory_rms_ka": conservative_max(advisory_10),
+        "known_grid_peak_ka": max(
+            float(point["grid_peak_current_ka"]) for point in closed_10
+        ),
+        "course_total_peak_sensitivity_ka": max(
+            float(point["course_total_peak_sensitivity_ka"])
+            for point in closed_10
+        ),
+        "advisory_course_peak_sensitivity_ka": float(
+            advisory_10["course_total_peak_sensitivity_ka"]
+        ),
+        "rms_scope": "grid_plus_local_svg_current_limited_course_upper_bound",
+        "peak_scope": "fixed_course_k_applied_to_conservative_total_rms",
+        "final_breaking_scope_complete": False,
+        "final_peak_scope_complete": False,
+        "conditional_reason": "220kv_bus_tie_closed_only_with_dispatch_permission",
+        "advisory_reason": "healthy_T10_parallel_operation_prohibited",
+    }
+
     return {
         "220_bus": profile_220,
         "35_bus": profile_35,
-        "10_bus": {
-            "status": "pending_input",
-            "mandatory_rms_ka": None,
-            "conditional_rms_ka": None,
-            "provisional_required_rms_ka": None,
-            "advisory_rms_ka": None,
-            "known_grid_peak_ka": None,
-            "course_total_peak_sensitivity_ka": None,
-            "rms_scope": "pending_35_10_5kv_transformer_rating_and_mvar",
-            "peak_scope": "pending",
-            "final_breaking_scope_complete": False,
-            "final_peak_scope_complete": False,
-        },
+        "10_bus": profile_10,
     }
 
 
@@ -176,10 +199,32 @@ def _continuous_duty(
             "source": "explicit_power_flow_and_bay_placement_required",
         }
     if duty_type == "pending_10kv_source_transformer_rating":
+        raise ValueError(
+            "pending_10kv_source_transformer_rating is obsolete after the T10 freeze"
+        )
+    if duty_type == "aux_transformer_35kv":
         return {
-            "status": "pending_input",
-            "required_current_a": None,
-            "source": "10kv_reactive_compensation_and_35_10_5kv_transformer_rating_required",
+            "status": "known",
+            "required_current_a": load_result["auxiliary_transformer"][
+                "rated_current_with_1_05_margin_a"
+            ]["35kv"],
+            "source": "auxiliary_transformer.rated_current_with_1_05_margin_a.35kv",
+        }
+    if duty_type == "aux_transformer_10kv":
+        return {
+            "status": "known",
+            "required_current_a": load_result["auxiliary_transformer"][
+                "rated_current_with_1_05_margin_a"
+            ]["10kv_equipment_basis"],
+            "source": "auxiliary_transformer.rated_current_with_1_05_margin_a.10kv_equipment_basis",
+        }
+    if duty_type == "svg_feeder_10kv":
+        return {
+            "status": "known",
+            "required_current_a": load_result["reactive_compensation"][
+                "svg_rated_current_a"
+            ]["10_5kv_each_with_1_05_margin"],
+            "source": "reactive_compensation.svg_rated_current_a.10_5kv_each_with_1_05_margin",
         }
     if duty_type == "section_allocated_base":
         section_id = duty["section_id"]

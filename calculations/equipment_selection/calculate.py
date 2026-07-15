@@ -44,7 +44,7 @@ def _evaluate_assignment(
         unit="kV",
         provisional=True,
         note=(
-            "Nominal-voltage precheck only; highest-system-voltage input is pending."
+            "Nominal-voltage class precheck."
         ),
     )
     numeric_checks.append(voltage_check)
@@ -103,7 +103,7 @@ def _evaluate_assignment(
             unit="kA rms",
             provisional=True,
             note=(
-                "Preliminary Ik-based course screening; contact-separation current is pending."
+                "Initial symmetrical current is retained as a conservative course precheck at the 0.09s contact-separation assumption."
             ),
         )
         numeric_checks.append(breaking_check)
@@ -117,7 +117,7 @@ def _evaluate_assignment(
             available=ratings.get("short_circuit_making_current_ka_peak"),
             unit="kA peak",
             provisional=True,
-            note="Course-only peak precheck; full renewable peak scope is pending.",
+        note="Course-only peak precheck using the fixed-k converter-inclusive RMS upper bound.",
         )
         numeric_checks.append(making_check)
         final_checks.append(making_check)
@@ -138,7 +138,7 @@ def _evaluate_assignment(
         available=ratings.get("peak_withstand_current_ka"),
         unit="kA peak",
         provisional=True,
-        note="Dynamic precheck only; final peak-current scope is incomplete.",
+        note="Dynamic course precheck; exact R/X and converter peak treatment remain for final engineering review.",
     )
     numeric_checks.append(peak_check)
     final_checks.append(peak_check)
@@ -150,16 +150,40 @@ def _evaluate_assignment(
         available=short_time.get("current_ka_rms"),
         unit="kA rms",
         provisional=True,
-        note="Current-level screen only; I²t requires fault duration and equivalent thermal current.",
+        note="Short-time current-level screen before the explicit I²t comparison.",
     )
     numeric_checks.append(short_time_check)
     final_checks.append(short_time_check)
-    final_checks.append(
-        pending_check(
-            "thermal_energy",
-            "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending.",
-        )
+    thermal_duration = float(
+        design_inputs["calculation_rules"]["protection_and_breaker_times"][
+            "thermal_equivalent_duration_s"
+        ]
     )
+    rated_short_time_current = short_time.get("current_ka_rms")
+    rated_short_time_duration = short_time.get("duration_s")
+    required_i2t = (
+        float(provisional_rms) ** 2 * thermal_duration
+        if provisional_rms is not None
+        else None
+    )
+    available_i2t = (
+        float(rated_short_time_current) ** 2 * float(rated_short_time_duration)
+        if rated_short_time_current is not None
+        and rated_short_time_duration is not None
+        else None
+    )
+    thermal_check = minimum_check(
+        check_id="thermal_energy",
+        required=required_i2t,
+        available=available_i2t,
+        unit="kA^2 s",
+        provisional=True,
+        note=(
+            f"Course I²t screen uses {thermal_duration:.2f}s, based on backup protection plus total breaker clearing time rounded upward."
+        ),
+    )
+    numeric_checks.append(thermal_check)
+    final_checks.append(thermal_check)
 
     natural = design_inputs["natural_conditions"]
     project_temperature = float(natural["maximum_temperature_c"])
@@ -183,11 +207,59 @@ def _evaluate_assignment(
             )
         )
 
-    if natural.get("altitude_m") is None or natural.get("pollution_level") is None:
+    project_altitude = natural.get("altitude_m")
+    candidate_altitude = service.get("max_altitude_m")
+    if project_altitude is None:
         final_checks.append(
             pending_check(
-                "altitude_and_pollution",
-                "Project altitude and pollution level are not yet confirmed.",
+                "altitude",
+                "Project altitude is not available.",
+            )
+        )
+    elif candidate_altitude is None:
+        final_checks.append(
+            pending_check(
+                "altitude",
+                "The course-design altitude is 1000m, but the exact candidate service limit is not verified.",
+            )
+        )
+    else:
+        final_checks.append(
+            minimum_check(
+                check_id="altitude",
+                required=float(project_altitude),
+                available=float(candidate_altitude),
+                unit="m",
+                provisional=False,
+                note="Maximum installation-altitude check.",
+            )
+        )
+
+    project_pollution = natural.get("pollution_level")
+    candidate_pollution = service.get("pollution_level")
+    if project_pollution is None:
+        final_checks.append(
+            pending_check("pollution_level", "Project pollution level is unavailable.")
+        )
+    elif candidate_pollution is None:
+        final_checks.append(
+            pending_check(
+                "pollution_level",
+                "Project course assumption is pollution class d; exact candidate external-insulation data are not verified.",
+            )
+        )
+    else:
+        pollution_rank = {value: index for index, value in enumerate("abcde", start=1)}
+        required_rank = pollution_rank.get(str(project_pollution).lower())
+        available_rank = pollution_rank.get(str(candidate_pollution).lower())
+        final_checks.append(
+            minimum_check(
+                check_id="pollution_level",
+                required=required_rank,
+                available=available_rank,
+                unit="class a-e",
+                provisional=False,
+                note="External-insulation pollution-class check.",
             )
         )
 

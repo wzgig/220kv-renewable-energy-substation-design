@@ -5,6 +5,7 @@
 # Codex/workspace runtime metadata
 /.agents/
 /.codex/
+/.playwright-cli/
 
 # Office temporary files
 ~$*
