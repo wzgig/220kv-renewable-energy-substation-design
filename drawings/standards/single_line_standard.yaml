@@ -1,0 +1,155 @@
+schema_version: 1
+standard_id: "single_line_a1_v1"
+description: "A1横向电气主接线简图制图标准"
+
+units: "mm"
+drawing_space: "modelspace"
+model_scale: "1:1"
+plot_scale: "NTS"
+lineweight_policy: "by_layer"
+plot_color_policy: "monochrome_ctb"
+global_linetype_scale: 1.0
+
+sheet_defaults:
+  format: "A1"
+  orientation: "landscape"
+  width: 841
+  height: 594
+  frame_bounds: [25, 10, 831, 584]
+  title_block_bounds: [651, 10, 831, 66]
+  working_area_bounds: [35, 72, 821, 574]
+
+linetypes:
+  CONTINUOUS:
+    source: "builtin"
+  RESERVED:
+    source: "custom"
+    description: "预留回路6-3虚线"
+    pattern_mm: [6.0, -3.0]
+  PENDING:
+    source: "custom"
+    description: "待定对象点划线"
+    pattern_mm: [12.0, -3.0, 2.0, -3.0]
+  CONDITIONAL:
+    source: "custom"
+    description: "条件投入对象点划线"
+    pattern_mm: [12.0, -3.0, 2.0, -3.0]
+
+layers:
+  E-BUS-220:
+    purpose: "220kV母线"
+    aci_color: 1
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.70
+    plot: true
+  E-BUS-35:
+    purpose: "35kV母线"
+    aci_color: 2
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.60
+    plot: true
+  E-BUS-10:
+    purpose: "10kV母线"
+    aci_color: 3
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.50
+    plot: true
+  E-BUS-0P4:
+    purpose: "0.4kV母线"
+    aci_color: 4
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.40
+    plot: true
+  E-CONDUCTOR:
+    purpose: "一次导线与连接线"
+    aci_color: 7
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.35
+    plot: true
+  E-DEVICE:
+    purpose: "一次设备轮廓"
+    aci_color: 7
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.35
+    plot: true
+  E-SYMBOL:
+    purpose: "电气符号与开关状态"
+    aci_color: 6
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.25
+    plot: true
+  E-RESERVED:
+    purpose: "预留间隔与远期回路"
+    aci_color: 8
+    linetype: "RESERVED"
+    lineweight_mm: 0.25
+    plot: true
+  E-CONDITIONAL:
+    purpose: "条件投入或参数待定对象"
+    aci_color: 5
+    linetype: "CONDITIONAL"
+    lineweight_mm: 0.25
+    plot: true
+  E-TEXT:
+    purpose: "设备编号与普通文字"
+    aci_color: 7
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.18
+    plot: true
+  E-NOTE:
+    purpose: "设计说明与状态注记"
+    aci_color: 7
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.18
+    plot: true
+  E-FRAME:
+    purpose: "图框"
+    aci_color: 7
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.50
+    plot: true
+  E-TITLE:
+    purpose: "标题栏"
+    aci_color: 7
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.25
+    plot: true
+  E-NOPLOT-GUIDE:
+    purpose: "构图辅助线"
+    aci_color: 9
+    linetype: "CONTINUOUS"
+    lineweight_mm: 0.09
+    plot: false
+
+text_styles:
+  HZTXT:
+    font_file: "txt.shx"
+    bigfont_file: "gbcbig.shx"
+    width_factor: 1.0
+    oblique_angle_deg: 0
+  LATIN:
+    font_file: "arial.ttf"
+    width_factor: 1.0
+    oblique_angle_deg: 0
+
+text_heights_mm:
+  body: 3.5
+  device_id: 2.5
+  section_title: 5.0
+  drawing_title: 7.0
+
+status_rendering:
+  in_service:
+    linetype: "CONTINUOUS"
+  reserved:
+    layer: "E-RESERVED"
+    linetype: "RESERVED"
+  pending:
+    layer: "E-CONDITIONAL"
+    linetype: "PENDING"
+  conditional:
+    layer: "E-CONDITIONAL"
+    linetype: "CONDITIONAL"
+  provisional:
+    layer: "E-RESERVED"
+    linetype: "RESERVED"

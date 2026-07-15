@@ -1,0 +1,152 @@
+schema_version: 1
+drawing_id: "SLD-01"
+standard_ref: "../standards/single_line_standard.yaml"
+
+sheet:
+  format: "A1"
+  orientation: "landscape"
+  width: 841
+  height: 594
+  scale: "NTS"
+  frame_bounds: [25, 10, 831, 584]
+  working_area_bounds: [35, 72, 821, 574]
+
+title_block:
+  bounds: [651, 10, 831, 66]
+  cells:
+    - id: "drawing_title"
+      bounds: [651, 38, 771, 66]
+      label: "220kV新能源汇集变电所电气主接线简图"
+    - id: "drawing_number"
+      bounds: [771, 52, 831, 66]
+      label: "图号 SLD-01"
+    - id: "sheet_number"
+      bounds: [771, 38, 831, 52]
+      label: "第1张 共1张"
+    - id: "project_title"
+      bounds: [651, 24, 831, 38]
+      label: "电气一次部分初步设计"
+    - id: "design_stage"
+      bounds: [651, 10, 711, 24]
+      label: "课程设计"
+    - id: "designer"
+      bounds: [711, 10, 751, 24]
+      label: "设计："
+    - id: "checker"
+      bounds: [751, 10, 791, 24]
+      label: "校核："
+    - id: "scale"
+      bounds: [791, 10, 831, 24]
+      label: "比例 NTS"
+
+level_geometry:
+  bus_y:
+    220kv: 500
+    35kv: 330
+    10kv: 180
+    0_4kv: 85
+  transformer_center_y:
+    main: 415
+    source_35_10: 230
+    station_service: 130
+
+bus_sections:
+  - {id: "BUS-220-I", section: "220kV-I", x: [95, 385], y: 500, status: "in_service", label: "220kV I段母线"}
+  - {id: "BUS-220-II", section: "220kV-II", x: [455, 785], y: 500, status: "in_service", label: "220kV II段母线"}
+  - {id: "BUS-35-I", section: "35kV-I", x: [55, 390], y: 330, status: "in_service", label: "35kV I段母线"}
+  - {id: "BUS-35-II", section: "35kV-II", x: [450, 785], y: 330, status: "in_service", label: "35kV II段母线"}
+  - {id: "BUS-10-I", section: "10kV-I", x: [195, 390], y: 180, status: "in_service", label: "10kV I段母线"}
+  - {id: "BUS-10-II", section: "10kV-II", x: [450, 645], y: 180, status: "in_service", label: "10kV II段母线"}
+  - {id: "BUS-0P4-I", section: "0.4kV-I", x: [190, 390], y: 85, status: "in_service", label: "0.4kV I段母线"}
+  - {id: "BUS-0P4-II", section: "0.4kV-II", x: [450, 650], y: 85, status: "in_service", label: "0.4kV II段母线"}
+
+ties:
+  - {id: "TIE-220", section: "220kV-I/II", x: 420, state: "conditional", label: "220kV分段（并列许可后合）"}
+  - {id: "TIE-35", section: "35kV-I/II", x: 420, state: "open", label: "35kV母联（正常断开）"}
+  - {id: "TIE-10", section: "10kV-I/II", x: 420, state: "open", label: "10kV母联（正常断开）"}
+  - {id: "TIE-0P4", section: "0.4kV-I/II", x: 420, state: "closed", label: "0.4kV母联（正常闭合）"}
+
+circuits:
+  220kv:
+    lines:
+      - {id: "L1", section: "220kV-I", x: 145, status: "in_service", label: "系统1线路 L1"}
+      - {id: "L2", section: "220kV-II", x: 675, status: "in_service", label: "系统2线路 L2"}
+      - {id: "L3", section: "220kV-II", x: 755, status: "reserved", state: "provisional", label: "预留线路 L3"}
+    transformer_bays:
+      - {id: "T1", section: "220kV-I", x: 295, status: "in_service", label: "1号主变间隔"}
+      - {id: "T2", section: "220kV-II", x: 545, status: "in_service", label: "2号主变间隔"}
+    voltage_transformers:
+      - {id: "PT-220-I", section: "220kV-I", x: 355, status: "in_service", label: "220kV I段PT"}
+      - {id: "PT-220-II", section: "220kV-II", x: 485, status: "in_service", label: "220kV II段PT"}
+
+  35kv:
+    collector_feeders:
+      - {id: "WA-1", section: "35kV-I", x: 65, status: "in_service", label: "风电场A-1"}
+      - {id: "WA-2", section: "35kV-I", x: 100, status: "in_service", label: "风电场A-2"}
+      - {id: "WB-1", section: "35kV-I", x: 135, status: "in_service", label: "风电场B-1"}
+      - {id: "WB-2", section: "35kV-I", x: 170, status: "in_service", label: "风电场B-2"}
+      - {id: "PVA-1", section: "35kV-I", x: 205, status: "in_service", label: "光伏电站A-1"}
+      - {id: "PVB-1", section: "35kV-I", x: 240, status: "in_service", label: "光伏电站B-1"}
+      - {id: "WA-3", section: "35kV-II", x: 600, status: "in_service", label: "风电场A-3"}
+      - {id: "WA-4", section: "35kV-II", x: 635, status: "in_service", label: "风电场A-4"}
+      - {id: "WB-3", section: "35kV-II", x: 670, status: "in_service", label: "风电场B-3"}
+      - {id: "PVA-2", section: "35kV-II", x: 705, status: "in_service", label: "光伏电站A-2"}
+      - {id: "PVB-2", section: "35kV-II", x: 740, status: "in_service", label: "光伏电站B-2"}
+      - {id: "ES-1", section: "35kV-II", x: 775, status: "in_service", label: "储能电站-1"}
+    reserved_bays:
+      - {id: "R1", section: "35kV-I", x: 375, status: "reserved", label: "35kV I段预留"}
+      - {id: "R2", section: "35kV-II", x: 465, status: "reserved", label: "35kV II段预留"}
+    source_transformer_bays:
+      - {id: "T10-1-HV", section: "35kV-I", x: 335, status: "in_service", label: "T10-1高压侧间隔"}
+      - {id: "T10-2-HV", section: "35kV-II", x: 505, status: "in_service", label: "T10-2高压侧间隔"}
+    main_transformer_incomers:
+      - {id: "T1-IN", section: "35kV-I", x: 295, status: "in_service", label: "1号主变进线"}
+      - {id: "T2-IN", section: "35kV-II", x: 545, status: "in_service", label: "2号主变进线"}
+    voltage_transformers:
+      - {id: "PT-35-I", section: "35kV-I", x: 265, status: "in_service", label: "35kV I段PT"}
+      - {id: "PT-35-II", section: "35kV-II", x: 575, status: "in_service", label: "35kV II段PT"}
+
+  10kv:
+    source_transformer_incomers:
+      - {id: "T10-1-IN", section: "10kV-I", x: 335, status: "in_service", label: "T10-1进线"}
+      - {id: "T10-2-IN", section: "10kV-II", x: 570, status: "in_service", label: "T10-2进线"}
+    voltage_transformers:
+      - {id: "PT-10-I", section: "10kV-I", x: 210, status: "in_service", label: "10kV I段PT"}
+      - {id: "PT-10-II", section: "10kV-II", x: 465, status: "in_service", label: "10kV II段PT"}
+    station_service_feeders:
+      - {id: "TS1-HV", section: "10kV-I", x: 270, status: "in_service", label: "1号所用变馈线"}
+      - {id: "TS2-HV", section: "10kV-II", x: 505, status: "in_service", label: "2号所用变馈线"}
+    pending_load_groups:
+      - {id: "LOAD-10-I", section: "10kV-I", x: 375, status: "pending", label: "10kV I段待定负荷组"}
+      - {id: "LOAD-10-II", section: "10kV-II", x: 630, status: "pending", label: "10kV II段待定负荷组"}
+
+  0_4kv:
+    station_service_incomers:
+      - {id: "TS1-LV-IN", section: "0.4kV-I", x: 270, status: "normal_source", state: "closed", label: "TS1进线（正常运行）"}
+      - {id: "TS2-LV-IN", section: "0.4kV-II", x: 570, status: "dark_standby", state: "open", label: "TS2进线（暗备用）"}
+
+transformers:
+  main:
+    - {id: "T1", section: "220kV-I/35kV-I", x: 295, status: "in_service", label: "1号主变"}
+    - {id: "T2", section: "220kV-II/35kV-II", x: 545, status: "in_service", label: "2号主变"}
+  source_35_10:
+    - {id: "T10-1", section: "35kV-I/10kV-I", x: 335, status: "in_service", label: "1号35/10kV电源变"}
+    - {id: "T10-2", section: "35kV-II/10kV-II", x: 505, status: "in_service", label: "2号35/10kV电源变"}
+  station_service:
+    - {id: "TS1", section: "10kV-I/0.4kV-I", x: 270, status: "normal_source", label: "1号所用变"}
+    - {id: "TS2", section: "10kV-II/0.4kV-II", x: 570, status: "dark_standby", label: "2号所用变"}
+
+notes_layout:
+  x: 660
+  y: 170
+  width: 158
+  line_spacing: 5
+
+notes:
+  - {id: "N-01", label: "本图为主接线简图，比例NTS；设备参数以设计基线和设备表为准。"}
+  - {id: "N-02", label: "L3为预留且方案待确认的远期回路，按预留线型绘制。"}
+  - {id: "N-03", label: "220kV分段是否闭合取决于系统1、系统2并列运行许可。"}
+  - {id: "N-04", label: "35kV及10kV母联正常断开，仅在故障侧隔离并清除后投入。"}
+  - {id: "N-05", label: "10kV负荷组分配待无功补偿容量确认后细化。"}
+  - {id: "N-06", label: "0.4kV母联正常闭合；图示TS1运行、TS2暗备用，运行计划可轮换。"}
+  - {id: "N-07", label: "0.4kV两进线设联锁，正常及切换过程不得同时闭合。"}

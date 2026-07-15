@@ -39,6 +39,7 @@ __pycache__/
 /tmp/
 /.tmp/
 /output/qa/
+/drawings/exports/*_raw.pdf
 
 # Submission bundles and large media stay outside source history
 /deliverables/*.zip

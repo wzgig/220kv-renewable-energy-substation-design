@@ -30,11 +30,22 @@ $requiredPaths = @(
     'calculations/results/short_circuit/short_circuit_results.json',
     'calculations/results/equipment_selection/equipment_selection_results.json',
     'drawings/README.md',
+    'drawings/data/single_line_layout.yaml',
+    'drawings/standards/single_line_standard.yaml',
+    'drawings/scripts/sld_symbols.py',
+    'drawings/scripts/generate_single_line.py',
+    'drawings/scripts/export_single_line.ps1',
+    'drawings/scripts/normalize_pdf.py',
+    'drawings/source/single_line_a1.dxf',
+    'drawings/source/single_line_a1.dwg',
+    'drawings/exports/single_line_a1.pdf',
+    'drawings/exports/single_line_a1.png',
     'report/README.md',
     'requirements.txt',
     'tests/test_load_and_transformers.py',
     'tests/test_short_circuit.py',
-    'tests/test_equipment_selection.py'
+    'tests/test_equipment_selection.py',
+    'tests/test_single_line_drawing.py'
 )
 
 foreach ($relativePath in $requiredPaths) {
