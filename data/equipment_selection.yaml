@@ -1,0 +1,153 @@
+schema_version: 1
+
+metadata:
+  status: "provisional_screening"
+  verified_on: "2026-07-15"
+  purpose: "derive circuit duties and screen candidate rating classes without hiding missing engineering inputs"
+
+upstream:
+  load_results: "calculations/results/load_and_transformer_results.json"
+  short_circuit_results: "calculations/results/short_circuit/short_circuit_results.json"
+  baseline: "data/design_baseline.yaml"
+  design_inputs: "data/design_inputs.yaml"
+
+policy:
+  unresolved_conditional_scenarios: "conservative_precheck"
+  prohibited_scenarios: "advisory_only"
+  missing_mandatory_data: "pending_not_pass"
+  feeder_current_extra_factor: 1.0
+  transformer_circuit_continuous_factor_source: "upstream_1.05_value"
+  final_status_requires_verified_exact_model: true
+  final_status_requires_environmental_corrections: true
+  final_status_requires_fault_duration_and_full_peak_scope: true
+
+voltage_classes:
+  v220:
+    nominal_kv: 220
+    highest_system_voltage_kv: null
+  v35:
+    nominal_kv: 35
+    highest_system_voltage_kv: null
+  v10:
+    nominal_kv: 10
+    highest_system_voltage_kv: null
+
+circuit_groups:
+  - id: "220-line-bays"
+    role: "outgoing_line"
+    voltage_class: "v220"
+    members: ["L1", "L2", "L3-reserved"]
+    continuous_duty: {type: "220_line_n_minus_one"}
+    fault_profile: "220_bus"
+
+  - id: "220-transformer-bays"
+    role: "main_transformer_high_side"
+    voltage_class: "v220"
+    members: ["T1-HV", "T2-HV"]
+    continuous_duty: {type: "main_transformer_220kv"}
+    fault_profile: "220_bus"
+
+  - id: "220-bus-section"
+    role: "bus_section"
+    voltage_class: "v220"
+    members: ["220-BS"]
+    continuous_duty: {type: "pending_topology_flow"}
+    fault_profile: "220_bus"
+
+  - id: "35-transformer-incomers"
+    role: "main_transformer_low_side"
+    voltage_class: "v35"
+    members: ["T1-LV", "T2-LV"]
+    continuous_duty: {type: "main_transformer_35kv"}
+    fault_profile: "35_bus"
+
+  - id: "35-bus-I"
+    role: "bus_section"
+    voltage_class: "v35"
+    members: ["35kV-I"]
+    continuous_duty: {type: "section_allocated_base", section_id: "35kV-I"}
+    fault_profile: "35_bus"
+
+  - id: "35-bus-II"
+    role: "bus_section"
+    voltage_class: "v35"
+    members: ["35kV-II"]
+    continuous_duty: {type: "section_allocated_base", section_id: "35kV-II"}
+    fault_profile: "35_bus"
+
+  - id: "35-bus-tie"
+    role: "bus_tie"
+    voltage_class: "v35"
+    members: ["35-BT"]
+    continuous_duty: {type: "main_transformer_35kv"}
+    fault_profile: "35_bus"
+
+  - id: "35-feeder-wind-A"
+    role: "collector_feeder"
+    voltage_class: "v35"
+    member_source: {baseline_feeders_where_source_key: "wind_farm_A"}
+    continuous_duty: {type: "35kv_feeder_source", source_key: "wind_farm_A"}
+    fault_profile: "35_bus"
+
+  - id: "35-feeder-wind-B"
+    role: "collector_feeder"
+    voltage_class: "v35"
+    member_source: {baseline_feeders_where_source_key: "wind_farm_B"}
+    continuous_duty: {type: "35kv_feeder_source", source_key: "wind_farm_B"}
+    fault_profile: "35_bus"
+
+  - id: "35-feeder-pv-A"
+    role: "collector_feeder"
+    voltage_class: "v35"
+    member_source: {baseline_feeders_where_source_key: "pv_plant_A"}
+    continuous_duty: {type: "35kv_feeder_source", source_key: "pv_plant_A"}
+    fault_profile: "35_bus"
+
+  - id: "35-feeder-pv-B"
+    role: "collector_feeder"
+    voltage_class: "v35"
+    member_source: {baseline_feeders_where_source_key: "pv_plant_B"}
+    continuous_duty: {type: "35kv_feeder_source", source_key: "pv_plant_B"}
+    fault_profile: "35_bus"
+
+  - id: "35-feeder-storage"
+    role: "collector_feeder"
+    voltage_class: "v35"
+    member_source: {baseline_feeders_where_source_key: "energy_storage"}
+    continuous_duty: {type: "35kv_feeder_source", source_key: "energy_storage"}
+    fault_profile: "35_bus"
+
+  - id: "10-load-station-service-backup"
+    role: "load_feeder"
+    voltage_class: "v10"
+    members: ["station_service_backup"]
+    continuous_duty: {type: "10kv_feeder_source", source_key: "station_service_backup"}
+    fault_profile: "10_bus"
+
+  - id: "10-load-reactive-and-cooling"
+    role: "load_feeder"
+    voltage_class: "v10"
+    members: ["reactive_compensation_and_cooling"]
+    continuous_duty: {type: "10kv_feeder_source", source_key: "reactive_compensation_and_cooling"}
+    fault_profile: "10_bus"
+
+  - id: "10-load-control-and-monitoring"
+    role: "load_feeder"
+    voltage_class: "v10"
+    members: ["control_communications_and_monitoring"]
+    continuous_duty: {type: "10kv_feeder_source", source_key: "control_communications_and_monitoring"}
+    fault_profile: "10_bus"
+
+selections:
+  - {id: "SEL-CB-220-LINE", circuit_group: "220-line-bays", device_kind: "circuit_breaker", candidate_id: "TARGET-CB-220"}
+  - {id: "SEL-DS-220-LINE", circuit_group: "220-line-bays", device_kind: "disconnector", candidate_id: "TARGET-DS-220"}
+  - {id: "SEL-CB-220-TX", circuit_group: "220-transformer-bays", device_kind: "circuit_breaker", candidate_id: "TARGET-CB-220"}
+  - {id: "SEL-DS-220-TX", circuit_group: "220-transformer-bays", device_kind: "disconnector", candidate_id: "TARGET-DS-220"}
+  - {id: "SEL-CB-220-BS", circuit_group: "220-bus-section", device_kind: "circuit_breaker", candidate_id: "TARGET-CB-220"}
+  - {id: "SEL-SWGR-35-IN", circuit_group: "35-transformer-incomers", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-3150"}
+  - {id: "SEL-SWGR-35-BT", circuit_group: "35-bus-tie", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-3150"}
+  - {id: "SEL-SWGR-35-WA", circuit_group: "35-feeder-wind-A", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-35-WB", circuit_group: "35-feeder-wind-B", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-35-PVA", circuit_group: "35-feeder-pv-A", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-35-PVB", circuit_group: "35-feeder-pv-B", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-35-ES", circuit_group: "35-feeder-storage", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}

@@ -1,0 +1,3663 @@
+{
+  "metadata": {
+    "status": "provisional_screening",
+    "verified_on": "2026-07-15",
+    "purpose": "derive circuit duties and screen candidate rating classes without hiding missing engineering inputs"
+  },
+  "policy": {
+    "unresolved_conditional_scenarios": "conservative_precheck",
+    "prohibited_scenarios": "advisory_only",
+    "missing_mandatory_data": "pending_not_pass",
+    "feeder_current_extra_factor": 1.0,
+    "transformer_circuit_continuous_factor_source": "upstream_1.05_value",
+    "final_status_requires_verified_exact_model": true,
+    "final_status_requires_environmental_corrections": true,
+    "final_status_requires_fault_duration_and_full_peak_scope": true
+  },
+  "duty_registry": {
+    "fault_profiles": {
+      "220_bus": {
+        "status": "known_with_incomplete_scope",
+        "mandatory_rms_ka": 3.6068056653765668,
+        "conditional_rms_ka": 6.499688665509761,
+        "provisional_required_rms_ka": 6.499688665509761,
+        "advisory_rms_ka": null,
+        "known_grid_peak_ka": 16.545506151539858,
+        "course_total_peak_sensitivity_ka": null,
+        "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+        "peak_scope": "grid_only_fixed_course_peak_factor",
+        "final_breaking_scope_complete": false,
+        "final_peak_scope_complete": false,
+        "conditional_reason": "system_1_and_system_2_parallel_permission"
+      },
+      "35_bus": {
+        "status": "known_with_incomplete_peak_scope",
+        "mandatory_rms_ka": 13.264911625868274,
+        "conditional_rms_ka": 16.290983445518524,
+        "provisional_required_rms_ka": 16.290983445518524,
+        "advisory_rms_ka": 25.693932164155918,
+        "known_grid_peak_ka": 34.12543807898018,
+        "course_total_peak_sensitivity_ka": 41.47007351948617,
+        "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+        "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+        "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+        "final_breaking_scope_complete": false,
+        "final_peak_scope_complete": false,
+        "conditional_reason": "system_1_and_system_2_parallel_permission",
+        "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+      },
+      "10_bus": {
+        "status": "pending_input",
+        "mandatory_rms_ka": null,
+        "conditional_rms_ka": null,
+        "provisional_required_rms_ka": null,
+        "advisory_rms_ka": null,
+        "known_grid_peak_ka": null,
+        "course_total_peak_sensitivity_ka": null,
+        "rms_scope": "pending_35_10_5kv_transformer_rating_and_mvar",
+        "peak_scope": "pending",
+        "final_breaking_scope_complete": false,
+        "final_peak_scope_complete": false
+      }
+    },
+    "section_allocated_currents": {
+      "35kV-I": {
+        "installed_base_current_a": 2230.731897835627,
+        "group_and_loss_current_a": 2225.1550680910377
+      },
+      "35kV-II": {
+        "installed_base_current_a": 2404.371076539274,
+        "group_and_loss_current_a": 2398.3601488479258
+      }
+    },
+    "circuit_groups": {
+      "220-line-bays": {
+        "id": "220-line-bays",
+        "role": "outgoing_line",
+        "voltage_class": "v220",
+        "members": [
+          "L1",
+          "L2",
+          "L3-reserved"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 735.5592390584715,
+          "source": "outgoing_220kv.single_circuit_contingency_current_a"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "220-transformer-bays": {
+        "id": "220-transformer-bays",
+        "role": "main_transformer_high_side",
+        "voltage_class": "v220",
+        "members": [
+          "T1-HV",
+          "T2-HV"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 495.99636762199674,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.220kv"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "220-bus-section": {
+        "id": "220-bus-section",
+        "role": "bus_section",
+        "voltage_class": "v220",
+        "members": [
+          "220-BS"
+        ],
+        "continuous": {
+          "status": "pending_topology_flow",
+          "required_current_a": null,
+          "source": "explicit_power_flow_and_bay_placement_required"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "35-transformer-incomers": {
+        "id": "35-transformer-incomers",
+        "role": "main_transformer_low_side",
+        "voltage_class": "v35",
+        "members": [
+          "T1-LV",
+          "T2-LV"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 3117.691453623979,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.35kv"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-bus-I": {
+        "id": "35-bus-I",
+        "role": "bus_section",
+        "voltage_class": "v35",
+        "members": [
+          "35kV-I"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 2230.731897835627,
+          "source": "baseline_feeder_allocation.35kV-I",
+          "group_and_loss_current_a": 2225.1550680910377
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-bus-II": {
+        "id": "35-bus-II",
+        "role": "bus_section",
+        "voltage_class": "v35",
+        "members": [
+          "35kV-II"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 2404.371076539274,
+          "source": "baseline_feeder_allocation.35kV-II",
+          "group_and_loss_current_a": 2398.3601488479258
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-bus-tie": {
+        "id": "35-bus-tie",
+        "role": "bus_tie",
+        "voltage_class": "v35",
+        "members": [
+          "35-BT"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 3117.691453623979,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.35kv"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-feeder-wind-A": {
+        "id": "35-feeder-wind-A",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "WA-1",
+          "WA-2",
+          "WA-3",
+          "WA-4"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 364.6422752776585,
+          "source": "load_35kv.items.wind_farm_A.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-feeder-wind-B": {
+        "id": "35-feeder-wind-B",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "WB-1",
+          "WB-2",
+          "WB-3"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 364.6422752776585,
+          "source": "load_35kv.items.wind_farm_B.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-feeder-pv-A": {
+        "id": "35-feeder-pv-A",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "PVA-1",
+          "PVA-2"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 530.2196349700645,
+          "source": "load_35kv.items.pv_plant_A.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-feeder-pv-B": {
+        "id": "35-feeder-pv-B",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "PVB-1",
+          "PVB-2"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 353.47975664670975,
+          "source": "load_35kv.items.pv_plant_B.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-feeder-storage": {
+        "id": "35-feeder-storage",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "ES-1"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 546.9634129164876,
+          "source": "load_35kv.items.energy_storage.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "10-load-station-service-backup": {
+        "id": "10-load-station-service-backup",
+        "role": "load_feeder",
+        "voltage_class": "v10",
+        "members": [
+          "station_service_backup"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 57.05579130815127,
+          "source": "load_10kv.items.station_service_backup.per_circuit_current_a"
+        },
+        "fault_profile_id": "10_bus",
+        "fault": {
+          "status": "pending_input",
+          "mandatory_rms_ka": null,
+          "conditional_rms_ka": null,
+          "provisional_required_rms_ka": null,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": null,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "pending_35_10_5kv_transformer_rating_and_mvar",
+          "peak_scope": "pending",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false
+        }
+      },
+      "10-load-reactive-and-cooling": {
+        "id": "10-load-reactive-and-cooling",
+        "role": "load_feeder",
+        "voltage_class": "v10",
+        "members": [
+          "reactive_compensation_and_cooling"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 42.791843481113446,
+          "source": "load_10kv.items.reactive_compensation_and_cooling.per_circuit_current_a"
+        },
+        "fault_profile_id": "10_bus",
+        "fault": {
+          "status": "pending_input",
+          "mandatory_rms_ka": null,
+          "conditional_rms_ka": null,
+          "provisional_required_rms_ka": null,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": null,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "pending_35_10_5kv_transformer_rating_and_mvar",
+          "peak_scope": "pending",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false
+        }
+      },
+      "10-load-control-and-monitoring": {
+        "id": "10-load-control-and-monitoring",
+        "role": "load_feeder",
+        "voltage_class": "v10",
+        "members": [
+          "control_communications_and_monitoring"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 26.943012562182542,
+          "source": "load_10kv.items.control_communications_and_monitoring.per_circuit_current_a"
+        },
+        "fault_profile_id": "10_bus",
+        "fault": {
+          "status": "pending_input",
+          "mandatory_rms_ka": null,
+          "conditional_rms_ka": null,
+          "provisional_required_rms_ka": null,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": null,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "pending_35_10_5kv_transformer_rating_and_mvar",
+          "peak_scope": "pending",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false
+        }
+      }
+    }
+  },
+  "selections": [
+    {
+      "id": "SEL-CB-220-LINE",
+      "circuit_group": "220-line-bays",
+      "device_kind": "circuit_breaker",
+      "duty": {
+        "id": "220-line-bays",
+        "role": "outgoing_line",
+        "voltage_class": "v220",
+        "members": [
+          "L1",
+          "L2",
+          "L3-reserved"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 735.5592390584715,
+          "source": "outgoing_220kv.single_circuit_contingency_current_a"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-CB-220",
+        "kind": "circuit_breaker",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "outdoor_sf6",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "CHINT",
+            "family": "LW43-252",
+            "scope": "official 252kV outdoor SF6 live-tank family and drawing only; current and breaking ratings not public on the cited page",
+            "url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/lw43-252.html",
+            "verified_on": "2026-07-15"
+          },
+          {
+            "manufacturer": "Hitachi Energy",
+            "family": "LTB E",
+            "scope": "official family-level availability up to 4000A standard-table current and 63kA; not an exact project configuration",
+            "url": "https://www.hitachienergy.com/products-and-solutions/high-voltage-switchgear-and-breakers/air-insulated-switchgear/live-tank-circuit-breaker-ltb-e-72-5-800-kv",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 252,
+          "continuous_current_a": 3150,
+          "short_circuit_breaking_current_ka_rms": 50,
+          "short_circuit_making_current_ka_peak": 125,
+          "peak_withstand_current_ka": 125,
+          "short_time_withstand": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 735.5592390584715,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2414.4407609415284,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 735.5592390584715,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2414.4407609415284,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-DS-220-LINE",
+      "circuit_group": "220-line-bays",
+      "device_kind": "disconnector",
+      "duty": {
+        "id": "220-line-bays",
+        "role": "outgoing_line",
+        "voltage_class": "v220",
+        "members": [
+          "L1",
+          "L2",
+          "L3-reserved"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 735.5592390584715,
+          "source": "outgoing_220kv.single_circuit_contingency_current_a"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-DS-220",
+        "kind": "disconnector",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "outdoor",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "CHINT",
+            "family": "GW4-.../252 and JW-.../252",
+            "scope": "official pages list 252kV disconnector and earthing-switch families; exact current and withstand data are not public",
+            "url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/gw4-disconnector-gw4.html",
+            "companion_url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/jw-earthing-switch-jw.html",
+            "verified_on": "2026-07-15"
+          },
+          {
+            "manufacturer": "Hitachi Energy",
+            "family": "GW55",
+            "scope": "245kV benchmark up to 3150A and 50kA; not proof of a Chinese Um=252kV configuration",
+            "url": "https://www.hitachienergy.com/products-and-solutions/disconnectors/center-break-disconnectors/center-break-up-to-245-kv",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 252,
+          "continuous_current_a": 3150,
+          "peak_withstand_current_ka": 125,
+          "short_time_withstand": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 735.5592390584715,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2414.4407609415284,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 735.5592390584715,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2414.4407609415284,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "not_applicable",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Disconnectors do not receive a fault-current breaking check."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-CB-220-TX",
+      "circuit_group": "220-transformer-bays",
+      "device_kind": "circuit_breaker",
+      "duty": {
+        "id": "220-transformer-bays",
+        "role": "main_transformer_high_side",
+        "voltage_class": "v220",
+        "members": [
+          "T1-HV",
+          "T2-HV"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 495.99636762199674,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.220kv"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-CB-220",
+        "kind": "circuit_breaker",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "outdoor_sf6",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "CHINT",
+            "family": "LW43-252",
+            "scope": "official 252kV outdoor SF6 live-tank family and drawing only; current and breaking ratings not public on the cited page",
+            "url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/lw43-252.html",
+            "verified_on": "2026-07-15"
+          },
+          {
+            "manufacturer": "Hitachi Energy",
+            "family": "LTB E",
+            "scope": "official family-level availability up to 4000A standard-table current and 63kA; not an exact project configuration",
+            "url": "https://www.hitachienergy.com/products-and-solutions/high-voltage-switchgear-and-breakers/air-insulated-switchgear/live-tank-circuit-breaker-ltb-e-72-5-800-kv",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 252,
+          "continuous_current_a": 3150,
+          "short_circuit_breaking_current_ka_rms": 50,
+          "short_circuit_making_current_ka_peak": 125,
+          "peak_withstand_current_ka": 125,
+          "short_time_withstand": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 495.99636762199674,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2654.003632378003,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 495.99636762199674,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2654.003632378003,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-DS-220-TX",
+      "circuit_group": "220-transformer-bays",
+      "device_kind": "disconnector",
+      "duty": {
+        "id": "220-transformer-bays",
+        "role": "main_transformer_high_side",
+        "voltage_class": "v220",
+        "members": [
+          "T1-HV",
+          "T2-HV"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 495.99636762199674,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.220kv"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-DS-220",
+        "kind": "disconnector",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "outdoor",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "CHINT",
+            "family": "GW4-.../252 and JW-.../252",
+            "scope": "official pages list 252kV disconnector and earthing-switch families; exact current and withstand data are not public",
+            "url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/gw4-disconnector-gw4.html",
+            "companion_url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/jw-earthing-switch-jw.html",
+            "verified_on": "2026-07-15"
+          },
+          {
+            "manufacturer": "Hitachi Energy",
+            "family": "GW55",
+            "scope": "245kV benchmark up to 3150A and 50kA; not proof of a Chinese Um=252kV configuration",
+            "url": "https://www.hitachienergy.com/products-and-solutions/disconnectors/center-break-disconnectors/center-break-up-to-245-kv",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 252,
+          "continuous_current_a": 3150,
+          "peak_withstand_current_ka": 125,
+          "short_time_withstand": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 495.99636762199674,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2654.003632378003,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 495.99636762199674,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 2654.003632378003,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "not_applicable",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Disconnectors do not receive a fault-current breaking check."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-CB-220-BS",
+      "circuit_group": "220-bus-section",
+      "device_kind": "circuit_breaker",
+      "duty": {
+        "id": "220-bus-section",
+        "role": "bus_section",
+        "voltage_class": "v220",
+        "members": [
+          "220-BS"
+        ],
+        "continuous": {
+          "status": "pending_topology_flow",
+          "required_current_a": null,
+          "source": "explicit_power_flow_and_bay_placement_required"
+        },
+        "fault_profile_id": "220_bus",
+        "fault": {
+          "status": "known_with_incomplete_scope",
+          "mandatory_rms_ka": 3.6068056653765668,
+          "conditional_rms_ka": 6.499688665509761,
+          "provisional_required_rms_ka": 6.499688665509761,
+          "advisory_rms_ka": null,
+          "known_grid_peak_ka": 16.545506151539858,
+          "course_total_peak_sensitivity_ka": null,
+          "rms_scope": "grid_only_missing_220kv_renewable_contribution",
+          "peak_scope": "grid_only_fixed_course_peak_factor",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-CB-220",
+        "kind": "circuit_breaker",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "outdoor_sf6",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "CHINT",
+            "family": "LW43-252",
+            "scope": "official 252kV outdoor SF6 live-tank family and drawing only; current and breaking ratings not public on the cited page",
+            "url": "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/lw43-252.html",
+            "verified_on": "2026-07-15"
+          },
+          {
+            "manufacturer": "Hitachi Energy",
+            "family": "LTB E",
+            "scope": "official family-level availability up to 4000A standard-table current and 63kA; not an exact project configuration",
+            "url": "https://www.hitachienergy.com/products-and-solutions/high-voltage-switchgear-and-breakers/air-insulated-switchgear/live-tank-circuit-breaker-ltb-e-72-5-800-kv",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 252,
+          "continuous_current_a": 3150,
+          "short_circuit_breaking_current_ka_rms": 50,
+          "short_circuit_making_current_ka_peak": 125,
+          "peak_withstand_current_ka": 125,
+          "short_time_withstand": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "pending",
+          "required": null,
+          "available": 3150,
+          "unit": "A",
+          "margin": null,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 220.0,
+          "available": 252.0,
+          "unit": "kV",
+          "margin": 32.0,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "pending",
+          "required": null,
+          "available": 3150,
+          "unit": "A",
+          "margin": null,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.545506151539858,
+          "available": 125.0,
+          "unit": "kA peak",
+          "margin": 108.45449384846015,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 6.499688665509761,
+          "available": 50.0,
+          "unit": "kA rms",
+          "margin": 43.50031133449024,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "pending",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-IN",
+      "circuit_group": "35-transformer-incomers",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-transformer-incomers",
+        "role": "main_transformer_low_side",
+        "voltage_class": "v35",
+        "members": [
+          "T1-LV",
+          "T2-LV"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 3117.691453623979,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.35kv"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-3150",
+        "kind": "switchgear",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "Siemens",
+            "family": "NXAirS",
+            "scope": "official page verifies 40.5kV, up to 3150A and 31.5kA; peak and short-time-duration values still require the exact datasheet",
+            "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 3150,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 3117.691453623979,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 32.308546376020786,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 3117.691453623979,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 32.308546376020786,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-BT",
+      "circuit_group": "35-bus-tie",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-bus-tie",
+        "role": "bus_tie",
+        "voltage_class": "v35",
+        "members": [
+          "35-BT"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 3117.691453623979,
+          "source": "main_transformer.rated_current_with_1_05_margin_a.35kv"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-3150",
+        "kind": "switchgear",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "Siemens",
+            "family": "NXAirS",
+            "scope": "official page verifies 40.5kV, up to 3150A and 31.5kA; peak and short-time-duration values still require the exact datasheet",
+            "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 3150,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 3117.691453623979,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 32.308546376020786,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 3117.691453623979,
+          "available": 3150.0,
+          "unit": "A",
+          "margin": 32.308546376020786,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-WA",
+      "circuit_group": "35-feeder-wind-A",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-feeder-wind-A",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "WA-1",
+          "WA-2",
+          "WA-3",
+          "WA-4"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 364.6422752776585,
+          "source": "load_35kv.items.wind_farm_A.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-1250",
+        "kind": "switchgear",
+        "manufacturer": "CHINT",
+        "family": "KYN61-40.5(Z)",
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "family_verified",
+          "document_title": "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog",
+          "edition_or_revision": "catalog metadata modified 2025-04-16",
+          "issue_date": "2024-05-31",
+          "url": "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf",
+          "page": 22,
+          "verified_on": "2026-07-15"
+        },
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 364.6422752776585,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 885.3577247223416,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 364.6422752776585,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 885.3577247223416,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is family_verified; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-WB",
+      "circuit_group": "35-feeder-wind-B",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-feeder-wind-B",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "WB-1",
+          "WB-2",
+          "WB-3"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 364.6422752776585,
+          "source": "load_35kv.items.wind_farm_B.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-1250",
+        "kind": "switchgear",
+        "manufacturer": "CHINT",
+        "family": "KYN61-40.5(Z)",
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "family_verified",
+          "document_title": "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog",
+          "edition_or_revision": "catalog metadata modified 2025-04-16",
+          "issue_date": "2024-05-31",
+          "url": "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf",
+          "page": 22,
+          "verified_on": "2026-07-15"
+        },
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 364.6422752776585,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 885.3577247223416,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 364.6422752776585,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 885.3577247223416,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is family_verified; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-PVA",
+      "circuit_group": "35-feeder-pv-A",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-feeder-pv-A",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "PVA-1",
+          "PVA-2"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 530.2196349700645,
+          "source": "load_35kv.items.pv_plant_A.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-1250",
+        "kind": "switchgear",
+        "manufacturer": "CHINT",
+        "family": "KYN61-40.5(Z)",
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "family_verified",
+          "document_title": "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog",
+          "edition_or_revision": "catalog metadata modified 2025-04-16",
+          "issue_date": "2024-05-31",
+          "url": "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf",
+          "page": 22,
+          "verified_on": "2026-07-15"
+        },
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 530.2196349700645,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 719.7803650299355,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 530.2196349700645,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 719.7803650299355,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is family_verified; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-PVB",
+      "circuit_group": "35-feeder-pv-B",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-feeder-pv-B",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "PVB-1",
+          "PVB-2"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 353.47975664670975,
+          "source": "load_35kv.items.pv_plant_B.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-1250",
+        "kind": "switchgear",
+        "manufacturer": "CHINT",
+        "family": "KYN61-40.5(Z)",
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "family_verified",
+          "document_title": "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog",
+          "edition_or_revision": "catalog metadata modified 2025-04-16",
+          "issue_date": "2024-05-31",
+          "url": "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf",
+          "page": 22,
+          "verified_on": "2026-07-15"
+        },
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 353.47975664670975,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 896.5202433532902,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 353.47975664670975,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 896.5202433532902,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is family_verified; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-ES",
+      "circuit_group": "35-feeder-storage",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-feeder-storage",
+        "role": "collector_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "ES-1"
+        ],
+        "continuous": {
+          "status": "known",
+          "required_current_a": 546.9634129164876,
+          "source": "load_35kv.items.energy_storage.per_circuit_current_a"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-1250",
+        "kind": "switchgear",
+        "manufacturer": "CHINT",
+        "family": "KYN61-40.5(Z)",
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "family_verified",
+          "document_title": "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog",
+          "edition_or_revision": "catalog metadata modified 2025-04-16",
+          "issue_date": "2024-05-31",
+          "url": "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf",
+          "page": 22,
+          "verified_on": "2026-07-15"
+        },
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": null,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": null
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 546.9634129164876,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 703.0365870835124,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage precheck only; highest-system-voltage input is pending."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Highest system voltage must be verified from the applicable standard."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 546.9634129164876,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 703.0365870835124,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "current_correction_factor",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Verified 41C and installation current correction is not available."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Preliminary Ik-based course screening; contact-separation current is pending."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck; full renewable peak scope is pending."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic precheck only; final peak-current scope is incomplete."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Current-level screen only; I²t requires fault duration and equivalent thermal current."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Protection time, breaker opening time, equivalent thermal current, and final rated duration are pending."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate ambient limit and 41C current correction are not verified."
+        },
+        {
+          "id": "altitude_and_pollution",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project altitude and pollution level are not yet confirmed."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is family_verified; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    }
+  ],
+  "numeric_precheck_status": "pending",
+  "final_selection_status": "pending",
+  "pending_final_inputs": [
+    "highest system voltage classes and insulation levels",
+    "system 1/system 2 parallel-operation permission",
+    "10kV reactive-compensation Mvar and 35/10.5kV transformer rating",
+    "protection and breaker clearing times for thermal duty",
+    "renewable peak-current and 220kV fault-contribution model",
+    "altitude, pollution level, and 41C current correction",
+    "exact manufacturer models, verified datasheets, and dimensions",
+    "LGJ-400/50 corrected ampacity, thermal, mechanical, and corona data",
+    "CT/PT secondary allocation, accuracy, burden, and protection data"
+  ],
+  "upstream_provenance": {
+    "load_results": {
+      "path": "calculations/results/load_and_transformer_results.json",
+      "sha256": "cea1463188b22ae240b85553281d1a72aad0c15a6254ee55897b24771b1aee6a"
+    },
+    "short_circuit_results": {
+      "path": "calculations/results/short_circuit/short_circuit_results.json",
+      "sha256": "def328b385a81b143ee1ee7676343863f303d8b2f93235d64eda6a00e2f00e41"
+    },
+    "baseline": {
+      "path": "data/design_baseline.yaml",
+      "sha256": "4466622ef0d0b182cf6d486ee4c3ec206dbaab4f6fa85389a113646cde1cf515"
+    },
+    "design_inputs": {
+      "path": "data/design_inputs.yaml",
+      "sha256": "d823a6e8df8a9dd72169b5809ab08b834adece27c1434863c46e633756a805b4"
+    }
+  }
+}

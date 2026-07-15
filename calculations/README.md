@@ -7,13 +7,15 @@
 ~~~text
 load_and_transformers/         负荷、持续电流与主变/所用变初算
 short_circuit/                 220kV、35kV 标幺网络与短路电流初算
+equipment_selection/           回路职责、场景门控与设备额定值预筛
 results/                       JSON、CSV 和 Markdown 统一结果
 ~~~
 
-后续将增加：
+后续将在现有设备模块中增加：
 
 ~~~text
-equipment_selection/           断路器、隔离开关、母线、CT/PT 等
+conductor_and_bus_checks        导体、母线、绝缘子和套管专项校验
+instrument_transformers        CT/PT配置、变比、准确级和二次负荷
 ~~~
 
 计算规则：

@@ -6,7 +6,7 @@
 
 课程设计工程仓库：主接线方案、负荷与短路计算、设备选型、配电装置设计、CAD 图纸、说明书与答辩材料。
 
-[总体规划](docs/MASTER_PLAN.md) · [接线基线](docs/MAIN_SCHEME_BASELINE.md) · [设计输入](data/design_inputs.yaml) · [标准台账](docs/STANDARDS_REGISTER.md) · [需求追踪](docs/REQUIREMENTS_TRACEABILITY.md) · [CAD 工作流](docs/CAD_WORKFLOW.md) · [项目日志](PROJECT_LOG.md)
+[总体规划](docs/MASTER_PLAN.md) · [接线基线](docs/MAIN_SCHEME_BASELINE.md) · [设备预筛](docs/EQUIPMENT_SELECTION_BASELINE.md) · [设计输入](data/design_inputs.yaml) · [标准台账](docs/STANDARDS_REGISTER.md) · [需求追踪](docs/REQUIREMENTS_TRACEABILITY.md) · [CAD 工作流](docs/CAD_WORKFLOW.md) · [项目日志](PROJECT_LOG.md)
 
 </div>
 
@@ -59,9 +59,10 @@ materials-private/  本地私有资料，仅 README 进入公开仓库
 - [x] 建立负荷/变压器可重复计算、结果表和 9 项单元测试
 - [x] 完成主接线技术经济比较并冻结可推进基线
 - [x] 建立现行标准、废止版本和原文复核门槛台账
-- [x] 完成负荷、主回路持续电流基础值以及 220/35kV 三相短路初算（全项目 17 项单元测试）
+- [x] 完成负荷、主回路持续电流基础值以及 220/35kV 三相短路初算
+- [x] 建立设备职责注册表和220/35kV额定值等级预筛（全项目29项单元测试）
 - [ ] 确认 10kV 无功补偿容量并完成 10kV 短路电流计算
-- [ ] 完成设备选择、校验和配电装置型式确定
+- [ ] 完成精确设备型号、完整动热稳定、CT/PT、导体母线和环境校验
 - [ ] 完成三类 CAD 图纸、说明书、计算书和答辩材料
 
 ## 工作方式

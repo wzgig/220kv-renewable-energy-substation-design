@@ -1,0 +1,256 @@
+schema_version: 1
+
+metadata:
+  status: "target_rating_classes_pending_exact_models"
+  verified_on: "2026-07-15"
+  rule: "target classes support provisional arithmetic only; final selection requires an exact current manufacturer model and page-level evidence"
+
+candidates:
+  - id: "TARGET-CB-220"
+    kind: "circuit_breaker"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "outdoor_sf6"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    availability_evidence:
+      - manufacturer: "CHINT"
+        family: "LW43-252"
+        scope: "official 252kV outdoor SF6 live-tank family and drawing only; current and breaking ratings not public on the cited page"
+        url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/lw43-252.html"
+        verified_on: "2026-07-15"
+      - manufacturer: "Hitachi Energy"
+        family: "LTB E"
+        scope: "official family-level availability up to 4000A standard-table current and 63kA; not an exact project configuration"
+        url: "https://www.hitachienergy.com/products-and-solutions/high-voltage-switchgear-and-breakers/air-insulated-switchgear/live-tank-circuit-breaker-ltb-e-72-5-800-kv"
+        verified_on: "2026-07-15"
+    ratings:
+      highest_voltage_kv: 252
+      continuous_current_a: 3150
+      short_circuit_breaking_current_ka_rms: 50
+      short_circuit_making_current_ka_peak: 125
+      peak_withstand_current_ka: 125
+      short_time_withstand: {current_ka_rms: 50, duration_s: 3}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "TARGET-DS-220"
+    kind: "disconnector"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "outdoor"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    availability_evidence:
+      - manufacturer: "CHINT"
+        family: "GW4-.../252 and JW-.../252"
+        scope: "official pages list 252kV disconnector and earthing-switch families; exact current and withstand data are not public"
+        url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/gw4-disconnector-gw4.html"
+        companion_url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/jw-earthing-switch-jw.html"
+        verified_on: "2026-07-15"
+      - manufacturer: "Hitachi Energy"
+        family: "GW55"
+        scope: "245kV benchmark up to 3150A and 50kA; not proof of a Chinese Um=252kV configuration"
+        url: "https://www.hitachienergy.com/products-and-solutions/disconnectors/center-break-disconnectors/center-break-up-to-245-kv"
+        verified_on: "2026-07-15"
+    ratings:
+      highest_voltage_kv: 252
+      continuous_current_a: 3150
+      peak_withstand_current_ka: 125
+      short_time_withstand: {current_ka_rms: 50, duration_s: 3}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "TARGET-SWGR-35-3150"
+    kind: "switchgear"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "indoor_metal_clad_withdrawable"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    availability_evidence:
+      - manufacturer: "Siemens"
+        family: "NXAirS"
+        scope: "official page verifies 40.5kV, up to 3150A and 31.5kA; peak and short-time-duration values still require the exact datasheet"
+        url: "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/"
+        verified_on: "2026-07-15"
+    ratings:
+      highest_voltage_kv: 40.5
+      continuous_current_a: 3150
+      short_circuit_breaking_current_ka_rms: 31.5
+      short_circuit_making_current_ka_peak: 80
+      peak_withstand_current_ka: 80
+      short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "TARGET-SWGR-35-1250"
+    kind: "switchgear"
+    manufacturer: "CHINT"
+    family: "KYN61-40.5(Z)"
+    model: null
+    installation: "indoor_metal_clad_withdrawable"
+    evidence:
+      status: "family_verified"
+      document_title: "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog"
+      edition_or_revision: "catalog metadata modified 2025-04-16"
+      issue_date: "2024-05-31"
+      url: "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf"
+      page: 22
+      verified_on: "2026-07-15"
+    ratings:
+      highest_voltage_kv: 40.5
+      continuous_current_a: 1250
+      short_circuit_breaking_current_ka_rms: 31.5
+      short_circuit_making_current_ka_peak: 80
+      peak_withstand_current_ka: 80
+      short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "FAMILY-CT-220-CHINT-LB-LVB"
+    kind: "current_transformer"
+    manufacturer: "CHINT"
+    family: "LB-35~275 / LVB-35~275"
+    model: null
+    installation: "outdoor_oil_paper"
+    evidence:
+      status: "family_verified"
+      document_title: "CHINT LB and LVB official product pages"
+      edition_or_revision: null
+      issue_date: null
+      url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/lb-35~275.html"
+      alternate_url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/lvb-35~275.html"
+      page: null
+      verified_on: "2026-07-15"
+    ratings:
+      family_voltage_range_kv: [35, 275]
+      highest_voltage_kv: null
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "FAMILY-CVT-220-CHINT-TYD"
+    kind: "capacitor_voltage_transformer"
+    manufacturer: "CHINT"
+    family: "TYD-35~220"
+    model: null
+    installation: "outdoor_single_phase"
+    evidence:
+      status: "family_verified"
+      document_title: "CHINT TYD official product page"
+      edition_or_revision: null
+      issue_date: null
+      url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/tyd-35~220.html"
+      page: null
+      verified_on: "2026-07-15"
+    ratings:
+      family_voltage_range_kv: [35, 220]
+      highest_voltage_kv: null
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "FAMILY-VT-220-CHINT-JDCF"
+    kind: "voltage_transformer"
+    manufacturer: "CHINT"
+    family: "JDCF-66~220"
+    model: null
+    installation: "outdoor_oil_paper"
+    evidence:
+      status: "family_verified"
+      document_title: "CHINT JDCF official product page"
+      edition_or_revision: null
+      issue_date: null
+      url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/jdcf-66~220.html"
+      page: null
+      verified_on: "2026-07-15"
+    ratings:
+      family_voltage_range_kv: [66, 220]
+      highest_voltage_kv: null
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "FAMILY-SA-220-CHINT-YH10W"
+    kind: "surge_arrester"
+    manufacturer: "CHINT"
+    family: "YH10(5)W / Y10(5)W"
+    model: null
+    installation: "outdoor_metal_oxide_gapless"
+    evidence:
+      status: "family_verified"
+      document_title: "CHINT YH10W and Y10W official product pages"
+      edition_or_revision: null
+      issue_date: null
+      url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/yh10w.html"
+      alternate_url: "https://www.chintglobal.com/global/en/products/power-transmission-and-distribution/transmission/y10w.html"
+      page: null
+      verified_on: "2026-07-15"
+    ratings:
+      family_system_voltage_range_kv: [10, 750]
+      highest_voltage_kv: null
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null

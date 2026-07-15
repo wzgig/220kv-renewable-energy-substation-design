@@ -1,0 +1,13 @@
+﻿selection_id,circuit_group,device_kind,candidate_id,required_current_a,rated_current_a,provisional_required_rms_ka,rated_breaking_current_ka,course_peak_precheck_ka,rated_peak_withstand_ka,numeric_precheck_status,final_selection_status
+SEL-CB-220-LINE,220-line-bays,circuit_breaker,TARGET-CB-220,735.5592390584715,3150,6.499688665509761,50,16.545506151539858,125,provisional_pass,pending
+SEL-DS-220-LINE,220-line-bays,disconnector,TARGET-DS-220,735.5592390584715,3150,6.499688665509761,,16.545506151539858,125,provisional_pass,pending
+SEL-CB-220-TX,220-transformer-bays,circuit_breaker,TARGET-CB-220,495.99636762199674,3150,6.499688665509761,50,16.545506151539858,125,provisional_pass,pending
+SEL-DS-220-TX,220-transformer-bays,disconnector,TARGET-DS-220,495.99636762199674,3150,6.499688665509761,,16.545506151539858,125,provisional_pass,pending
+SEL-CB-220-BS,220-bus-section,circuit_breaker,TARGET-CB-220,,3150,6.499688665509761,50,16.545506151539858,125,pending,pending
+SEL-SWGR-35-IN,35-transformer-incomers,switchgear,TARGET-SWGR-35-3150,3117.691453623979,3150,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending
+SEL-SWGR-35-BT,35-bus-tie,switchgear,TARGET-SWGR-35-3150,3117.691453623979,3150,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending
+SEL-SWGR-35-WA,35-feeder-wind-A,switchgear,TARGET-SWGR-35-1250,364.6422752776585,1250,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending
+SEL-SWGR-35-WB,35-feeder-wind-B,switchgear,TARGET-SWGR-35-1250,364.6422752776585,1250,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending
+SEL-SWGR-35-PVA,35-feeder-pv-A,switchgear,TARGET-SWGR-35-1250,530.2196349700645,1250,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending
+SEL-SWGR-35-PVB,35-feeder-pv-B,switchgear,TARGET-SWGR-35-1250,353.47975664670975,1250,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending
+SEL-SWGR-35-ES,35-feeder-storage,switchgear,TARGET-SWGR-35-1250,546.9634129164876,1250,16.290983445518524,31.5,41.47007351948617,80,provisional_pass,pending

@@ -13,22 +13,28 @@ $requiredPaths = @(
     'PROJECT_LOG.md',
     'data/design_inputs.yaml',
     'data/design_baseline.yaml',
+    'data/equipment_selection.yaml',
+    'data/equipment_catalog.yaml',
     'docs/PROJECT_BRIEF.md',
     'docs/MASTER_PLAN.md',
     'docs/MAIN_SCHEME_BASELINE.md',
+    'docs/EQUIPMENT_SELECTION_BASELINE.md',
     'docs/STANDARDS_REGISTER.md',
     'docs/REQUIREMENTS_TRACEABILITY.md',
     'docs/CAD_WORKFLOW.md',
     'calculations/README.md',
     'calculations/load_and_transformers/calculate.py',
     'calculations/short_circuit/calculate.py',
+    'calculations/equipment_selection/calculate.py',
     'calculations/results/load_and_transformer_results.json',
     'calculations/results/short_circuit/short_circuit_results.json',
+    'calculations/results/equipment_selection/equipment_selection_results.json',
     'drawings/README.md',
     'report/README.md',
     'requirements.txt',
     'tests/test_load_and_transformers.py',
-    'tests/test_short_circuit.py'
+    'tests/test_short_circuit.py',
+    'tests/test_equipment_selection.py'
 )
 
 foreach ($relativePath in $requiredPaths) {

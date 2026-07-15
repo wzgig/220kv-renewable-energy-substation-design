@@ -37,6 +37,7 @@ jobs:
         run: |
           python -m calculations.load_and_transformers.calculate
           python -m calculations.short_circuit.calculate
+          python -m calculations.equipment_selection.calculate
 
       - name: Verify generated results are committed
         run: git diff --exit-code -- calculations/results
