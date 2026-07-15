@@ -1,0 +1,133 @@
+project:
+  title: "220kV新能源汇集变电所电气一次部分初步设计"
+  taskbook_group: 5
+  assignment_start: "2026-07-06"
+  assignment_end: "2026-07-17"
+  source_status: "confirmed_from_local_taskbook"
+
+submission_requirements:
+  technical_design_description: true
+  technical_calculation_book: true
+  single_line_diagram: true
+  switchyard_section_drawing: true
+  switchyard_plan_drawing: true
+  course_summary_and_defense: true
+  document_mode: "generally_handwritten_per_taskbook"
+  drawing_mode: "generally_hand_drawn_per_taskbook; direct_CAD_submission_pending_confirmation"
+
+system:
+  voltage_levels_kv: [220, 35, 10, 0.4]
+  main_transformer_proposal:
+    count: 2
+    rated_capacity_mva_each: 180
+    installation: "outdoor_oil_immersed_on_load_tap_changing"
+    winding_scheme: "to_decide_between_220_35_two_winding_plus_auxiliary_transformer_and_three_winding_scheme"
+  outgoing_220kv:
+    in_service_circuits: 2
+    reserved_circuits: 1
+    conductor: "LGJ-400/50"
+    direction: "northwest"
+  collector_35kv:
+    in_service_circuits: 12
+    reserved_circuits: 2
+    line_type: "mixed_overhead_and_cable"
+    directions: ["east", "south"]
+  auxiliary_10kv:
+    purposes: ["station_service", "reactive_compensation", "cooling", "auxiliary_systems", "backup_supply"]
+    direction: "within_station_and_backup_source"
+
+system_sources:
+  base_capacity_mva: 100
+  source_1:
+    equivalent_capacity_mva: 2400
+    reactance_pu_on_own_base: 0.40
+    line_length_km: 70
+  source_2:
+    equivalent_capacity_mva: 2000
+    reactance_pu_on_own_base: 0.45
+    line_length_km: 85
+  future_or_tie_line:
+    line_length_km: 60
+    in_service_for_base_case: false
+    status: "sensitivity_case_pending_final_operating_mode"
+
+loads_35kv:
+  simultaneous_output_factor: 0.95
+  total_installed_active_power_mw: 270
+  items:
+    - {name: "wind_farm_A", active_power_mw: 80, power_factor: 0.95, circuits: 4}
+    - {name: "wind_farm_B", active_power_mw: 60, power_factor: 0.95, circuits: 3}
+    - {name: "pv_plant_A", active_power_mw: 60, power_factor: 0.98, circuits: 2}
+    - {name: "pv_plant_B", active_power_mw: 40, power_factor: 0.98, circuits: 2}
+    - {name: "energy_storage", active_power_mw: 30, power_factor: 0.95, circuits: 1}
+
+loads_10kv:
+  simultaneity_factor: 0.80
+  items:
+    - {name: "station_service_backup", active_power_mw: 0.8, power_factor: 0.85, circuits: 1}
+    - {name: "reactive_compensation_and_cooling", active_power_mw: 0.6, power_factor: 0.85, circuits: 1}
+    - {name: "control_communications_and_monitoring", active_power_mw: 0.4, power_factor: 0.90, circuits: 1}
+
+station_service_loads:
+  low_voltage_system: "380_220V_three_phase_four_wire"
+  bus_scheme: "single_bus_sectionalized"
+  transformer_count_preference: 2
+  standby_mode: "dark_standby"
+  capacity_rule: "each_transformer_supplies_all_frequent_loads_plus_about_10_percent_margin"
+  items:
+    - {name: "main_transformer_fans", rated_kw_formula: "n*66*0.15", duty: "continuous_frequent", applicable: true}
+    - {name: "main_battery_charger", rated_kw: 20, duty: "continuous_infrequent", applicable: true}
+    - {name: "float_charger", rated_kw: 14, duty: "continuous_frequent", applicable: true}
+    - {name: "battery_ventilation", rated_kw: 1.4, duty: "continuous_infrequent", applicable: true}
+    - {name: "battery_exhaust", rated_kw: 1.7, duty: "continuous_infrequent", applicable: true}
+    - {name: "domestic_and_fire_water_pump", rated_kw: 1.7, duty: "continuous_frequent", applicable: true}
+    - {name: "air_compressors", rated_kw_formula: "2*22", duty: "short_time_frequent", applicable: true}
+    - {name: "carrier_and_communications", rated_kw: 1.7, duty: "continuous_frequent", applicable: true}
+    - {name: "220kv_switchyard_supply", rated_kw: 20, duty: "short_time_infrequent", applicable: true}
+    - {name: "110kv_switchyard_supply", rated_kw: 20, duty: "short_time_infrequent", applicable: false, reason: "no_110kv_level_in_this_project"}
+    - {name: "35kv_switchgear_supply", rated_kw: 10, duty: "short_time_infrequent", applicable: true}
+    - {name: "220kv_breaker_winter_heating", rated_kw: 6, duty: "continuous", applicable: true}
+    - {name: "110kv_breaker_winter_heating", rated_kw: 10, duty: "continuous", applicable: false, reason: "no_110kv_level_in_this_project"}
+    - {name: "outdoor_switchyard_lighting", rated_kw: 20, duty: "continuous", applicable: true}
+    - {name: "indoor_lighting", rated_kw: 10, duty: "continuous", applicable: true}
+    - {name: "maintenance_and_spare", rated_kw: 15, duty: "short_time_infrequent", applicable: true}
+
+natural_conditions:
+  maximum_temperature_c: 41
+  minimum_temperature_c: -12
+  annual_average_temperature_c: 15
+  altitude_m: null
+  pollution_level: null
+
+calculation_rules:
+  line_loss_rate: 0.05
+  annual_growth_rate_for_sensitivity: 0.04
+  short_circuit_base_mva: 100
+  average_rated_voltage_kv:
+    220kv: 230
+    35kv: 37
+    10kv: 10.5
+  line_reactance_ohm_per_km:
+    220kv_overhead: 0.40
+    35kv: 0.35
+    10kv_cable: 0.08
+    10kv_overhead_range: [0.35, 0.40]
+  preliminary_short_circuit_resistance: "ignored"
+  main_transformer_short_circuit_voltage_percent:
+    220_35_two_winding: 14
+    35_10_5_distribution_transformer: 8
+  grounding:
+    220kv: "direct_grounding"
+    35kv: "non_effectively_grounded_to_be_justified"
+    10kv: "non_effectively_grounded_to_be_justified"
+  renewable_short_circuit_contribution:
+    base_case: "ignored"
+    sensitivity_case: "1.1_to_1.2_times_rated_current"
+
+open_decisions:
+  - "220kv_bus_scheme"
+  - "main_transformer_winding_scheme_and_10kv_supply_path"
+  - "35kv_and_10kv_normal_bus_coupler_operating_state"
+  - "direct_CAD_submission_permission"
+  - "voltage_level_and_sheet_size_for_section_and_plan_drawings"
+  - "altitude_and_pollution_level_if_required_for_equipment_selection"

@@ -1,0 +1,23 @@
+name: Project health
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Run repository health checks
+        shell: pwsh
+        run: ./scripts/project_health_check.ps1 -Ci
