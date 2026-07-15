@@ -130,6 +130,9 @@ operating_modes:
   one_220kv_line_out:
     action: "remaining_line_carries_export_subject_to_LGJ_400_50_temperature_corrected_ampacity"
     full_export_current_a_approx: 735.559
+    course_reference_ampacity_at_41c_a: 475.242
+    line_only_required_curtailment_percent: 35.390
+    interaction_with_main_transformer_n_minus_one: "main_transformer_35_780_percent_curtailment_is_slightly_more_restrictive_and_reduces_line_current_to_about_472_377A"
   auxiliary_source_n_minus_one:
     action_10kv: "isolate_failed_35_10_5kv_source_then_close_10kv_bus_tie_after_fault_clearance"
     full_svg_range_retained: true
@@ -147,6 +150,12 @@ site_conditions:
   pollution_level: "d"
   pollution_status: "conservative_course_design_assumption"
 
+neutral_grounding:
+  220kv: "direct_grounding"
+  35kv: "grounding_transformer_plus_low_resistance_course_assumption"
+  10kv: "grounding_transformer_plus_low_resistance_course_assumption"
+  status: "course_design_scheme_only_resistance_and_ground_fault_current_pending"
+
 protection_and_thermal_duty:
   main_protection_operating_s: 0.05
   backup_protection_operating_s: 1.00
@@ -160,6 +169,16 @@ switchyard_220kv:
   arrangement: "outdoor_AIS_phase_segregated_medium_type"
   plan_sheet: {format: "A1", orientation: "landscape", scale: "1:200"}
   section_sheet: {format: "A1", orientation: "landscape", scale: "1:100"}
+  plan_site_size_m: [145, 90]
+  normal_road_width_m: 4
+  phase_spacing_m: 4
+  typical_function_center_pitch_m: 14
+  line_bus_to_gantry_m: 29
+  transformer_bus_to_gantry_m: 20
+  transformer_bus_to_center_m: 27
+  bus_conductor_elevation_m: 9
+  line_gantry_conductor_elevation_m: 14.5
+  transformer_gantry_conductor_elevation_m: 11.5
   minimum_clearances_mm:
     A1: 1800
     A2: 2000
@@ -173,6 +192,6 @@ switchyard_220kv:
 open_engineering_inputs:
   - "L3_role_and_expected_in_service_date"
   - "teacher_reliability_requirement_for_220kv_bus_maintenance"
-  - "LGJ_400_50_ampacity_at_41C"
+  - "final_LGJ_400_50_manufacturer_thermal_rating_with_defined_weather_conditions"
   - "final_reactive_power_voltage_harmonic_and_svg_short_circuit_study"
   - "T10_SVG_and_switchgear_exact_vendor_models_for_41C_service"

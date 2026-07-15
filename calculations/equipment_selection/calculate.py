@@ -350,12 +350,12 @@ def calculate_equipment_screening(
         "pending_final_inputs": [
             "highest system voltage classes and insulation levels",
             "system 1/system 2 parallel-operation permission",
-            "10kV reactive-compensation Mvar and 35/10.5kV transformer rating",
-            "protection and breaker clearing times for thermal duty",
+            "final reactive-power/voltage/harmonic study and 41C T10/SVG vendor confirmation",
+            "final protection coordination and manufacturer breaker clearing data",
             "renewable peak-current and 220kV fault-contribution model",
-            "altitude, pollution level, and 41C current correction",
+            "site-confirmed altitude/pollution and manufacturer 41C service ratings",
             "exact manufacturer models, verified datasheets, and dimensions",
-            "LGJ-400/50 corrected ampacity, thermal, mechanical, and corona data",
+            "LGJ-400/50 manufacturer thermal rating under defined weather plus mechanical and corona checks",
             "CT/PT secondary allocation, accuracy, burden, and protection data",
         ],
     }

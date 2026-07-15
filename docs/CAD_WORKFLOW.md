@@ -28,22 +28,38 @@ drawings/
 
 Python 依赖统一写入根目录 `requirements.txt` 并安装到项目虚拟环境，不污染系统环境：ezdxf 用于 DXF 生成和语义审计，pypdf 用于规范化 AutoCAD PDF。当前不依赖 pywin32 或 GUI COM。
 
-## 当前主接线产物
+CI不直接比较平断面DXF的原始字节，而比较实体、图层、线型、字体和文字/几何的语义指纹；这样可忽略ezdxf在独立进程中可能出现的CLASSES表顺序差异，同时仍能阻止真实图面漂移。
+
+## 当前三张图纸产物
 
 ~~~text
 drawings/data/single_line_layout.yaml
+drawings/data/switchyard_layout.yaml
 drawings/standards/single_line_standard.yaml
+drawings/standards/switchyard_standard.yaml
 drawings/scripts/sld_symbols.py
 drawings/scripts/generate_single_line.py
+drawings/scripts/generate_switchyard_drawings.py
 drawings/scripts/export_single_line.ps1
+drawings/scripts/export_all_drawings.ps1
 drawings/scripts/normalize_pdf.py
 drawings/source/single_line_a1.dxf
 drawings/source/single_line_a1.dwg
+drawings/source/switchyard_plan_a1.dxf
+drawings/source/switchyard_plan_a1.dwg
+drawings/source/switchyard_section_a1.dxf
+drawings/source/switchyard_section_a1.dwg
 drawings/exports/single_line_a1.pdf
 drawings/exports/single_line_a1.png
+drawings/exports/switchyard_plan_a1.pdf
+drawings/exports/switchyard_plan_a1.png
+drawings/exports/switchyard_section_a1.pdf
+drawings/exports/switchyard_section_a1.png
 ~~~
 
 中文文字采用本机已验证的 `txt.shx + gbcbig.shx` 大字体组合，避免 Core Console 对 TTC 字体替换成问号。DXF 使用 R2018/AC1032、毫米单位、A1 横向 841×594 模型空间纸面坐标；DWG 由 Git LFS 管理。
+
+三张图均已通过签名有效的Core Console原生AUDIT并保存为AC1032/2018 DWG；PDF为A1横向单页，PNG按150dpi渲染目检。`acad.exe`仍不启动。
 
 ## 制图顺序
 
@@ -64,6 +80,14 @@ drawings/exports/single_line_a1.png
 - 输入：间隔表、出线方向、道路、建筑/构架、设备坐标和断面参数。
 - 重点：220kV 向西北出线，35kV 向东/向南，站内与备用电源方向合理；预留间隔清楚。
 - 验收：平面与断面使用同一设备、间隔宽度、编号和标高体系。
+
+## 平断面统一参数
+
+- 220kV户外AIS、分相中型布置；分段正常断开；
+- 相间中心距4.0m，典型相邻功能中心按14m节距组织；
+- 母线中心标高9.0m、线路构架挂线点14.5m、主变构架挂线点11.5m；
+- 课程表7-2净距：A1=1800、A2=2000、B1=2550、B2=1900、C=4300、D=3800mm；
+- 设备外形、道路、建筑和基础是课程几何假设，精确厂家图优先覆盖。
 
 ## 图形标准草案
 

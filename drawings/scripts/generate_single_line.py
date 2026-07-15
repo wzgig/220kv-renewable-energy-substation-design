@@ -29,6 +29,7 @@ DEFAULT_STANDARD = (
     PROJECT_ROOT / "drawings" / "standards" / "single_line_standard.yaml"
 )
 DEFAULT_BASELINE = PROJECT_ROOT / "data" / "design_baseline.yaml"
+DEFAULT_DESIGN_INPUTS = PROJECT_ROOT / "data" / "design_inputs.yaml"
 DEFAULT_LOAD_RESULTS = (
     PROJECT_ROOT / "calculations" / "results" / "load_and_transformer_results.json"
 )
@@ -87,6 +88,7 @@ def load_project_data(
     layout_path: Path = DEFAULT_LAYOUT,
     standard_path: Path = DEFAULT_STANDARD,
     baseline_path: Path = DEFAULT_BASELINE,
+    design_inputs_path: Path = DEFAULT_DESIGN_INPUTS,
     load_results_path: Path = DEFAULT_LOAD_RESULTS,
     equipment_results_path: Path = DEFAULT_EQUIPMENT_RESULTS,
 ) -> dict[str, dict[str, Any]]:
@@ -94,6 +96,7 @@ def load_project_data(
         "layout": _read_yaml(layout_path),
         "standard": _read_yaml(standard_path),
         "baseline": _read_yaml(baseline_path),
+        "design_inputs": _read_yaml(design_inputs_path),
         "load_results": _read_json(load_results_path),
         "equipment_results": _read_json(equipment_results_path),
     }
@@ -107,6 +110,7 @@ def validate_project_data(data: dict[str, dict[str, Any]]) -> None:
     layout = data["layout"]
     standard = data["standard"]
     baseline = data["baseline"]
+    design_inputs = data["design_inputs"]
 
     if layout.get("schema_version") != 1 or standard.get("schema_version") != 1:
         raise ValueError("Unsupported single-line schema version")
@@ -173,6 +177,37 @@ def validate_project_data(data: dict[str, dict[str, Any]]) -> None:
     )
     if set(_ids(layout["transformers"]["source_35_10"])) != source_transformers:
         raise ValueError("35/10.5kV source transformers do not match the baseline")
+    source_rating = float(
+        baseline["connection_10kv"]["source_transformers"][
+            "rated_capacity_mva_each"
+        ]
+    )
+    for transformer in layout["transformers"]["source_35_10"]:
+        if float(transformer["rated_capacity_mva"]) != source_rating:
+            raise ValueError("T10 drawing rating does not match the frozen baseline")
+
+    baseline_svg = {
+        str(item["id"]): float(item["rated_mvar"])
+        for item in baseline["connection_10kv"]["reactive_compensation"]["units"]
+    }
+    layout_svg = {
+        str(item["id"]): float(item["rated_mvar"])
+        for item in layout["circuits"]["10kv"]["reactive_compensation_feeders"]
+    }
+    if layout_svg != baseline_svg:
+        raise ValueError("10kV SVG drawing data do not match the frozen baseline")
+
+    result_auxiliary_loads = {
+        str(item["name"]): item for item in data["load_results"]["load_10kv"]["items"]
+    }
+    layout_auxiliary_loads = layout["circuits"]["10kv"]["auxiliary_load_groups"]
+    layout_load_refs = [str(item["load_ref"]) for item in layout_auxiliary_loads]
+    if len(layout_load_refs) != len(set(layout_load_refs)):
+        raise ValueError("10kV auxiliary drawing contains duplicate load references")
+    if set(layout_load_refs) != set(result_auxiliary_loads):
+        raise ValueError("10kV auxiliary drawing does not match calculated load circuits")
+    if any(int(item["circuits"]) != 1 for item in result_auxiliary_loads.values()):
+        raise ValueError("Single-line auxiliary feeder layout expects one circuit per load item")
 
     station_transformers = set(
         baseline["connection_0_4kv"]["station_service_transformers"]["identifiers"]
@@ -182,13 +217,21 @@ def validate_project_data(data: dict[str, dict[str, Any]]) -> None:
 
     tie_states = {str(item["id"]): str(item["state"]) for item in layout["ties"]}
     expected_ties = {
-        "TIE-220": "conditional",
+        "TIE-220": baseline["connection_220kv"]["normal_bus_tie_state"],
         "TIE-35": baseline["connection_35kv"]["bus_tie_normal_state"],
         "TIE-10": baseline["connection_10kv"]["bus_tie_normal_state"],
         "TIE-0P4": baseline["connection_0_4kv"]["bus_tie_normal_state"],
     }
     if tie_states != expected_ties:
         raise ValueError(f"Bus-tie states mismatch: {tie_states!r}")
+
+    grounding = design_inputs["calculation_rules"]["grounding"]
+    expected_grounding = "grounding_transformer_plus_low_resistance_course_assumption"
+    for level in ("35kv", "10kv"):
+        if grounding[level] != expected_grounding:
+            raise ValueError(f"Unexpected {level} grounding basis: {grounding[level]!r}")
+        if baseline["neutral_grounding"][level] != grounding[level]:
+            raise ValueError(f"Baseline and design inputs disagree on {level} grounding")
 
     station_incomers = layout["circuits"]["0_4kv"]["station_service_incomers"]
     closed_incomers = [item for item in station_incomers if item["state"] == "closed"]
@@ -444,8 +487,8 @@ def _draw_frame_and_title(
         attachment=1,
     )
     footer_notes = (
-        "制图边界：精确型号、CT/PT变比、T10容量、10kV无功Mvar、海拔及污秽等级均未定稿。"
-        " 220kV分段按条件项表达；35/10kV母联正常断开；0.4kV按单台所用变运行、母联闭合表达。"
+        "制图边界：T10=2×31.5MVA、SVG=2×±12Mvar、海拔≤1000m、污秽d级均按课程设计基线表达；"
+        "精确型号、CT/PT二次参数、谐波和厂家41℃适配待最终复核。220/35/10kV母联正常断开。"
     )
     _add_mtext(
         msp,
@@ -597,7 +640,10 @@ def _draw_220kv(
 ) -> None:
     bus_y = float(layout["level_geometry"]["bus_y"]["220kv"])
     device_height = float(standard["text_heights_mm"]["device_id"])
-    line_current = float(
+    normal_line_current = float(
+        load_results["outgoing_220kv"]["equal_share_current_a"]
+    )
+    contingency_required_current = float(
         load_results["outgoing_220kv"]["single_circuit_contingency_current_a"]
     )
     for circuit in layout["circuits"]["220kv"]["lines"]:
@@ -658,7 +704,14 @@ def _draw_220kv(
             status=status,
             section=str(circuit["section"]),
         )
-        current = "R / 不计入本期" if status == "reserved" else f"{line_current:.3f}A"
+        current = (
+            "R / 不计入本期"
+            if status == "reserved"
+            else (
+                f"正常{normal_line_current:.3f}A\n"
+                f"N-1需{contingency_required_current:.3f}A（须限发）"
+            )
+        )
         _add_mtext(
             msp,
             f"{circuit['label']}\n{current}",
@@ -874,8 +927,8 @@ def _draw_35kv(
             attachment=2,
         )
 
-    # Each normally separated medium-voltage section retains an explicit
-    # grounding-system placeholder until the neutral-grounding study is frozen.
+    # Each normally separated medium-voltage section uses the frozen course
+    # assumption of a grounding transformer plus low resistance.
     for x, section in ((280.0, "35kV-I"), (590.0, "35kV-II")):
         _add_line(msp, (x, bus_y), (x, 319.0), layer="E-CONDITIONAL")
         insert_symbol(
@@ -884,15 +937,15 @@ def _draw_35kv(
             (x, 316.0),
             layer="E-CONDITIONAL",
             bay_id=f"GROUND-{section}",
-            device_type="neutral_grounding_placeholder",
-            status="pending",
+            device_type="grounding_transformer_low_resistance",
+            status="course_assumption",
             section=section,
         )
         _add_mtext(
             msp,
-            "接地方式P",
+            "接地变+小电阻",
             (x, 302.0),
-            height=2.0,
+            height=2.5,
             width=28.0,
             layer="E-CONDITIONAL",
             attachment=2,
@@ -993,7 +1046,7 @@ def _draw_source_transformers(
             )
         _add_mtext(
             msp,
-            f"{transformer_id} 35/10.5kV\nSn=P, uk=8%(P)",
+            f"{transformer_id} {float(transformer['rated_capacity_mva']):g}MVA\n35/10.5kV  uk={float(transformer['short_circuit_voltage_percent']):g}%",
             (high_x + 15.0, center_y + 3.0),
             height=2.4,
             width=62.0,
@@ -1004,6 +1057,7 @@ def _draw_source_transformers(
 def _draw_10kv_and_station_service(
     msp: Any,
     layout: dict[str, Any],
+    load_results: dict[str, Any],
 ) -> None:
     bus_10 = float(layout["level_geometry"]["bus_y"]["10kv"])
     bus_04 = float(layout["level_geometry"]["bus_y"]["0_4kv"])
@@ -1031,7 +1085,48 @@ def _draw_10kv_and_station_service(
             attachment=2,
         )
 
-    for group in layout["circuits"]["10kv"]["pending_load_groups"]:
+    auxiliary_by_name = {
+        str(item["name"]): item for item in load_results["load_10kv"]["items"]
+    }
+    for group in layout["circuits"]["10kv"]["auxiliary_load_groups"]:
+        x = float(group["x"])
+        load_item = auxiliary_by_name[str(group["load_ref"])]
+        _draw_vertical_series(
+            msp,
+            x=x,
+            y1=145.0,
+            y2=bus_10,
+            devices=[
+                {"center": 157.0, "block": "SLD_CT", "type": "auxiliary_load_ct"},
+                {"center": 169.0, "block": "SLD_CB_CLOSED", "type": "auxiliary_load_breaker", "state": "closed"},
+            ],
+            layer="E-CONDUCTOR",
+            bay_id=str(group["id"]),
+            status=str(group["status"]),
+            section=str(group["section"]),
+        )
+        insert_symbol(
+            msp,
+            "SLD_ARROW_DOWN",
+            (x, 140.0),
+            layer="E-CONDUCTOR",
+            bay_id=str(group["id"]),
+            device_type="auxiliary_load_group",
+            state="closed",
+            status=str(group["status"]),
+            section=str(group["section"]),
+        )
+        _add_mtext(
+            msp,
+            f"{group['label']}\nImax={float(load_item['per_circuit_current_a']):.3f}A",
+            (x, float(group.get("label_y", 132.0))),
+            height=2.5,
+            width=56.0,
+            layer="E-TEXT",
+            attachment=2,
+        )
+
+    for group in layout["circuits"]["10kv"]["reactive_compensation_feeders"]:
         x = float(group["x"])
         _draw_vertical_series(
             msp,
@@ -1039,32 +1134,32 @@ def _draw_10kv_and_station_service(
             y1=145.0,
             y2=bus_10,
             devices=[
-                {"center": 157.0, "block": "SLD_CT", "type": "pending_load_ct"},
-                {"center": 169.0, "block": "SLD_CB_OPEN", "type": "pending_load_breaker", "state": "open"},
+                {"center": 157.0, "block": "SLD_CT", "type": "svg_feeder_ct"},
+                {"center": 169.0, "block": "SLD_CB_CLOSED", "type": "svg_feeder_breaker", "state": "closed"},
             ],
-            layer="E-CONDITIONAL",
+            layer="E-CONDUCTOR",
             bay_id=str(group["id"]),
-            status="pending",
+            status=str(group["status"]),
             section=str(group["section"]),
         )
         insert_symbol(
             msp,
             "SLD_ARROW_DOWN",
             (x, 140.0),
-            layer="E-CONDITIONAL",
+            layer="E-CONDUCTOR",
             bay_id=str(group["id"]),
-            device_type="pending_load_group",
-            state="open",
-            status="pending",
+            device_type="dynamic_svg",
+            state="in_service",
+            status=str(group["status"]),
             section=str(group["section"]),
         )
         _add_mtext(
             msp,
-            f"{group['label']}\n0.8/0.6/0.4MW及无功回路：分段、Mvar均P",
+            f"{group['label']}\n动态无功补偿",
             (x, 132.0),
-            height=2.1,
-            width=56.0,
-            layer="E-CONDITIONAL",
+            height=2.5,
+            width=48.0,
+            layer="E-TEXT",
             attachment=2,
         )
 
@@ -1133,14 +1228,14 @@ def _draw_10kv_and_station_service(
         )
         _add_mtext(
             msp,
-            f"{transformer_id} 200kVA(P)\n10/0.4kV  {low['state'].upper()}",
+            f"{transformer_id} {int(transformer['rated_capacity_kva'])}kVA\n10/0.4kV  {low['state'].upper()}",
             (low_x + 13.0, center_y + 4.0),
             height=2.2,
             width=54.0,
             attachment=4,
         )
 
-    for x, section in ((235.0, "10kV-I"), (485.0, "10kV-II")):
+    for x, section in ((305.0, "10kV-I"), (540.0, "10kV-II")):
         _add_line(msp, (x, bus_10), (x, 169.0), layer="E-CONDITIONAL")
         insert_symbol(
             msp,
@@ -1148,17 +1243,17 @@ def _draw_10kv_and_station_service(
             (x, 166.0),
             layer="E-CONDITIONAL",
             bay_id=f"GROUND-{section}",
-            device_type="neutral_grounding_placeholder",
-            status="pending",
+            device_type="grounding_transformer_low_resistance",
+            status="course_assumption",
             section=section,
         )
         _add_mtext(
             msp,
-            "接地P",
+            "接地变+小电阻",
             (x, 153.0),
-            height=2.0,
+            height=2.5,
             width=24.0,
-            layer="E-CONDITIONAL",
+            layer="E-NOTE",
             attachment=2,
         )
 
@@ -1183,7 +1278,7 @@ def _draw_10kv_and_station_service(
             msp,
             label,
             (x, 69.5),
-            height=1.8,
+            height=2.5,
             width=50.0,
             attachment=2,
         )
@@ -1238,7 +1333,7 @@ def build_document(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
         _duty_current_map(data["equipment_results"]),
     )
     _draw_source_transformers(msp, layout)
-    _draw_10kv_and_station_service(msp, layout)
+    _draw_10kv_and_station_service(msp, layout, data["load_results"])
     _draw_notes(msp, layout)
 
     return doc
@@ -1397,7 +1492,16 @@ def _canonical_entity(entity: Any) -> dict[str, Any]:
     return record
 
 
-def semantic_fingerprint(doc: ezdxf.document.Drawing) -> str:
+def semantic_fingerprint(
+    doc: ezdxf.document.Drawing,
+    *,
+    layer_prefixes: tuple[str, ...] = ("E-",),
+    block_prefixes: tuple[str, ...] = ("SLD_",),
+    linetype_names: frozenset[str] = frozenset(
+        {"RESERVED", "PENDING", "CONDITIONAL"}
+    ),
+    style_names: frozenset[str] = frozenset({"HZTXT", "LATIN"}),
+) -> str:
     """Return a stable hash that ignores DXF timestamps, GUIDs and class order."""
 
     modelspace = sorted(
@@ -1406,7 +1510,7 @@ def semantic_fingerprint(doc: ezdxf.document.Drawing) -> str:
     )
     blocks: dict[str, list[dict[str, Any]]] = {}
     for block in doc.blocks:
-        if not block.name.startswith("SLD_"):
+        if not any(block.name.startswith(prefix) for prefix in block_prefixes):
             continue
         blocks[block.name] = sorted(
             (_canonical_entity(entity) for entity in block),
@@ -1421,7 +1525,7 @@ def semantic_fingerprint(doc: ezdxf.document.Drawing) -> str:
             "plot": int(layer.dxf.plot),
         }
         for layer in doc.layers
-        if str(layer.dxf.name).startswith("E-")),
+        if any(str(layer.dxf.name).startswith(prefix) for prefix in layer_prefixes)),
         key=lambda item: item["name"],
     )
     styles = sorted(
@@ -1433,7 +1537,7 @@ def semantic_fingerprint(doc: ezdxf.document.Drawing) -> str:
             "oblique": round(float(style.dxf.oblique), 6),
         }
         for style in doc.styles
-        if style.dxf.name in {"HZTXT", "LATIN"}),
+        if style.dxf.name in style_names),
         key=lambda item: item["name"],
     )
     linetypes = sorted(
@@ -1447,7 +1551,7 @@ def semantic_fingerprint(doc: ezdxf.document.Drawing) -> str:
                 ],
             }
             for linetype in doc.linetypes
-            if linetype.dxf.name in {"RESERVED", "PENDING", "CONDITIONAL"}
+            if linetype.dxf.name in linetype_names
         ),
         key=lambda item: item["name"],
     )
@@ -1475,6 +1579,7 @@ def generate_single_line(
     layout_path: Path = DEFAULT_LAYOUT,
     standard_path: Path = DEFAULT_STANDARD,
     baseline_path: Path = DEFAULT_BASELINE,
+    design_inputs_path: Path = DEFAULT_DESIGN_INPUTS,
     load_results_path: Path = DEFAULT_LOAD_RESULTS,
     equipment_results_path: Path = DEFAULT_EQUIPMENT_RESULTS,
 ) -> dict[str, Any]:
@@ -1487,6 +1592,7 @@ def generate_single_line(
             layout_path=layout_path,
             standard_path=standard_path,
             baseline_path=baseline_path,
+            design_inputs_path=design_inputs_path,
             load_results_path=load_results_path,
             equipment_results_path=equipment_results_path,
         )

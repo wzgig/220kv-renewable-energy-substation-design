@@ -553,7 +553,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-57F
+5CB
   9
 $SURFTAB1
  70
@@ -1327,9 +1327,9 @@ ISM
   0
 CLASS
   1
-LAYOUT
+ACDBPLACEHOLDER
   2
-AcDbLayout
+AcDbPlaceHolder
   3
 ObjectDBX Classes
  90
@@ -1343,9 +1343,9 @@ ObjectDBX Classes
   0
 CLASS
   1
-ACDBPLACEHOLDER
+LAYOUT
   2
-AcDbPlaceHolder
+AcDbLayout
   3
 ObjectDBX Classes
  90
@@ -2205,7 +2205,7 @@ ACAD
   0
 APPID
   5
-57C
+5C8
 330
 3
 100
@@ -2219,7 +2219,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-57D
+5C9
 330
 3
 100
@@ -7895,7 +7895,7 @@ AcDbMText
  71
 1
   1
-制图边界：精确型号、CT/PT变比、T10容量、10kV无功Mvar、海拔及污秽等级均未定稿。 220kV分段按条件项表达；35/10kV母联正常断开；0.4kV按单台所用变运行、母联闭合表达。
+制图边界：T10=2×31.5MVA、SVG=2×±12Mvar、海拔≤1000m、污秽d级均按课程设计基线表达；精确型号、CT/PT二次参数、谐波和厂家41℃适配待最终复核。220/35/10kV母联正常断开。
   7
 HZTXT
   0
@@ -8351,7 +8351,7 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbLine
  10
@@ -8375,7 +8375,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbBlockReference
  66
@@ -8549,7 +8549,7 @@ AcDbText
  40
 0.1
   1
-conditional
+in_service
  50
 90.0
  11
@@ -8629,7 +8629,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
   0
 LINE
   5
@@ -8639,7 +8639,7 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbLine
  10
@@ -8663,7 +8663,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbBlockReference
  66
@@ -8837,7 +8837,7 @@ AcDbText
  40
 0.1
   1
-conditional
+in_service
  50
 90.0
  11
@@ -8917,7 +8917,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
   0
 LINE
   5
@@ -8927,7 +8927,7 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbLine
  10
@@ -8951,7 +8951,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbBlockReference
  66
@@ -9079,7 +9079,7 @@ AcDbText
  40
 0.1
   1
-conditional
+open
  50
 90.0
  11
@@ -9125,7 +9125,7 @@ AcDbText
  40
 0.1
   1
-conditional
+in_service
  50
 90.0
  11
@@ -9205,7 +9205,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
   0
 LINE
   5
@@ -9215,7 +9215,7 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbLine
  10
@@ -9239,7 +9239,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbBlockReference
  66
@@ -9413,7 +9413,7 @@ AcDbText
  40
 0.1
   1
-conditional
+in_service
  50
 90.0
  11
@@ -9493,7 +9493,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
   0
 LINE
   5
@@ -9503,7 +9503,7 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbLine
  10
@@ -9527,7 +9527,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbBlockReference
  66
@@ -9701,7 +9701,7 @@ AcDbText
  40
 0.1
   1
-conditional
+in_service
  50
 90.0
  11
@@ -9781,7 +9781,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
   0
 LINE
   5
@@ -9791,7 +9791,7 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-SYMBOL
 100
 AcDbLine
  10
@@ -9815,7 +9815,7 @@ MTEXT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-NOTE
 100
 AcDbMText
  10
@@ -9831,7 +9831,7 @@ AcDbMText
  71
 5
   1
-220kV分段（并列许可后合）
+220kV分段（正常断开）
   7
 HZTXT
   0
@@ -14547,7 +14547,7 @@ AcDbMText
  71
 8
   1
-系统1线路 L1\P735.559A
+系统1线路 L1\P正常367.780A\PN-1需735.559A（须限发）
   7
 HZTXT
   0
@@ -16515,7 +16515,7 @@ AcDbMText
  71
 8
   1
-系统2线路 L2\P735.559A
+系统2线路 L2\P正常367.780A\PN-1需735.559A（须限发）
   7
 HZTXT
   0
@@ -36381,7 +36381,7 @@ AcDbText
  40
 0.1
   1
-neutral_grounding_placeholder
+grounding_transformer_low_resistance
  11
 280.0
  21
@@ -36469,7 +36469,7 @@ AcDbText
  40
 0.1
   1
-pending
+course_assumption
  11
 280.0
  21
@@ -36565,13 +36565,13 @@ AcDbMText
  30
 0.0
  40
-2.0
+2.5
  41
 28.0
  71
 2
   1
-接地方式P
+接地变+小电阻
   7
 HZTXT
   0
@@ -36685,7 +36685,7 @@ AcDbText
  40
 0.1
   1
-neutral_grounding_placeholder
+grounding_transformer_low_resistance
  11
 590.0
  21
@@ -36773,7 +36773,7 @@ AcDbText
  40
 0.1
   1
-pending
+course_assumption
  11
 590.0
  21
@@ -36869,13 +36869,13 @@ AcDbMText
  30
 0.0
  40
-2.0
+2.5
  41
 28.0
  71
 2
   1
-接地方式P
+接地变+小电阻
   7
 HZTXT
   0
@@ -38363,7 +38363,7 @@ AcDbMText
  71
 4
   1
-T10-1 35/10.5kV\PSn=P, uk=8%(P)
+T10-1 31.5MVA\P35/10.5kV  uk=8%
   7
 HZTXT
   0
@@ -39827,7 +39827,7 @@ AcDbMText
  71
 4
   1
-T10-2 35/10.5kV\PSn=P, uk=8%(P)
+T10-2 31.5MVA\P35/10.5kV  uk=8%
   7
 HZTXT
   0
@@ -40447,17 +40447,17 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbLine
  10
-375.0
+235.0
  20
 145.0
  30
 0.0
  11
-375.0
+235.0
  21
 152.0
  31
@@ -40471,7 +40471,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbBlockReference
  66
@@ -40479,7 +40479,7 @@ AcDbBlockReference
   2
 SLD_CT
  10
-375.0
+235.0
  20
 157.0
  30
@@ -40497,7 +40497,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 137.0
  30
@@ -40505,9 +40505,9 @@ AcDbText
  40
 0.1
   1
-LOAD-10-I
+AUX-BACKUP
  11
-375.0
+235.0
  21
 137.0
  31
@@ -40523,7 +40523,7 @@ BAY_ID
  72
 0
  11
-375.0
+235.0
  21
 137.0
  31
@@ -40541,7 +40541,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 136.0
  30
@@ -40549,9 +40549,9 @@ AcDbText
  40
 0.1
   1
-pending_load_ct
+auxiliary_load_ct
  11
-375.0
+235.0
  21
 136.0
  31
@@ -40567,7 +40567,7 @@ TYPE
  72
 0
  11
-375.0
+235.0
  21
 136.0
  31
@@ -40585,7 +40585,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 135.0
  30
@@ -40595,7 +40595,7 @@ AcDbText
   1
 closed
  11
-375.0
+235.0
  21
 135.0
  31
@@ -40611,7 +40611,7 @@ STATE
  72
 0
  11
-375.0
+235.0
  21
 135.0
  31
@@ -40629,7 +40629,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 134.0
  30
@@ -40637,9 +40637,9 @@ AcDbText
  40
 0.1
   1
-pending
+in_service
  11
-375.0
+235.0
  21
 134.0
  31
@@ -40655,7 +40655,7 @@ STATUS
  72
 0
  11
-375.0
+235.0
  21
 134.0
  31
@@ -40673,7 +40673,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 133.0
  30
@@ -40683,7 +40683,7 @@ AcDbText
   1
 10kV-I
  11
-375.0
+235.0
  21
 133.0
  31
@@ -40699,7 +40699,7 @@ SECTION
  72
 0
  11
-375.0
+235.0
  21
 133.0
  31
@@ -40713,7 +40713,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
   0
 LINE
   5
@@ -40723,17 +40723,17 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbLine
  10
-375.0
+235.0
  20
 162.0
  30
 0.0
  11
-375.0
+235.0
  21
 165.0
  31
@@ -40747,15 +40747,15 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbBlockReference
  66
 1
   2
-SLD_CB_OPEN
+SLD_CB_CLOSED
  10
-375.0
+235.0
  20
 169.0
  30
@@ -40773,7 +40773,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 149.0
  30
@@ -40781,9 +40781,9 @@ AcDbText
  40
 0.1
   1
-LOAD-10-I
+AUX-BACKUP
  11
-375.0
+235.0
  21
 149.0
  31
@@ -40799,7 +40799,7 @@ BAY_ID
  72
 0
  11
-375.0
+235.0
  21
 149.0
  31
@@ -40817,7 +40817,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 148.0
  30
@@ -40825,9 +40825,9 @@ AcDbText
  40
 0.1
   1
-pending_load_breaker
+auxiliary_load_breaker
  11
-375.0
+235.0
  21
 148.0
  31
@@ -40843,7 +40843,7 @@ TYPE
  72
 0
  11
-375.0
+235.0
  21
 148.0
  31
@@ -40861,7 +40861,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 147.0
  30
@@ -40869,9 +40869,9 @@ AcDbText
  40
 0.1
   1
-open
+closed
  11
-375.0
+235.0
  21
 147.0
  31
@@ -40887,7 +40887,7 @@ STATE
  72
 0
  11
-375.0
+235.0
  21
 147.0
  31
@@ -40905,7 +40905,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 146.0
  30
@@ -40913,9 +40913,9 @@ AcDbText
  40
 0.1
   1
-pending
+in_service
  11
-375.0
+235.0
  21
 146.0
  31
@@ -40931,7 +40931,7 @@ STATUS
  72
 0
  11
-375.0
+235.0
  21
 146.0
  31
@@ -40949,7 +40949,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 145.0
  30
@@ -40959,7 +40959,7 @@ AcDbText
   1
 10kV-I
  11
-375.0
+235.0
  21
 145.0
  31
@@ -40975,7 +40975,7 @@ SECTION
  72
 0
  11
-375.0
+235.0
  21
 145.0
  31
@@ -40989,7 +40989,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
   0
 LINE
   5
@@ -40999,17 +40999,17 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbLine
  10
-375.0
+235.0
  20
 173.0
  30
 0.0
  11
-375.0
+235.0
  21
 180.0
  31
@@ -41023,7 +41023,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbBlockReference
  66
@@ -41031,7 +41031,7 @@ AcDbBlockReference
   2
 SLD_ARROW_DOWN
  10
-375.0
+235.0
  20
 140.0
  30
@@ -41049,7 +41049,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 120.0
  30
@@ -41057,9 +41057,9 @@ AcDbText
  40
 0.1
   1
-LOAD-10-I
+AUX-BACKUP
  11
-375.0
+235.0
  21
 120.0
  31
@@ -41075,7 +41075,7 @@ BAY_ID
  72
 0
  11
-375.0
+235.0
  21
 120.0
  31
@@ -41093,7 +41093,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 119.0
  30
@@ -41101,9 +41101,9 @@ AcDbText
  40
 0.1
   1
-pending_load_group
+auxiliary_load_group
  11
-375.0
+235.0
  21
 119.0
  31
@@ -41119,7 +41119,7 @@ TYPE
  72
 0
  11
-375.0
+235.0
  21
 119.0
  31
@@ -41137,7 +41137,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 118.0
  30
@@ -41145,9 +41145,9 @@ AcDbText
  40
 0.1
   1
-open
+closed
  11
-375.0
+235.0
  21
 118.0
  31
@@ -41163,7 +41163,7 @@ STATE
  72
 0
  11
-375.0
+235.0
  21
 118.0
  31
@@ -41181,7 +41181,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 117.0
  30
@@ -41189,9 +41189,9 @@ AcDbText
  40
 0.1
   1
-pending
+in_service
  11
-375.0
+235.0
  21
 117.0
  31
@@ -41207,7 +41207,7 @@ STATUS
  72
 0
  11
-375.0
+235.0
  21
 117.0
  31
@@ -41225,7 +41225,7 @@ AcDbEntity
 100
 AcDbText
  10
-375.0
+235.0
  20
 116.0
  30
@@ -41235,7 +41235,7 @@ AcDbText
   1
 10kV-I
  11
-375.0
+235.0
  21
 116.0
  31
@@ -41251,7 +41251,7 @@ SECTION
  72
 0
  11
-375.0
+235.0
  21
 116.0
  31
@@ -41265,7 +41265,7 @@ SEQEND
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
   0
 MTEXT
   5
@@ -41275,23 +41275,23 @@ MTEXT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-TEXT
 100
 AcDbMText
  10
-375.0
+235.0
  20
 132.0
  30
 0.0
  40
-2.1
+2.5
  41
 56.0
  71
 2
   1
-10kV I段待定负荷组\P0.8/0.6/0.4MW及无功回路：分段、Mvar均P
+站用电备用电源\PImax=57.056A
   7
 HZTXT
   0
@@ -41303,17 +41303,17 @@ LINE
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbLine
  10
-630.0
+360.0
  20
 145.0
  30
 0.0
  11
-630.0
+360.0
  21
 152.0
  31
@@ -41327,7 +41327,7 @@ INSERT
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbBlockReference
  66
@@ -41335,7 +41335,7 @@ AcDbBlockReference
   2
 SLD_CT
  10
-630.0
+360.0
  20
 157.0
  30
@@ -41353,6 +41353,2574 @@ AcDbEntity
 100
 AcDbText
  10
+360.0
+ 20
+137.0
+ 30
+0.0
+ 40
+0.1
+  1
+AUX-COMM
+ 11
+360.0
+ 21
+137.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+137.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4D2
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+136.0
+ 30
+0.0
+ 40
+0.1
+  1
+auxiliary_load_ct
+ 11
+360.0
+ 21
+136.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+136.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4D3
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+135.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+360.0
+ 21
+135.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+135.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4D4
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+134.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+360.0
+ 21
+134.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+134.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4D5
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+133.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-I
+ 11
+360.0
+ 21
+133.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+133.0
+ 31
+0.0
+  0
+SEQEND
+  5
+4D0
+330
+4CF
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+LINE
+  5
+4D6
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+360.0
+ 20
+162.0
+ 30
+0.0
+ 11
+360.0
+ 21
+165.0
+ 31
+0.0
+  0
+INSERT
+  5
+4D7
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_CB_CLOSED
+ 10
+360.0
+ 20
+169.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+4D9
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+149.0
+ 30
+0.0
+ 40
+0.1
+  1
+AUX-COMM
+ 11
+360.0
+ 21
+149.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+149.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4DA
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+148.0
+ 30
+0.0
+ 40
+0.1
+  1
+auxiliary_load_breaker
+ 11
+360.0
+ 21
+148.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+148.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4DB
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+147.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+360.0
+ 21
+147.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+147.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4DC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+146.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+360.0
+ 21
+146.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+146.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4DD
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+145.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-I
+ 11
+360.0
+ 21
+145.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+145.0
+ 31
+0.0
+  0
+SEQEND
+  5
+4D8
+330
+4D7
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+LINE
+  5
+4DE
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+360.0
+ 20
+173.0
+ 30
+0.0
+ 11
+360.0
+ 21
+180.0
+ 31
+0.0
+  0
+INSERT
+  5
+4DF
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_ARROW_DOWN
+ 10
+360.0
+ 20
+140.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+4E1
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+120.0
+ 30
+0.0
+ 40
+0.1
+  1
+AUX-COMM
+ 11
+360.0
+ 21
+120.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+120.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4E2
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+119.0
+ 30
+0.0
+ 40
+0.1
+  1
+auxiliary_load_group
+ 11
+360.0
+ 21
+119.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+119.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4E3
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+118.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+360.0
+ 21
+118.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+118.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4E4
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+117.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+360.0
+ 21
+117.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+117.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4E5
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+360.0
+ 20
+116.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-I
+ 11
+360.0
+ 21
+116.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+360.0
+ 21
+116.0
+ 31
+0.0
+  0
+SEQEND
+  5
+4E0
+330
+4DF
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+MTEXT
+  5
+4E6
+330
+17
+100
+AcDbEntity
+  8
+E-TEXT
+100
+AcDbMText
+ 10
+360.0
+ 20
+125.0
+ 30
+0.0
+ 40
+2.5
+ 41
+56.0
+ 71
+2
+  1
+集控通信及监控\PImax=26.943A
+  7
+HZTXT
+  0
+LINE
+  5
+4E7
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+600.0
+ 20
+145.0
+ 30
+0.0
+ 11
+600.0
+ 21
+152.0
+ 31
+0.0
+  0
+INSERT
+  5
+4E8
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_CT
+ 10
+600.0
+ 20
+157.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+4EA
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+137.0
+ 30
+0.0
+ 40
+0.1
+  1
+AUX-COOL
+ 11
+600.0
+ 21
+137.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+137.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4EB
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+136.0
+ 30
+0.0
+ 40
+0.1
+  1
+auxiliary_load_ct
+ 11
+600.0
+ 21
+136.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+136.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4EC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+135.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+600.0
+ 21
+135.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+135.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4ED
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+134.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+600.0
+ 21
+134.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+134.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4EE
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+133.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-II
+ 11
+600.0
+ 21
+133.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+133.0
+ 31
+0.0
+  0
+SEQEND
+  5
+4E9
+330
+4E8
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+LINE
+  5
+4EF
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+600.0
+ 20
+162.0
+ 30
+0.0
+ 11
+600.0
+ 21
+165.0
+ 31
+0.0
+  0
+INSERT
+  5
+4F0
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_CB_CLOSED
+ 10
+600.0
+ 20
+169.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+4F2
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+149.0
+ 30
+0.0
+ 40
+0.1
+  1
+AUX-COOL
+ 11
+600.0
+ 21
+149.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+149.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4F3
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+148.0
+ 30
+0.0
+ 40
+0.1
+  1
+auxiliary_load_breaker
+ 11
+600.0
+ 21
+148.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+148.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4F4
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+147.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+600.0
+ 21
+147.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+147.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4F5
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+146.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+600.0
+ 21
+146.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+146.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4F6
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+145.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-II
+ 11
+600.0
+ 21
+145.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+145.0
+ 31
+0.0
+  0
+SEQEND
+  5
+4F1
+330
+4F0
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+LINE
+  5
+4F7
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+600.0
+ 20
+173.0
+ 30
+0.0
+ 11
+600.0
+ 21
+180.0
+ 31
+0.0
+  0
+INSERT
+  5
+4F8
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_ARROW_DOWN
+ 10
+600.0
+ 20
+140.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+4FA
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+120.0
+ 30
+0.0
+ 40
+0.1
+  1
+AUX-COOL
+ 11
+600.0
+ 21
+120.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+120.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4FB
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+119.0
+ 30
+0.0
+ 40
+0.1
+  1
+auxiliary_load_group
+ 11
+600.0
+ 21
+119.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+119.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4FC
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+118.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+600.0
+ 21
+118.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+118.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4FD
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+117.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+600.0
+ 21
+117.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+117.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+4FE
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+600.0
+ 20
+116.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-II
+ 11
+600.0
+ 21
+116.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+600.0
+ 21
+116.0
+ 31
+0.0
+  0
+SEQEND
+  5
+4F9
+330
+4F8
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+MTEXT
+  5
+4FF
+330
+17
+100
+AcDbEntity
+  8
+E-TEXT
+100
+AcDbMText
+ 10
+600.0
+ 20
+125.0
+ 30
+0.0
+ 40
+2.5
+ 41
+56.0
+ 71
+2
+  1
+无功补偿及冷却\PImax=42.792A
+  7
+HZTXT
+  0
+LINE
+  5
+500
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+385.0
+ 20
+145.0
+ 30
+0.0
+ 11
+385.0
+ 21
+152.0
+ 31
+0.0
+  0
+INSERT
+  5
+501
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_CT
+ 10
+385.0
+ 20
+157.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+503
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+137.0
+ 30
+0.0
+ 40
+0.1
+  1
+SVG-1
+ 11
+385.0
+ 21
+137.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+137.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+504
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+136.0
+ 30
+0.0
+ 40
+0.1
+  1
+svg_feeder_ct
+ 11
+385.0
+ 21
+136.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+136.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+505
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+135.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+385.0
+ 21
+135.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+135.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+506
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+134.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+385.0
+ 21
+134.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+134.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+507
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+133.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-I
+ 11
+385.0
+ 21
+133.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+133.0
+ 31
+0.0
+  0
+SEQEND
+  5
+502
+330
+501
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+LINE
+  5
+508
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+385.0
+ 20
+162.0
+ 30
+0.0
+ 11
+385.0
+ 21
+165.0
+ 31
+0.0
+  0
+INSERT
+  5
+509
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_CB_CLOSED
+ 10
+385.0
+ 20
+169.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+50B
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+149.0
+ 30
+0.0
+ 40
+0.1
+  1
+SVG-1
+ 11
+385.0
+ 21
+149.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+149.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+50C
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+148.0
+ 30
+0.0
+ 40
+0.1
+  1
+svg_feeder_breaker
+ 11
+385.0
+ 21
+148.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+148.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+50D
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+147.0
+ 30
+0.0
+ 40
+0.1
+  1
+closed
+ 11
+385.0
+ 21
+147.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+147.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+50E
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+146.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+385.0
+ 21
+146.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+146.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+50F
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+145.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-I
+ 11
+385.0
+ 21
+145.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+145.0
+ 31
+0.0
+  0
+SEQEND
+  5
+50A
+330
+509
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+LINE
+  5
+510
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+385.0
+ 20
+173.0
+ 30
+0.0
+ 11
+385.0
+ 21
+180.0
+ 31
+0.0
+  0
+INSERT
+  5
+511
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_ARROW_DOWN
+ 10
+385.0
+ 20
+140.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+513
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+120.0
+ 30
+0.0
+ 40
+0.1
+  1
+SVG-1
+ 11
+385.0
+ 21
+120.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+BAY_ID
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+120.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+514
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+119.0
+ 30
+0.0
+ 40
+0.1
+  1
+dynamic_svg
+ 11
+385.0
+ 21
+119.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+TYPE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+119.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+515
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+118.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+385.0
+ 21
+118.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATE
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+118.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+516
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+117.0
+ 30
+0.0
+ 40
+0.1
+  1
+in_service
+ 11
+385.0
+ 21
+117.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+STATUS
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+117.0
+ 31
+0.0
+  0
+ATTRIB
+  5
+517
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+385.0
+ 20
+116.0
+ 30
+0.0
+ 40
+0.1
+  1
+10kV-I
+ 11
+385.0
+ 21
+116.0
+ 31
+0.0
+100
+AcDbAttribute
+  2
+SECTION
+ 70
+1
+ 71
+1
+ 72
+0
+ 11
+385.0
+ 21
+116.0
+ 31
+0.0
+  0
+SEQEND
+  5
+512
+330
+511
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+  0
+MTEXT
+  5
+518
+330
+17
+100
+AcDbEntity
+  8
+E-TEXT
+100
+AcDbMText
+ 10
+385.0
+ 20
+132.0
+ 30
+0.0
+ 40
+2.5
+ 41
+48.0
+ 71
+2
+  1
+SVG-1 ±12Mvar\P动态无功补偿
+  7
+HZTXT
+  0
+LINE
+  5
+519
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbLine
+ 10
+630.0
+ 20
+145.0
+ 30
+0.0
+ 11
+630.0
+ 21
+152.0
+ 31
+0.0
+  0
+INSERT
+  5
+51A
+330
+17
+100
+AcDbEntity
+  8
+E-CONDUCTOR
+100
+AcDbBlockReference
+ 66
+1
+  2
+SLD_CT
+ 10
+630.0
+ 20
+157.0
+ 30
+0.0
+  0
+ATTRIB
+  5
+51C
+330
+17
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
 630.0
  20
 137.0
@@ -41361,7 +43929,7 @@ AcDbText
  40
 0.1
   1
-LOAD-10-II
+SVG-2
  11
 630.0
  21
@@ -41387,7 +43955,7 @@ BAY_ID
   0
 ATTRIB
   5
-4D2
+51D
 330
 17
 100
@@ -41405,7 +43973,7 @@ AcDbText
  40
 0.1
   1
-pending_load_ct
+svg_feeder_ct
  11
 630.0
  21
@@ -41431,7 +43999,7 @@ TYPE
   0
 ATTRIB
   5
-4D3
+51E
 330
 17
 100
@@ -41475,7 +44043,7 @@ STATE
   0
 ATTRIB
   5
-4D4
+51F
 330
 17
 100
@@ -41493,7 +44061,7 @@ AcDbText
  40
 0.1
   1
-pending
+in_service
  11
 630.0
  21
@@ -41519,7 +44087,7 @@ STATUS
   0
 ATTRIB
   5
-4D5
+520
 330
 17
 100
@@ -41563,23 +44131,23 @@ SECTION
   0
 SEQEND
   5
-4D0
+51B
 330
-4CF
+51A
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
   0
 LINE
   5
-4D6
+521
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbLine
  10
@@ -41597,19 +44165,19 @@ AcDbLine
   0
 INSERT
   5
-4D7
+522
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbBlockReference
  66
 1
   2
-SLD_CB_OPEN
+SLD_CB_CLOSED
  10
 630.0
  20
@@ -41619,7 +44187,7 @@ SLD_CB_OPEN
   0
 ATTRIB
   5
-4D9
+524
 330
 17
 100
@@ -41637,7 +44205,7 @@ AcDbText
  40
 0.1
   1
-LOAD-10-II
+SVG-2
  11
 630.0
  21
@@ -41663,7 +44231,7 @@ BAY_ID
   0
 ATTRIB
   5
-4DA
+525
 330
 17
 100
@@ -41681,7 +44249,7 @@ AcDbText
  40
 0.1
   1
-pending_load_breaker
+svg_feeder_breaker
  11
 630.0
  21
@@ -41707,7 +44275,7 @@ TYPE
   0
 ATTRIB
   5
-4DB
+526
 330
 17
 100
@@ -41725,7 +44293,7 @@ AcDbText
  40
 0.1
   1
-open
+closed
  11
 630.0
  21
@@ -41751,7 +44319,7 @@ STATE
   0
 ATTRIB
   5
-4DC
+527
 330
 17
 100
@@ -41769,7 +44337,7 @@ AcDbText
  40
 0.1
   1
-pending
+in_service
  11
 630.0
  21
@@ -41795,7 +44363,7 @@ STATUS
   0
 ATTRIB
   5
-4DD
+528
 330
 17
 100
@@ -41839,23 +44407,23 @@ SECTION
   0
 SEQEND
   5
-4D8
+523
 330
-4D7
+522
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
   0
 LINE
   5
-4DE
+529
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbLine
  10
@@ -41873,13 +44441,13 @@ AcDbLine
   0
 INSERT
   5
-4DF
+52A
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
 100
 AcDbBlockReference
  66
@@ -41895,7 +44463,7 @@ SLD_ARROW_DOWN
   0
 ATTRIB
   5
-4E1
+52C
 330
 17
 100
@@ -41913,7 +44481,7 @@ AcDbText
  40
 0.1
   1
-LOAD-10-II
+SVG-2
  11
 630.0
  21
@@ -41939,7 +44507,7 @@ BAY_ID
   0
 ATTRIB
   5
-4E2
+52D
 330
 17
 100
@@ -41957,7 +44525,7 @@ AcDbText
  40
 0.1
   1
-pending_load_group
+dynamic_svg
  11
 630.0
  21
@@ -41983,7 +44551,7 @@ TYPE
   0
 ATTRIB
   5
-4E3
+52E
 330
 17
 100
@@ -42001,7 +44569,7 @@ AcDbText
  40
 0.1
   1
-open
+in_service
  11
 630.0
  21
@@ -42027,7 +44595,7 @@ STATE
   0
 ATTRIB
   5
-4E4
+52F
 330
 17
 100
@@ -42045,7 +44613,7 @@ AcDbText
  40
 0.1
   1
-pending
+in_service
  11
 630.0
  21
@@ -42071,7 +44639,7 @@ STATUS
   0
 ATTRIB
   5
-4E5
+530
 330
 17
 100
@@ -42115,23 +44683,23 @@ SECTION
   0
 SEQEND
   5
-4E0
+52B
 330
-4DF
+52A
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-CONDUCTOR
   0
 MTEXT
   5
-4E6
+531
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-TEXT
 100
 AcDbMText
  10
@@ -42141,19 +44709,19 @@ AcDbMText
  30
 0.0
  40
-2.1
+2.5
  41
-56.0
+48.0
  71
 2
   1
-10kV II段待定负荷组\P0.8/0.6/0.4MW及无功回路：分段、Mvar均P
+SVG-2 ±12Mvar\P动态无功补偿
   7
 HZTXT
   0
 LINE
   5
-4E7
+532
 330
 17
 100
@@ -42177,7 +44745,7 @@ AcDbLine
   0
 INSERT
   5
-4E8
+533
 330
 17
 100
@@ -42199,7 +44767,7 @@ SLD_CT
   0
 ATTRIB
   5
-4EA
+535
 330
 17
 100
@@ -42243,7 +44811,7 @@ BAY_ID
   0
 ATTRIB
   5
-4EB
+536
 330
 17
 100
@@ -42287,7 +44855,7 @@ TYPE
   0
 ATTRIB
   5
-4EC
+537
 330
 17
 100
@@ -42331,7 +44899,7 @@ STATE
   0
 ATTRIB
   5
-4ED
+538
 330
 17
 100
@@ -42375,7 +44943,7 @@ STATUS
   0
 ATTRIB
   5
-4EE
+539
 330
 17
 100
@@ -42419,9 +44987,9 @@ SECTION
   0
 SEQEND
   5
-4E9
+534
 330
-4E8
+533
 100
 AcDbEntity
   8
@@ -42429,7 +44997,7 @@ E-CONDUCTOR
   0
 LINE
   5
-4EF
+53A
 330
 17
 100
@@ -42453,7 +45021,7 @@ AcDbLine
   0
 INSERT
   5
-4F0
+53B
 330
 17
 100
@@ -42475,7 +45043,7 @@ SLD_CB_CLOSED
   0
 ATTRIB
   5
-4F2
+53D
 330
 17
 100
@@ -42519,7 +45087,7 @@ BAY_ID
   0
 ATTRIB
   5
-4F3
+53E
 330
 17
 100
@@ -42563,7 +45131,7 @@ TYPE
   0
 ATTRIB
   5
-4F4
+53F
 330
 17
 100
@@ -42607,7 +45175,7 @@ STATE
   0
 ATTRIB
   5
-4F5
+540
 330
 17
 100
@@ -42651,7 +45219,7 @@ STATUS
   0
 ATTRIB
   5
-4F6
+541
 330
 17
 100
@@ -42695,9 +45263,9 @@ SECTION
   0
 SEQEND
   5
-4F1
+53C
 330
-4F0
+53B
 100
 AcDbEntity
   8
@@ -42705,7 +45273,7 @@ E-CONDUCTOR
   0
 LINE
   5
-4F7
+542
 330
 17
 100
@@ -42729,7 +45297,7 @@ AcDbLine
   0
 LINE
   5
-4F8
+543
 330
 17
 100
@@ -42753,7 +45321,7 @@ AcDbLine
   0
 INSERT
   5
-4F9
+544
 330
 17
 100
@@ -42775,7 +45343,7 @@ SLD_TX_2W
   0
 ATTRIB
   5
-4FB
+546
 330
 17
 100
@@ -42819,7 +45387,7 @@ BAY_ID
   0
 ATTRIB
   5
-4FC
+547
 330
 17
 100
@@ -42863,7 +45431,7 @@ TYPE
   0
 ATTRIB
   5
-4FD
+548
 330
 17
 100
@@ -42907,7 +45475,7 @@ STATE
   0
 ATTRIB
   5
-4FE
+549
 330
 17
 100
@@ -42951,7 +45519,7 @@ STATUS
   0
 ATTRIB
   5
-4FF
+54A
 330
 17
 100
@@ -42995,9 +45563,9 @@ SECTION
   0
 SEQEND
   5
-4FA
+545
 330
-4F9
+544
 100
 AcDbEntity
   8
@@ -43005,7 +45573,7 @@ E-DEVICE
   0
 LINE
   5
-500
+54B
 330
 17
 100
@@ -43029,7 +45597,7 @@ AcDbLine
   0
 INSERT
   5
-501
+54C
 330
 17
 100
@@ -43051,7 +45619,7 @@ SLD_CB_CLOSED
   0
 ATTRIB
   5
-503
+54E
 330
 17
 100
@@ -43095,7 +45663,7 @@ BAY_ID
   0
 ATTRIB
   5
-504
+54F
 330
 17
 100
@@ -43139,7 +45707,7 @@ TYPE
   0
 ATTRIB
   5
-505
+550
 330
 17
 100
@@ -43183,7 +45751,7 @@ STATE
   0
 ATTRIB
   5
-506
+551
 330
 17
 100
@@ -43227,7 +45795,7 @@ STATUS
   0
 ATTRIB
   5
-507
+552
 330
 17
 100
@@ -43271,9 +45839,9 @@ SECTION
   0
 SEQEND
   5
-502
+54D
 330
-501
+54C
 100
 AcDbEntity
   8
@@ -43281,7 +45849,7 @@ E-CONDUCTOR
   0
 LINE
   5
-508
+553
 330
 17
 100
@@ -43305,7 +45873,7 @@ AcDbLine
   0
 INSERT
   5
-509
+554
 330
 17
 100
@@ -43327,7 +45895,7 @@ SLD_CT
   0
 ATTRIB
   5
-50B
+556
 330
 17
 100
@@ -43371,7 +45939,7 @@ BAY_ID
   0
 ATTRIB
   5
-50C
+557
 330
 17
 100
@@ -43415,7 +45983,7 @@ TYPE
   0
 ATTRIB
   5
-50D
+558
 330
 17
 100
@@ -43459,7 +46027,7 @@ STATE
   0
 ATTRIB
   5
-50E
+559
 330
 17
 100
@@ -43503,7 +46071,7 @@ STATUS
   0
 ATTRIB
   5
-50F
+55A
 330
 17
 100
@@ -43547,9 +46115,9 @@ SECTION
   0
 SEQEND
   5
-50A
+555
 330
-509
+554
 100
 AcDbEntity
   8
@@ -43557,7 +46125,7 @@ E-CONDUCTOR
   0
 LINE
   5
-510
+55B
 330
 17
 100
@@ -43581,7 +46149,7 @@ AcDbLine
   0
 MTEXT
   5
-511
+55C
 330
 17
 100
@@ -43603,13 +46171,13 @@ AcDbMText
  71
 4
   1
-TS1 200kVA(P)\P10/0.4kV  CLOSED
+TS1 200kVA\P10/0.4kV  CLOSED
   7
 HZTXT
   0
 LINE
   5
-512
+55D
 330
 17
 100
@@ -43633,7 +46201,7 @@ AcDbLine
   0
 INSERT
   5
-513
+55E
 330
 17
 100
@@ -43655,7 +46223,7 @@ SLD_CT
   0
 ATTRIB
   5
-515
+560
 330
 17
 100
@@ -43699,7 +46267,7 @@ BAY_ID
   0
 ATTRIB
   5
-516
+561
 330
 17
 100
@@ -43743,7 +46311,7 @@ TYPE
   0
 ATTRIB
   5
-517
+562
 330
 17
 100
@@ -43787,7 +46355,7 @@ STATE
   0
 ATTRIB
   5
-518
+563
 330
 17
 100
@@ -43831,7 +46399,7 @@ STATUS
   0
 ATTRIB
   5
-519
+564
 330
 17
 100
@@ -43875,9 +46443,9 @@ SECTION
   0
 SEQEND
   5
-514
+55F
 330
-513
+55E
 100
 AcDbEntity
   8
@@ -43885,7 +46453,7 @@ E-CONDUCTOR
   0
 LINE
   5
-51A
+565
 330
 17
 100
@@ -43909,7 +46477,7 @@ AcDbLine
   0
 INSERT
   5
-51B
+566
 330
 17
 100
@@ -43931,7 +46499,7 @@ SLD_CB_CLOSED
   0
 ATTRIB
   5
-51D
+568
 330
 17
 100
@@ -43975,7 +46543,7 @@ BAY_ID
   0
 ATTRIB
   5
-51E
+569
 330
 17
 100
@@ -44019,7 +46587,7 @@ TYPE
   0
 ATTRIB
   5
-51F
+56A
 330
 17
 100
@@ -44063,7 +46631,7 @@ STATE
   0
 ATTRIB
   5
-520
+56B
 330
 17
 100
@@ -44107,7 +46675,7 @@ STATUS
   0
 ATTRIB
   5
-521
+56C
 330
 17
 100
@@ -44151,9 +46719,9 @@ SECTION
   0
 SEQEND
   5
-51C
+567
 330
-51B
+566
 100
 AcDbEntity
   8
@@ -44161,7 +46729,7 @@ E-CONDUCTOR
   0
 LINE
   5
-522
+56D
 330
 17
 100
@@ -44185,7 +46753,7 @@ AcDbLine
   0
 LWPOLYLINE
   5
-523
+56E
 330
 17
 100
@@ -44217,7 +46785,7 @@ AcDbPolyline
   0
 INSERT
   5
-524
+56F
 330
 17
 100
@@ -44239,7 +46807,7 @@ SLD_TX_2W
   0
 ATTRIB
   5
-526
+571
 330
 17
 100
@@ -44283,7 +46851,7 @@ BAY_ID
   0
 ATTRIB
   5
-527
+572
 330
 17
 100
@@ -44327,7 +46895,7 @@ TYPE
   0
 ATTRIB
   5
-528
+573
 330
 17
 100
@@ -44371,7 +46939,7 @@ STATE
   0
 ATTRIB
   5
-529
+574
 330
 17
 100
@@ -44415,7 +46983,7 @@ STATUS
   0
 ATTRIB
   5
-52A
+575
 330
 17
 100
@@ -44459,9 +47027,9 @@ SECTION
   0
 SEQEND
   5
-525
+570
 330
-524
+56F
 100
 AcDbEntity
   8
@@ -44469,7 +47037,7 @@ E-DEVICE
   0
 LINE
   5
-52B
+576
 330
 17
 100
@@ -44493,7 +47061,7 @@ AcDbLine
   0
 INSERT
   5
-52C
+577
 330
 17
 100
@@ -44515,7 +47083,7 @@ SLD_CB_OPEN
   0
 ATTRIB
   5
-52E
+579
 330
 17
 100
@@ -44559,7 +47127,7 @@ BAY_ID
   0
 ATTRIB
   5
-52F
+57A
 330
 17
 100
@@ -44603,7 +47171,7 @@ TYPE
   0
 ATTRIB
   5
-530
+57B
 330
 17
 100
@@ -44647,7 +47215,7 @@ STATE
   0
 ATTRIB
   5
-531
+57C
 330
 17
 100
@@ -44691,7 +47259,7 @@ STATUS
   0
 ATTRIB
   5
-532
+57D
 330
 17
 100
@@ -44735,9 +47303,9 @@ SECTION
   0
 SEQEND
   5
-52D
+578
 330
-52C
+577
 100
 AcDbEntity
   8
@@ -44745,7 +47313,7 @@ E-SYMBOL
   0
 LINE
   5
-533
+57E
 330
 17
 100
@@ -44769,7 +47337,7 @@ AcDbLine
   0
 INSERT
   5
-534
+57F
 330
 17
 100
@@ -44791,7 +47359,7 @@ SLD_CT
   0
 ATTRIB
   5
-536
+581
 330
 17
 100
@@ -44835,7 +47403,7 @@ BAY_ID
   0
 ATTRIB
   5
-537
+582
 330
 17
 100
@@ -44879,7 +47447,7 @@ TYPE
   0
 ATTRIB
   5
-538
+583
 330
 17
 100
@@ -44923,7 +47491,7 @@ STATE
   0
 ATTRIB
   5
-539
+584
 330
 17
 100
@@ -44967,7 +47535,7 @@ STATUS
   0
 ATTRIB
   5
-53A
+585
 330
 17
 100
@@ -45011,9 +47579,9 @@ SECTION
   0
 SEQEND
   5
-535
+580
 330
-534
+57F
 100
 AcDbEntity
   8
@@ -45021,7 +47589,7 @@ E-SYMBOL
   0
 LINE
   5
-53B
+586
 330
 17
 100
@@ -45045,7 +47613,7 @@ AcDbLine
   0
 MTEXT
   5
-53C
+587
 330
 17
 100
@@ -45067,13 +47635,13 @@ AcDbMText
  71
 4
   1
-TS2 200kVA(P)\P10/0.4kV  OPEN
+TS2 200kVA\P10/0.4kV  OPEN
   7
 HZTXT
   0
 LINE
   5
-53D
+588
 330
 17
 100
@@ -45083,13 +47651,13 @@ E-CONDITIONAL
 100
 AcDbLine
  10
-235.0
+305.0
  20
 180.0
  30
 0.0
  11
-235.0
+305.0
  21
 169.0
  31
@@ -45097,7 +47665,7 @@ AcDbLine
   0
 INSERT
   5
-53E
+589
 330
 17
 100
@@ -45111,7 +47679,7 @@ AcDbBlockReference
   2
 SLD_GROUND
  10
-235.0
+305.0
  20
 166.0
  30
@@ -45119,7 +47687,7 @@ SLD_GROUND
   0
 ATTRIB
   5
-540
+58B
 330
 17
 100
@@ -45129,7 +47697,7 @@ AcDbEntity
 100
 AcDbText
  10
-235.0
+305.0
  20
 146.0
  30
@@ -45139,7 +47707,7 @@ AcDbText
   1
 GROUND-10kV-I
  11
-235.0
+305.0
  21
 146.0
  31
@@ -45155,7 +47723,7 @@ BAY_ID
  72
 0
  11
-235.0
+305.0
  21
 146.0
  31
@@ -45163,7 +47731,7 @@ BAY_ID
   0
 ATTRIB
   5
-541
+58C
 330
 17
 100
@@ -45173,7 +47741,7 @@ AcDbEntity
 100
 AcDbText
  10
-235.0
+305.0
  20
 145.0
  30
@@ -45181,9 +47749,9 @@ AcDbText
  40
 0.1
   1
-neutral_grounding_placeholder
+grounding_transformer_low_resistance
  11
-235.0
+305.0
  21
 145.0
  31
@@ -45199,7 +47767,7 @@ TYPE
  72
 0
  11
-235.0
+305.0
  21
 145.0
  31
@@ -45207,7 +47775,7 @@ TYPE
   0
 ATTRIB
   5
-542
+58D
 330
 17
 100
@@ -45217,7 +47785,7 @@ AcDbEntity
 100
 AcDbText
  10
-235.0
+305.0
  20
 144.0
  30
@@ -45227,7 +47795,7 @@ AcDbText
   1
 closed
  11
-235.0
+305.0
  21
 144.0
  31
@@ -45243,7 +47811,7 @@ STATE
  72
 0
  11
-235.0
+305.0
  21
 144.0
  31
@@ -45251,7 +47819,7 @@ STATE
   0
 ATTRIB
   5
-543
+58E
 330
 17
 100
@@ -45261,7 +47829,7 @@ AcDbEntity
 100
 AcDbText
  10
-235.0
+305.0
  20
 143.0
  30
@@ -45269,9 +47837,9 @@ AcDbText
  40
 0.1
   1
-pending
+course_assumption
  11
-235.0
+305.0
  21
 143.0
  31
@@ -45287,7 +47855,7 @@ STATUS
  72
 0
  11
-235.0
+305.0
  21
 143.0
  31
@@ -45295,7 +47863,7 @@ STATUS
   0
 ATTRIB
   5
-544
+58F
 330
 17
 100
@@ -45305,7 +47873,7 @@ AcDbEntity
 100
 AcDbText
  10
-235.0
+305.0
  20
 142.0
  30
@@ -45315,7 +47883,7 @@ AcDbText
   1
 10kV-I
  11
-235.0
+305.0
  21
 142.0
  31
@@ -45331,7 +47899,7 @@ SECTION
  72
 0
  11
-235.0
+305.0
  21
 142.0
  31
@@ -45339,9 +47907,9 @@ SECTION
   0
 SEQEND
   5
-53F
+58A
 330
-53E
+589
 100
 AcDbEntity
   8
@@ -45349,35 +47917,35 @@ E-CONDITIONAL
   0
 MTEXT
   5
-545
+590
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-NOTE
 100
 AcDbMText
  10
-235.0
+305.0
  20
 153.0
  30
 0.0
  40
-2.0
+2.5
  41
 24.0
  71
 2
   1
-接地P
+接地变+小电阻
   7
 HZTXT
   0
 LINE
   5
-546
+591
 330
 17
 100
@@ -45387,13 +47955,13 @@ E-CONDITIONAL
 100
 AcDbLine
  10
-485.0
+540.0
  20
 180.0
  30
 0.0
  11
-485.0
+540.0
  21
 169.0
  31
@@ -45401,7 +47969,7 @@ AcDbLine
   0
 INSERT
   5
-547
+592
 330
 17
 100
@@ -45415,7 +47983,7 @@ AcDbBlockReference
   2
 SLD_GROUND
  10
-485.0
+540.0
  20
 166.0
  30
@@ -45423,7 +47991,7 @@ SLD_GROUND
   0
 ATTRIB
   5
-549
+594
 330
 17
 100
@@ -45433,7 +48001,7 @@ AcDbEntity
 100
 AcDbText
  10
-485.0
+540.0
  20
 146.0
  30
@@ -45443,7 +48011,7 @@ AcDbText
   1
 GROUND-10kV-II
  11
-485.0
+540.0
  21
 146.0
  31
@@ -45459,7 +48027,7 @@ BAY_ID
  72
 0
  11
-485.0
+540.0
  21
 146.0
  31
@@ -45467,7 +48035,7 @@ BAY_ID
   0
 ATTRIB
   5
-54A
+595
 330
 17
 100
@@ -45477,7 +48045,7 @@ AcDbEntity
 100
 AcDbText
  10
-485.0
+540.0
  20
 145.0
  30
@@ -45485,9 +48053,9 @@ AcDbText
  40
 0.1
   1
-neutral_grounding_placeholder
+grounding_transformer_low_resistance
  11
-485.0
+540.0
  21
 145.0
  31
@@ -45503,7 +48071,7 @@ TYPE
  72
 0
  11
-485.0
+540.0
  21
 145.0
  31
@@ -45511,7 +48079,7 @@ TYPE
   0
 ATTRIB
   5
-54B
+596
 330
 17
 100
@@ -45521,7 +48089,7 @@ AcDbEntity
 100
 AcDbText
  10
-485.0
+540.0
  20
 144.0
  30
@@ -45531,7 +48099,7 @@ AcDbText
   1
 closed
  11
-485.0
+540.0
  21
 144.0
  31
@@ -45547,7 +48115,7 @@ STATE
  72
 0
  11
-485.0
+540.0
  21
 144.0
  31
@@ -45555,7 +48123,7 @@ STATE
   0
 ATTRIB
   5
-54C
+597
 330
 17
 100
@@ -45565,7 +48133,7 @@ AcDbEntity
 100
 AcDbText
  10
-485.0
+540.0
  20
 143.0
  30
@@ -45573,9 +48141,9 @@ AcDbText
  40
 0.1
   1
-pending
+course_assumption
  11
-485.0
+540.0
  21
 143.0
  31
@@ -45591,7 +48159,7 @@ STATUS
  72
 0
  11
-485.0
+540.0
  21
 143.0
  31
@@ -45599,7 +48167,7 @@ STATUS
   0
 ATTRIB
   5
-54D
+598
 330
 17
 100
@@ -45609,7 +48177,7 @@ AcDbEntity
 100
 AcDbText
  10
-485.0
+540.0
  20
 142.0
  30
@@ -45619,7 +48187,7 @@ AcDbText
   1
 10kV-II
  11
-485.0
+540.0
  21
 142.0
  31
@@ -45635,7 +48203,7 @@ SECTION
  72
 0
  11
-485.0
+540.0
  21
 142.0
  31
@@ -45643,9 +48211,9 @@ SECTION
   0
 SEQEND
   5
-548
+593
 330
-547
+592
 100
 AcDbEntity
   8
@@ -45653,35 +48221,35 @@ E-CONDITIONAL
   0
 MTEXT
   5
-54E
+599
 330
 17
 100
 AcDbEntity
   8
-E-CONDITIONAL
+E-NOTE
 100
 AcDbMText
  10
-485.0
+540.0
  20
 153.0
  30
 0.0
  40
-2.0
+2.5
  41
 24.0
  71
 2
   1
-接地P
+接地变+小电阻
   7
 HZTXT
   0
 LINE
   5
-54F
+59A
 330
 17
 100
@@ -45705,7 +48273,7 @@ AcDbLine
   0
 INSERT
   5
-550
+59B
 330
 17
 100
@@ -45727,7 +48295,7 @@ SLD_ARROW_DOWN
   0
 ATTRIB
   5
-552
+59D
 330
 17
 100
@@ -45771,7 +48339,7 @@ BAY_ID
   0
 ATTRIB
   5
-553
+59E
 330
 17
 100
@@ -45815,7 +48383,7 @@ TYPE
   0
 ATTRIB
   5
-554
+59F
 330
 17
 100
@@ -45859,7 +48427,7 @@ STATE
   0
 ATTRIB
   5
-555
+5A0
 330
 17
 100
@@ -45903,7 +48471,7 @@ STATUS
   0
 ATTRIB
   5
-556
+5A1
 330
 17
 100
@@ -45947,9 +48515,9 @@ SECTION
   0
 SEQEND
   5
-551
+59C
 330
-550
+59B
 100
 AcDbEntity
   8
@@ -45957,7 +48525,7 @@ E-CONDUCTOR
   0
 MTEXT
   5
-557
+5A2
 330
 17
 100
@@ -45973,7 +48541,7 @@ AcDbMText
  30
 0.0
  40
-1.8
+2.5
  41
 50.0
  71
@@ -45985,7 +48553,7 @@ HZTXT
   0
 LINE
   5
-558
+5A3
 330
 17
 100
@@ -46009,7 +48577,7 @@ AcDbLine
   0
 INSERT
   5
-559
+5A4
 330
 17
 100
@@ -46031,7 +48599,7 @@ SLD_ARROW_DOWN
   0
 ATTRIB
   5
-55B
+5A6
 330
 17
 100
@@ -46075,7 +48643,7 @@ BAY_ID
   0
 ATTRIB
   5
-55C
+5A7
 330
 17
 100
@@ -46119,7 +48687,7 @@ TYPE
   0
 ATTRIB
   5
-55D
+5A8
 330
 17
 100
@@ -46163,7 +48731,7 @@ STATE
   0
 ATTRIB
   5
-55E
+5A9
 330
 17
 100
@@ -46207,7 +48775,7 @@ STATUS
   0
 ATTRIB
   5
-55F
+5AA
 330
 17
 100
@@ -46251,9 +48819,9 @@ SECTION
   0
 SEQEND
   5
-55A
+5A5
 330
-559
+5A4
 100
 AcDbEntity
   8
@@ -46261,7 +48829,7 @@ E-CONDUCTOR
   0
 MTEXT
   5
-560
+5AB
 330
 17
 100
@@ -46277,7 +48845,7 @@ AcDbMText
  30
 0.0
  40
-1.8
+2.5
  41
 50.0
  71
@@ -46289,7 +48857,7 @@ HZTXT
   0
 LINE
   5
-561
+5AC
 330
 17
 100
@@ -46313,7 +48881,7 @@ AcDbLine
   0
 INSERT
   5
-562
+5AD
 330
 17
 100
@@ -46335,7 +48903,7 @@ SLD_ARROW_DOWN
   0
 ATTRIB
   5
-564
+5AF
 330
 17
 100
@@ -46379,7 +48947,7 @@ BAY_ID
   0
 ATTRIB
   5
-565
+5B0
 330
 17
 100
@@ -46423,7 +48991,7 @@ TYPE
   0
 ATTRIB
   5
-566
+5B1
 330
 17
 100
@@ -46467,7 +49035,7 @@ STATE
   0
 ATTRIB
   5
-567
+5B2
 330
 17
 100
@@ -46511,7 +49079,7 @@ STATUS
   0
 ATTRIB
   5
-568
+5B3
 330
 17
 100
@@ -46555,9 +49123,9 @@ SECTION
   0
 SEQEND
   5
-563
+5AE
 330
-562
+5AD
 100
 AcDbEntity
   8
@@ -46565,7 +49133,7 @@ E-CONDUCTOR
   0
 MTEXT
   5
-569
+5B4
 330
 17
 100
@@ -46581,7 +49149,7 @@ AcDbMText
  30
 0.0
  40
-1.8
+2.5
  41
 50.0
  71
@@ -46593,7 +49161,7 @@ HZTXT
   0
 LINE
   5
-56A
+5B5
 330
 17
 100
@@ -46617,7 +49185,7 @@ AcDbLine
   0
 INSERT
   5
-56B
+5B6
 330
 17
 100
@@ -46639,7 +49207,7 @@ SLD_ARROW_DOWN
   0
 ATTRIB
   5
-56D
+5B8
 330
 17
 100
@@ -46683,7 +49251,7 @@ BAY_ID
   0
 ATTRIB
   5
-56E
+5B9
 330
 17
 100
@@ -46727,7 +49295,7 @@ TYPE
   0
 ATTRIB
   5
-56F
+5BA
 330
 17
 100
@@ -46771,7 +49339,7 @@ STATE
   0
 ATTRIB
   5
-570
+5BB
 330
 17
 100
@@ -46815,7 +49383,7 @@ STATUS
   0
 ATTRIB
   5
-571
+5BC
 330
 17
 100
@@ -46859,9 +49427,9 @@ SECTION
   0
 SEQEND
   5
-56C
+5B7
 330
-56B
+5B6
 100
 AcDbEntity
   8
@@ -46869,7 +49437,7 @@ E-CONDUCTOR
   0
 MTEXT
   5
-572
+5BD
 330
 17
 100
@@ -46885,7 +49453,7 @@ AcDbMText
  30
 0.0
  40
-1.8
+2.5
  41
 50.0
  71
@@ -46897,7 +49465,7 @@ HZTXT
   0
 LWPOLYLINE
   5
-573
+5BE
 330
 17
 100
@@ -46913,11 +49481,11 @@ AcDbPolyline
  10
 655.0
  20
-117.0
+110.0
  10
 820.0
  20
-117.0
+110.0
  10
 820.0
  20
@@ -46929,7 +49497,7 @@ AcDbPolyline
   0
 MTEXT
   5
-574
+5BF
 330
 17
 100
@@ -46957,7 +49525,7 @@ HZTXT
   0
 MTEXT
   5
-575
+5C0
 330
 17
 100
@@ -46985,7 +49553,7 @@ HZTXT
   0
 MTEXT
   5
-576
+5C1
 330
 17
 100
@@ -47013,7 +49581,7 @@ HZTXT
   0
 MTEXT
   5
-577
+5C2
 330
 17
 100
@@ -47035,13 +49603,13 @@ AcDbMText
  71
 1
   1
-3. 220kV分段是否闭合取决于系统1、系统2并列运行许可。
+3. 220kV分段正常断开；仅调度许可且同期检查通过后条件闭合。
   7
 HZTXT
   0
 MTEXT
   5
-578
+5C3
 330
 17
 100
@@ -47069,7 +49637,7 @@ HZTXT
   0
 MTEXT
   5
-579
+5C4
 330
 17
 100
@@ -47091,13 +49659,13 @@ AcDbMText
  71
 1
   1
-5. 10kV负荷组分配待无功补偿容量确认后细化。
+5. 10kV每段设1套±12Mvar SVG；T10为2×31.5MVA、35/10.5kV、uk=8%。
   7
 HZTXT
   0
 MTEXT
   5
-57A
+5C5
 330
 17
 100
@@ -47125,7 +49693,7 @@ HZTXT
   0
 MTEXT
   5
-57B
+5C6
 330
 17
 100
@@ -47148,6 +49716,34 @@ AcDbMText
 1
   1
 7. 0.4kV两进线设联锁，正常及切换过程不得同时闭合。
+  7
+HZTXT
+  0
+MTEXT
+  5
+5C7
+330
+17
+100
+AcDbEntity
+  8
+E-NOTE
+100
+AcDbMText
+ 10
+660.0
+ 20
+122.0
+ 30
+0.0
+ 40
+2.35
+ 41
+158.0
+ 71
+1
+  1
+8. 海拔≤1000m、污秽d级、保护与接地方式为课程设计假设，教师或专题资料优先覆盖。
   7
 HZTXT
   0
@@ -48141,7 +50737,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-57E
+5CA
   0
 DICTIONARYVAR
   5
@@ -48157,7 +50753,7 @@ DictionaryVariables
   0
 DICTIONARYVAR
   5
-57E
+5CA
 330
 2D
 100

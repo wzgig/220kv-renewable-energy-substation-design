@@ -5953,18 +5953,18 @@
   "pending_final_inputs": [
     "highest system voltage classes and insulation levels",
     "system 1/system 2 parallel-operation permission",
-    "10kV reactive-compensation Mvar and 35/10.5kV transformer rating",
-    "protection and breaker clearing times for thermal duty",
+    "final reactive-power/voltage/harmonic study and 41C T10/SVG vendor confirmation",
+    "final protection coordination and manufacturer breaker clearing data",
     "renewable peak-current and 220kV fault-contribution model",
-    "altitude, pollution level, and 41C current correction",
+    "site-confirmed altitude/pollution and manufacturer 41C service ratings",
     "exact manufacturer models, verified datasheets, and dimensions",
-    "LGJ-400/50 corrected ampacity, thermal, mechanical, and corona data",
+    "LGJ-400/50 manufacturer thermal rating under defined weather plus mechanical and corona checks",
     "CT/PT secondary allocation, accuracy, burden, and protection data"
   ],
   "upstream_provenance": {
     "load_results": {
       "path": "calculations/results/load_and_transformer_results.json",
-      "sha256": "a16c7d85ca405fe2f9e7b0bee4cc5ff352f3605d7bf8cf7a805ec858eb1444ff"
+      "sha256": "3fb45465acefb089d6309008fe474f8fd1411f7f6c55a9579a85789aceddeb28"
     },
     "short_circuit_results": {
       "path": "calculations/results/short_circuit/short_circuit_results.json",
@@ -5972,11 +5972,11 @@
     },
     "baseline": {
       "path": "data/design_baseline.yaml",
-      "sha256": "a62bc17c54ffd3a751e771c4316e80666e71ba99e7b379f98e3509609276e83a"
+      "sha256": "4e644d28a9d9306d1301f24ea6ec68ec9a73fb51be506f9f53a71e5cd6c89895"
     },
     "design_inputs": {
       "path": "data/design_inputs.yaml",
-      "sha256": "c610448dd5321f101b801ce2d5d40db8b9d5bef24670bc9c833190d88a6a93b2"
+      "sha256": "5ace870a040d9eff8667277dcf365d20384ab4a84398a1d1806fb76c7a67d35e"
     }
   }
 }

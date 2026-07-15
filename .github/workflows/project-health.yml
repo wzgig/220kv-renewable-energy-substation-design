@@ -45,5 +45,16 @@ jobs:
           --output tmp/ci_single_line_a1.dxf
           --verify-against drawings/source/single_line_a1.dxf
 
+      - name: Regenerate switchyard DXFs
+        run: >-
+          python drawings/scripts/generate_switchyard_drawings.py
+          --plan-output tmp/ci_switchyard_plan_a1.dxf
+          --section-output tmp/ci_switchyard_section_a1.dxf
+          --verify-against
+          drawings/source/switchyard_plan_a1.dxf
+          drawings/source/switchyard_section_a1.dxf
+
       - name: Verify generated results are committed
-        run: git diff --exit-code -- calculations/results
+        run: >-
+          git diff --exit-code --
+          calculations/results

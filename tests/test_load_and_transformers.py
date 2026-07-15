@@ -96,6 +96,32 @@ class LoadAndTransformerCalculationTests(unittest.TestCase):
             places=8,
         )
 
+    def test_lgj_400_50_course_ampacity_and_n_minus_one_control(self) -> None:
+        conductor = self.result["outgoing_220kv_conductor_ampacity"]
+
+        self.assertAlmostEqual(
+            conductor["temperature_correction_factor"],
+            math.sqrt((70 - 41) / (70 - 25)),
+            places=12,
+        )
+        self.assertAlmostEqual(conductor["corrected_ampacity_a"], 475.2415993763, places=9)
+        self.assertEqual(conductor["normal_status"], "pass")
+        self.assertEqual(
+            conductor["single_line_contingency_status"],
+            "fail_curtailment_required",
+        )
+        self.assertAlmostEqual(
+            conductor["line_only_required_curtailment_percent"],
+            35.3904384391,
+            places=9,
+        )
+        self.assertEqual(conductor["controlling_element"], "main_transformer")
+        self.assertAlmostEqual(
+            conductor["margin_after_main_transformer_n_minus_one_a"],
+            2.8641064030,
+            places=9,
+        )
+
     def test_station_service_excludes_110kv_items_and_selects_200kva(self) -> None:
         result = self.result["station_service"]
 

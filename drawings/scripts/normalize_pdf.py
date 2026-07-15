@@ -13,7 +13,13 @@ DEFAULT_INPUT = PROJECT_ROOT / "drawings" / "exports" / "single_line_a1_raw.pdf"
 DEFAULT_OUTPUT = PROJECT_ROOT / "drawings" / "exports" / "single_line_a1.pdf"
 
 
-def normalize_pdf(input_path: Path, output_path: Path) -> int:
+def normalize_pdf(
+    input_path: Path,
+    output_path: Path,
+    *,
+    title: str | None = None,
+    subject: str | None = None,
+) -> int:
     input_path = input_path.resolve()
     output_path = output_path.resolve()
     if not input_path.is_file():
@@ -25,8 +31,8 @@ def normalize_pdf(input_path: Path, output_path: Path) -> int:
         writer.add_page(page)
     writer.add_metadata(
         {
-            "/Title": "220kV renewable energy substation single-line diagram",
-            "/Subject": "Course design drawing SLD-01",
+            "/Title": title or output_path.stem.replace("_", " "),
+            "/Subject": subject or "220kV renewable energy substation course design drawing",
             "/Creator": "AutoCAD Core Console and project normalization pipeline",
         }
     )
@@ -54,8 +60,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--title")
+    parser.add_argument("--subject")
     args = parser.parse_args()
-    pages = normalize_pdf(args.input, args.output)
+    pages = normalize_pdf(
+        args.input,
+        args.output,
+        title=args.title,
+        subject=args.subject,
+    )
     print(f"Normalized {pages} page: {args.output.resolve()}")
 
 

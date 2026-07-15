@@ -276,6 +276,82 @@ def _calculate_reactive_compensation(
     }
 
 
+def _calculate_outgoing_conductor_ampacity(
+    config: dict[str, Any],
+    outgoing: dict[str, Any],
+    main_transformer: dict[str, Any],
+) -> dict[str, Any]:
+    conductor = config["system"]["outgoing_220kv"]
+    reference = conductor["conductor_ampacity_course_reference"]
+    reference_temperature = float(reference["reference_ambient_temperature_c"])
+    project_temperature = float(reference["project_ambient_temperature_c"])
+    maximum_conductor_temperature = float(
+        reference["maximum_conductor_temperature_c"]
+    )
+    reference_ampacity = float(reference["reference_ampacity_a"])
+    if not (
+        reference_temperature < maximum_conductor_temperature
+        and project_temperature < maximum_conductor_temperature
+        and reference_ampacity > 0
+    ):
+        raise ValueError("invalid outgoing-conductor temperature or ampacity basis")
+
+    correction_factor = math.sqrt(
+        (maximum_conductor_temperature - project_temperature)
+        / (maximum_conductor_temperature - reference_temperature)
+    )
+    corrected_ampacity = reference_ampacity * correction_factor
+    normal_current = float(outgoing["equal_share_current_a"])
+    contingency_current = float(outgoing["single_circuit_contingency_current_a"])
+    line_only_curtailment_percent = max(
+        1 - corrected_ampacity / contingency_current,
+        0.0,
+    ) * 100
+    maximum_export_mva = corrected_ampacity * math.sqrt(3) * 220.0 / 1000
+    main_transformer_n_minus_one_current = three_phase_current_a(
+        float(main_transformer["rated_mva_each"]), 220.0
+    )
+    combined_controlling_curtailment_percent = max(
+        line_only_curtailment_percent,
+        100 - float(main_transformer["n_minus_one_supply_percent"]),
+    )
+
+    return {
+        "conductor": conductor["conductor"],
+        "reference_ampacity_a": reference_ampacity,
+        "reference_ambient_temperature_c": reference_temperature,
+        "maximum_conductor_temperature_c": maximum_conductor_temperature,
+        "project_ambient_temperature_c": project_temperature,
+        "temperature_correction_factor": correction_factor,
+        "corrected_ampacity_a": corrected_ampacity,
+        "normal_two_line_current_a_each": normal_current,
+        "normal_margin_a": corrected_ampacity - normal_current,
+        "normal_status": "pass" if corrected_ampacity >= normal_current else "fail",
+        "single_line_contingency_required_current_a": contingency_current,
+        "single_line_contingency_shortfall_a": max(
+            contingency_current - corrected_ampacity, 0.0
+        ),
+        "single_line_contingency_status": (
+            "pass" if corrected_ampacity >= contingency_current else "fail_curtailment_required"
+        ),
+        "line_only_required_curtailment_percent": line_only_curtailment_percent,
+        "maximum_export_mva_at_course_ampacity": maximum_export_mva,
+        "main_transformer_n_minus_one_current_a": main_transformer_n_minus_one_current,
+        "margin_after_main_transformer_n_minus_one_a": (
+            corrected_ampacity - main_transformer_n_minus_one_current
+        ),
+        "combined_controlling_curtailment_percent": combined_controlling_curtailment_percent,
+        "controlling_element": (
+            "main_transformer"
+            if 100 - float(main_transformer["n_minus_one_supply_percent"])
+            >= line_only_curtailment_percent
+            else "outgoing_conductor"
+        ),
+        "evidence_status": reference["evidence_status"],
+        "final_engineering_status": reference["final_engineering_status"],
+    }
+
+
 def _calculate_station_service(
     config: dict[str, Any],
 ) -> dict[str, Any]:
@@ -461,6 +537,21 @@ def calculate_design(config: dict[str, Any]) -> dict[str, Any]:
     if outgoing_circuits <= 0:
         raise ValueError("at least one 220kV outgoing circuit is required")
     outgoing_equal_share_mva = load_35kv["with_losses_mva"] / outgoing_circuits
+    outgoing = {
+        "in_service_circuits": outgoing_circuits,
+        "equal_share_mva": outgoing_equal_share_mva,
+        "equal_share_current_a": three_phase_current_a(
+            outgoing_equal_share_mva, 220.0
+        ),
+        "single_circuit_contingency_mva": load_35kv["with_losses_mva"],
+        "single_circuit_contingency_current_a": three_phase_current_a(
+            load_35kv["with_losses_mva"], 220.0
+        ),
+        "basis": "35kV renewable aggregate before subtracting local auxiliary use",
+    }
+    conductor_ampacity = _calculate_outgoing_conductor_ampacity(
+        config, outgoing, main_transformer
+    )
 
     return {
         "project": {
@@ -472,18 +563,8 @@ def calculate_design(config: dict[str, Any]) -> dict[str, Any]:
         "reactive_compensation": reactive_compensation,
         "auxiliary_transformer": reactive_compensation["source_transformers"],
         "main_transformer": main_transformer,
-        "outgoing_220kv": {
-            "in_service_circuits": outgoing_circuits,
-            "equal_share_mva": outgoing_equal_share_mva,
-            "equal_share_current_a": three_phase_current_a(
-                outgoing_equal_share_mva, 220.0
-            ),
-            "single_circuit_contingency_mva": load_35kv["with_losses_mva"],
-            "single_circuit_contingency_current_a": three_phase_current_a(
-                load_35kv["with_losses_mva"], 220.0
-            ),
-            "basis": "35kV renewable aggregate before subtracting local auxiliary use",
-        },
+        "outgoing_220kv": outgoing,
+        "outgoing_220kv_conductor_ampacity": conductor_ampacity,
         "station_service": _calculate_station_service(config),
         "calculation_notes": [
             "0.95 新能源同时出力系数仅用于主变综合容量计算。",
@@ -568,6 +649,7 @@ def _write_markdown_summary(result: dict[str, Any], path: Path) -> None:
     transformer = result["main_transformer"]
     compensation = result["reactive_compensation"]
     auxiliary_transformer = result["auxiliary_transformer"]
+    conductor = result["outgoing_220kv_conductor_ampacity"]
     station = result["station_service"]
 
     lines = [
@@ -618,12 +700,34 @@ def _write_markdown_summary(result: dict[str, Any], path: Path) -> None:
             "| --- | ---: | ---: |",
         ]
     )
+
     for item in load_10["items"]:
         lines.append(
             f"| {item['label_zh']} | "
             f"{item['base_per_circuit_current_a']:.3f} | "
             f"{item['per_circuit_current_a']:.3f} |"
         )
+
+    lines.extend(
+        [
+            "",
+            "## 220kV出线LGJ-400/50温度修正与N-1",
+            "",
+            "| 项目 | 结果 |",
+            "| --- | ---: |",
+            f"| 25℃、导体70℃课程参考载流量 | {conductor['reference_ampacity_a']:.3f} A |",
+            f"| 41℃温度修正系数 | {conductor['temperature_correction_factor']:.6f} |",
+            f"| 41℃课程保守允许载流量 | {conductor['corrected_ampacity_a']:.3f} A |",
+            f"| 正常双回每回电流 | {conductor['normal_two_line_current_a_each']:.3f} A |",
+            f"| 单回承担全部送出所需电流 | {conductor['single_line_contingency_required_current_a']:.3f} A |",
+            f"| 导线单独约束所需限发 | {conductor['line_only_required_curtailment_percent']:.3f}% |",
+            f"| 主变N-1限发后的线路电流 | {conductor['main_transformer_n_minus_one_current_a']:.3f} A |",
+            f"| 主变N-1后导线余量 | {conductor['margin_after_main_transformer_n_minus_one_a']:.3f} A |",
+            f"| N-1控制因素 | {conductor['controlling_element']} |",
+            "",
+            "592A来自旧版二手课程参数表，只作为偏保守课程参考；风速、日照、环境和现行厂家热额定值明确前，不作为工程保证值。",
+        ]
+    )
 
     lines.extend(
         [

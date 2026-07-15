@@ -3,7 +3,10 @@ param(
     [ValidateRange(30, 3600)]
     [int]$TimeoutSeconds = 300,
 
-    [string]$CoreConsolePath = 'D:\Software\CAD Electrical2026\AutoCAD 2026\accoreconsole.exe'
+    [string]$CoreConsolePath = 'D:\Software\CAD Electrical2026\AutoCAD 2026\accoreconsole.exe',
+
+    [ValidatePattern('^[A-Za-z0-9_-]+$')]
+    [string]$DrawingStem = 'single_line_a1'
 )
 
 Set-StrictMode -Version Latest
@@ -93,9 +96,9 @@ if (-not (Test-Path -LiteralPath $exportsDirectory -PathType Container)) {
     New-Item -ItemType Directory -Path $exportsDirectory | Out-Null
 }
 
-$inputDxf = Join-Path $sourceDirectory 'single_line_a1.dxf'
-$outputDwg = Join-Path $sourceDirectory 'single_line_a1.dwg'
-$outputPdf = Join-Path $exportsDirectory 'single_line_a1_raw.pdf'
+$inputDxf = Join-Path $sourceDirectory "$DrawingStem.dxf"
+$outputDwg = Join-Path $sourceDirectory "$DrawingStem.dwg"
+$outputPdf = Join-Path $exportsDirectory "${DrawingStem}_raw.pdf"
 
 $null = Assert-ExistingFile -Path $inputDxf -Description 'Input DXF' -MinimumBytes 128
 $null = Assert-ExistingFile -Path $CoreConsolePath -Description 'AutoCAD Core Console executable' -MinimumBytes 1024
@@ -116,9 +119,9 @@ $null = Assert-ExistingFile -Path $plotterConfig -Description 'PDF plotter confi
 $null = Assert-ExistingFile -Path $plotStyle -Description 'Monochrome plot style' -MinimumBytes 128
 
 $runStamp = Get-Date -Format 'yyyyMMdd_HHmmss_fff'
-$stdoutLog = Join-Path $exportsDirectory "single_line_a1_accoreconsole_${runStamp}_${PID}.stdout.log"
-$stderrLog = Join-Path $exportsDirectory "single_line_a1_accoreconsole_${runStamp}_${PID}.stderr.log"
-$temporaryScriptName = 'export_single_line_{0}_{1}.scr' -f $PID, ([Guid]::NewGuid().ToString('N'))
+$stdoutLog = Join-Path $exportsDirectory "${DrawingStem}_accoreconsole_${runStamp}_${PID}.stdout.log"
+$stderrLog = Join-Path $exportsDirectory "${DrawingStem}_accoreconsole_${runStamp}_${PID}.stderr.log"
+$temporaryScriptName = 'export_drawing_{0}_{1}.scr' -f $PID, ([Guid]::NewGuid().ToString('N'))
 $temporaryScriptPath = Join-Path $sourceDirectory $temporaryScriptName
 
 # Every path embedded in the SCR is deliberately ASCII and relative to drawings/source.
@@ -134,7 +137,7 @@ $scriptLines = @(
     '_Y',
     '_.SAVEAS',
     '_2018',
-    'single_line_a1.dwg',
+    "$DrawingStem.dwg",
     '_.-PLOT',
     '_Y',
     '',
@@ -150,7 +153,7 @@ $scriptLines = @(
     'monochrome.ctb',
     '_Y',
     '',
-    '..\exports\single_line_a1_raw.pdf',
+    "..\exports\${DrawingStem}_raw.pdf",
     '_N',
     '_Y',
     '_.QSAVE',

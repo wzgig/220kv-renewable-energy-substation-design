@@ -118,6 +118,14 @@ class DesignBaselineTests(unittest.TestCase):
         self.assertEqual(self.baseline["site_conditions"]["altitude_m_max"], 1000)
         self.assertEqual(self.baseline["site_conditions"]["pollution_level"], "d")
         self.assertEqual(
+            self.baseline["neutral_grounding"]["35kv"],
+            "grounding_transformer_plus_low_resistance_course_assumption",
+        )
+        self.assertEqual(
+            self.baseline["neutral_grounding"]["10kv"],
+            "grounding_transformer_plus_low_resistance_course_assumption",
+        )
+        self.assertEqual(
             self.baseline["protection_and_thermal_duty"][
                 "thermal_equivalent_duration_s"
             ],

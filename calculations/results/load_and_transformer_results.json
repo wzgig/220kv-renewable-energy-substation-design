@@ -295,6 +295,29 @@
     "single_circuit_contingency_current_a": 735.5592390584715,
     "basis": "35kV renewable aggregate before subtracting local auxiliary use"
   },
+  "outgoing_220kv_conductor_ampacity": {
+    "conductor": "LGJ-400/50",
+    "reference_ampacity_a": 592.0,
+    "reference_ambient_temperature_c": 25.0,
+    "maximum_conductor_temperature_c": 70.0,
+    "project_ambient_temperature_c": 41.0,
+    "temperature_correction_factor": 0.8027729719194864,
+    "corrected_ampacity_a": 475.24159937633596,
+    "normal_two_line_current_a_each": 367.77961952923573,
+    "normal_margin_a": 107.46197984710022,
+    "normal_status": "pass",
+    "single_line_contingency_required_current_a": 735.5592390584715,
+    "single_line_contingency_shortfall_a": 260.3176396821355,
+    "single_line_contingency_status": "fail_curtailment_required",
+    "line_only_required_curtailment_percent": 35.39043843910472,
+    "maximum_export_mva_at_course_ampacity": 181.09137111782363,
+    "main_transformer_n_minus_one_current_a": 472.3774929733302,
+    "margin_after_main_transformer_n_minus_one_a": 2.864106403005735,
+    "combined_controlling_curtailment_percent": 35.779816513761475,
+    "controlling_element": "main_transformer",
+    "evidence_status": "legacy_GB1179_83_secondary_table_course_conservative_reference",
+    "final_engineering_status": "pending_current_manufacturer_thermal_rating_with_weather_conditions"
+  },
   "station_service": {
     "applicable_items": [
       {

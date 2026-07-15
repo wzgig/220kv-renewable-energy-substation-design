@@ -36,6 +36,14 @@ system:
     reserved_circuits: 1
     conductor: "LGJ-400/50"
     direction: "northwest"
+    conductor_ampacity_course_reference:
+      reference_ambient_temperature_c: 25
+      maximum_conductor_temperature_c: 70
+      reference_ampacity_a: 592
+      project_ambient_temperature_c: 41
+      correction_formula: "sqrt((theta_allow-theta_project)/(theta_allow-theta_reference))"
+      evidence_status: "legacy_GB1179_83_secondary_table_course_conservative_reference"
+      final_engineering_status: "pending_current_manufacturer_thermal_rating_with_weather_conditions"
   collector_35kv:
     in_service_circuits: 12
     reserved_circuits: 2
@@ -149,8 +157,8 @@ calculation_rules:
     35_10_5_distribution_transformer: 8
   grounding:
     220kv: "direct_grounding"
-    35kv: "non_effectively_grounded_to_be_justified"
-    10kv: "non_effectively_grounded_to_be_justified"
+    35kv: "grounding_transformer_plus_low_resistance_course_assumption"
+    10kv: "grounding_transformer_plus_low_resistance_course_assumption"
   renewable_short_circuit_contribution:
     base_case: "ignored"
     sensitivity_case: "1.1_to_1.2_times_rated_current"
@@ -176,5 +184,6 @@ calculation_rules:
 open_decisions:
   - "L3_role_and_expected_in_service_date"
   - "teacher_reliability_requirement_for_220kv_bus_maintenance"
+  - "final_LGJ_400_50_manufacturer_thermal_rating_with_wind_solar_and_weather_conditions"
   - "final_reactive_power_voltage_and_harmonic_study"
   - "exact_T10_SVG_and_switchgear_models_for_41C_service"
