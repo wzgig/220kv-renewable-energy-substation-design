@@ -122,7 +122,7 @@
 
 - 更新根 README、总体计划、需求追踪、报告说明和交付说明，将四份正式报告、11页答辩 PPTX/PDF 及三张 A1 CAD 图纳入已完成成果。
 - 保留工程精确设备型号、41℃适配、CT/PT 二次参数和外绝缘复核等明确边界，不将课程等级预筛误写为工程定型。
-- 本次文档同步时尚未宣称最终全仓隐私扫描、47项测试复跑、项目健康检查、GitHub Actions 和远端一致性已完成；这些仍为提交与推送前的收尾项。
+- 本次文档同步时尚未宣称最终全仓隐私扫描、47项测试复跑、项目健康检查、GitHub Actions 和远端一致性已完成；这些在后续发布收尾日志中完成闭环。
 
 ## 2026-07-15 - 公开发布门与隐私收尾
 
@@ -131,4 +131,12 @@
 - 新增 4 项报告交付测试，全项目测试由 CAD 闭环阶段的 47 项增至 51 项；64 项健康检查、计算结果再生成、三张 DXF 语义漂移检查和 `git diff --check` 均通过。
 - 将 AutoCAD Core Console 路径改为参数、环境变量、PATH 与注册表自动发现，移除公开文档中的机器诊断细节。
 - AutoCAD 每次保存 DWG 会写入只读的 Windows `LastAuthor`。公开树改为版本化 DXF/PDF/PNG，DWG 继续保留本地且由 `.gitignore` 排除；本地三份 DWG 文件未删除。
-- 当前公开候选树的文本、Office/PDF 包、DXF 与 PDF 内容隐私扫描无命中；仓库级 Git 身份已改为 GitHub noreply。既有两个提交和旧 LFS DWG 仍在公开历史中，需经确认后改写历史并强制推送，随后核验 GitHub Actions 与远端一致性。
+- 截至本阶段，公开候选树的文本、Office/PDF 包、DXF 与 PDF 内容隐私扫描无命中，仓库级 Git 身份已改为 GitHub noreply；当时既有两个提交和旧 LFS DWG 仍在公开历史中，待用户授权后处理。该事项随后在“公开历史重写与远端收尾”阶段完成。
+
+## 2026-07-15 - 公开历史重写与远端收尾
+
+- 用户明确授权后，先在本地 `tmp/history-backup/` 生成不入库的回滚 bundle，再使用 `git-filter-repo` 从全部可达历史移除三份 `drawings/source/*.dwg`，并将作者与提交者身份统一为 `wzgig <176552148+wzgig@users.noreply.github.com>`。
+- 重写前后当前树哈希保持不变；三份 DWG 未删除，继续仅在本地保留并由 `.gitignore` 排除。重写后的可达历史中未发现旧身份、DWG 路径或 LFS 对象。
+- 使用精确租约将远端 `main` 从重写前 HEAD 更新为重写后 HEAD；51 项测试、64 项健康检查、`git fsck` 和当前树隐私扫描均通过。
+- GitHub Issues #1-#6 已全部关闭；历史重写后的 GitHub Actions Run `29425905651` 成功，并删除了仍引用旧提交/DWG 历史的可控旧 Actions 记录。
+- 远端分支引用和仓库内可控引用已完成清理。GitHub 仍可能暂存不可达提交或 LFS 对象；若旧 SHA 在后台回收前仍可直接访问，立即物理清除需等待 GitHub GC 或联系 GitHub Support。
