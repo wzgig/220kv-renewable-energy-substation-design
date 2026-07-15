@@ -1,0 +1,112 @@
+metadata:
+  status: "provisional_frozen_for_calculation_and_cad"
+  date: "2026-07-15"
+  change_rule: "revise_only_when_teacher_guidance_or_verified_equipment_data_changes_a_basis"
+
+main_transformers:
+  count: 2
+  rated_capacity_mva_each: 180
+  voltage_ratio_kv: [220, 35]
+  winding_type: "two_winding"
+  installation: "outdoor_oil_immersed_on_load_tap_changing"
+  short_circuit_voltage_percent: 14
+  identifiers: ["T1", "T2"]
+
+connection_220kv:
+  scheme: "single_bus_sectionalized"
+  bus_sections: 2
+  bypass_bus: false
+  bus_tie_breaker: true
+  line_circuits_in_service: ["L1", "L2"]
+  reserved_line_circuits: ["L3"]
+  transformer_bays: ["T1", "T2"]
+  normal_bus_tie_state: "closed_if_system_1_and_system_2_parallel_operation_is_permitted"
+  maximum_short_circuit_bus_tie_state: "closed"
+  fallback_if_parallel_operation_is_not_permitted: "normally_open_with_separate_bus_sections"
+  upgrade_trigger: "teacher_requires_bus_maintenance_without_line_or_transformer_outage"
+  upgrade_option: "double_bus_without_bypass"
+
+connection_35kv:
+  scheme: "single_bus_two_sections"
+  equipment_form: "indoor_metal_clad_withdrawable_switchgear"
+  bus_tie_normal_state: "open"
+  bus_tie_close_condition: "one_source_isolated_and_fault_cleared"
+  sections:
+    - id: "35kV-I"
+      source_transformer: "T1"
+      feeder_circuits:
+        - {id: "WA-1", source_key: "wind_farm_A"}
+        - {id: "WA-2", source_key: "wind_farm_A"}
+        - {id: "WB-1", source_key: "wind_farm_B"}
+        - {id: "WB-2", source_key: "wind_farm_B"}
+        - {id: "PVA-1", source_key: "pv_plant_A"}
+        - {id: "PVB-1", source_key: "pv_plant_B"}
+      reserved_bays: 1
+      allocated_active_power_mw: 130
+    - id: "35kV-II"
+      source_transformer: "T2"
+      feeder_circuits:
+        - {id: "WA-3", source_key: "wind_farm_A"}
+        - {id: "WA-4", source_key: "wind_farm_A"}
+        - {id: "WB-3", source_key: "wind_farm_B"}
+        - {id: "PVA-2", source_key: "pv_plant_A"}
+        - {id: "PVB-2", source_key: "pv_plant_B"}
+        - {id: "ES-1", source_key: "energy_storage"}
+      reserved_bays: 1
+      allocated_active_power_mw: 140
+
+connection_10kv:
+  scheme: "single_bus_two_sections"
+  bus_tie_normal_state: "open"
+  bus_tie_close_condition: "one_35_10_5kv_source_isolated_and_fault_cleared"
+  source_transformers:
+    count: 2
+    voltage_ratio_kv: [35, 10.5]
+    short_circuit_voltage_percent: 8
+    rated_capacity_mva_each: null
+    identifiers: ["T10-1", "T10-2"]
+    rating_dependency: "confirm_reactive_compensation_Mvar_and_starting_requirements"
+  load_allocation_status: "to_be_finalized_after_reactive_compensation_capacity_is_known"
+
+connection_0_4kv:
+  scheme: "single_bus_sectionalized"
+  system: "380_220V_three_phase_four_wire"
+  bus_tie_normal_state: "open"
+  standby_mode: "dark_standby"
+  station_service_transformers:
+    count: 2
+    rated_capacity_kva_each: 200
+    voltage_ratio_kv: [10, 0.4]
+    identifiers: ["TS1", "TS2"]
+    source_sections: ["10kV-I", "10kV-II"]
+
+operating_modes:
+  normal:
+    active_220kv_lines: ["L1", "L2"]
+    active_main_transformers: ["T1", "T2"]
+    reserved_220kv_lines: ["L3"]
+    bus_ties:
+      220kv: "conditional_on_grid_parallel_permission"
+      35kv: "open"
+      10kv: "open"
+      0_4kv: "open"
+  main_transformer_n_minus_one:
+    action_sequence:
+      - "isolate_faulted_main_transformer"
+      - "close_35kv_bus_tie_only_after_fault_clearance"
+      - "curtail_renewable_output_to_no_more_than_180MVA_through_surviving_transformer"
+      - "retain_10kv_and_0_4kv_important_loads"
+    required_curtailment_percent_baseline: 35.7798
+  one_220kv_line_out:
+    action: "remaining_line_carries_export_subject_to_LGJ_400_50_temperature_corrected_ampacity"
+    full_export_current_a_approx: 735.559
+  auxiliary_source_n_minus_one:
+    action: "isolate_failed_source_then_close_corresponding_10kv_or_0_4kv_bus_tie"
+
+open_engineering_inputs:
+  - "10kv_reactive_compensation_capacity_mvar"
+  - "permission_for_system_1_and_system_2_parallel_operation"
+  - "L3_role_and_expected_in_service_date"
+  - "teacher_reliability_requirement_for_220kv_bus_maintenance"
+  - "LGJ_400_50_ampacity_at_41C"
+  - "altitude_and_pollution_level"

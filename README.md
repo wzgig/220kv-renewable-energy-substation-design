@@ -6,7 +6,7 @@
 
 课程设计工程仓库：主接线方案、负荷与短路计算、设备选型、配电装置设计、CAD 图纸、说明书与答辩材料。
 
-[总体规划](docs/MASTER_PLAN.md) · [设计输入](data/design_inputs.yaml) · [需求追踪](docs/REQUIREMENTS_TRACEABILITY.md) · [CAD 工作流](docs/CAD_WORKFLOW.md) · [项目日志](PROJECT_LOG.md)
+[总体规划](docs/MASTER_PLAN.md) · [接线基线](docs/MAIN_SCHEME_BASELINE.md) · [设计输入](data/design_inputs.yaml) · [需求追踪](docs/REQUIREMENTS_TRACEABILITY.md) · [CAD 工作流](docs/CAD_WORKFLOW.md) · [项目日志](PROJECT_LOG.md)
 
 </div>
 
@@ -56,8 +56,8 @@ materials-private/  本地私有资料，仅 README 进入公开仓库
 - [x] 提取并冻结本组任务书的核心参数与交付要求
 - [x] 确认 AutoCAD Electrical 2026、核心控制台、COM 和打印环境可用
 - [x] 建立公开/私有边界、仓库结构和持续同步规则
-- [x] 建立负荷/变压器可重复计算、结果表和 6 项单元测试
-- [ ] 完成主接线方案技术经济比较并冻结方案
+- [x] 建立负荷/变压器可重复计算、结果表和 9 项单元测试
+- [x] 完成主接线技术经济比较并冻结可推进基线
 - [ ] 完成负荷、最大持续电流和短路电流计算
 - [ ] 完成设备选择、校验和配电装置型式确定
 - [ ] 完成三类 CAD 图纸、说明书、计算书和答辩材料
