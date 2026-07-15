@@ -73,6 +73,7 @@ station_service_loads:
   bus_scheme: "single_bus_sectionalized"
   transformer_count_preference: 2
   standby_mode: "dark_standby"
+  normal_operation: "one_transformer_in_service_bus_tie_closed_other_transformer_dark_standby"
   capacity_rule: "each_transformer_supplies_all_frequent_loads_plus_about_10_percent_margin"
   preliminary_selection_assumptions:
     power_factor: 0.80

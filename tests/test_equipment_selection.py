@@ -187,6 +187,17 @@ class EquipmentSelectionTests(unittest.TestCase):
         self.assertEqual(bus_section["numeric_precheck_status"], "pending")
         self.assertEqual(bus_section["final_selection_status"], "pending")
 
+    def test_auxiliary_transformer_feeder_duty_is_explicitly_pending(self) -> None:
+        groups = self.result["duty_registry"]["circuit_groups"]
+        duty = groups["35-aux-transformer-feeders"]["continuous"]
+
+        self.assertEqual(duty["status"], "pending_input")
+        self.assertIsNone(duty["required_current_a"])
+        self.assertEqual(
+            groups["35-aux-transformer-feeders"]["members"],
+            ["T10-1-HV", "T10-2-HV"],
+        )
+
     def test_minimum_check_boundary(self) -> None:
         equal = minimum_check(
             check_id="equal",

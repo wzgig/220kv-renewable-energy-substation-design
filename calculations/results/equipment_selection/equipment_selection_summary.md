@@ -17,6 +17,7 @@
 | 35-bus-I | 35kV-I | 2230.732 | baseline_feeder_allocation.35kV-I / known |
 | 35-bus-II | 35kV-II | 2404.371 | baseline_feeder_allocation.35kV-II / known |
 | 35-bus-tie | 35-BT | 3117.691 | main_transformer.rated_current_with_1_05_margin_a.35kv / known |
+| 35-aux-transformer-feeders | T10-1-HV, T10-2-HV | 待定 | 10kv_reactive_compensation_and_35_10_5kv_transformer_rating_required / pending_input |
 | 35-feeder-wind-A | WA-1, WA-2, WA-3, WA-4 | 364.642 | load_35kv.items.wind_farm_A.per_circuit_current_a / known |
 | 35-feeder-wind-B | WB-1, WB-2, WB-3 | 364.642 | load_35kv.items.wind_farm_B.per_circuit_current_a / known |
 | 35-feeder-pv-A | PVA-1, PVA-2 | 530.220 | load_35kv.items.pv_plant_A.per_circuit_current_a / known |

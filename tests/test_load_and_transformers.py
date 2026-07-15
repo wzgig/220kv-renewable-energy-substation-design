@@ -74,6 +74,10 @@ class LoadAndTransformerCalculationTests(unittest.TestCase):
         self.assertAlmostEqual(result["worst_frequent_required_kva"], 192.9125, places=8)
         self.assertEqual(result["recommended_each_transformer_kva"], 200)
         self.assertEqual(
+            result["normal_operation"],
+            "one_transformer_in_service_bus_tie_closed_other_transformer_dark_standby",
+        )
+        self.assertEqual(
             set(result["excluded_items"]),
             {"110kv_switchyard_supply", "110kv_breaker_winter_heating"},
         )

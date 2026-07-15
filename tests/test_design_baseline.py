@@ -76,6 +76,25 @@ class DesignBaselineTests(unittest.TestCase):
             ],
             200,
         )
+        self.assertEqual(
+            self.baseline["connection_0_4kv"]["bus_tie_normal_state"],
+            "closed",
+        )
+        self.assertEqual(
+            self.baseline["connection_0_4kv"][
+                "normal_transformers_in_service"
+            ],
+            1,
+        )
+
+    def test_35kv_includes_two_auxiliary_transformer_bays(self) -> None:
+        bays = self.baseline["connection_35kv"]["auxiliary_transformer_bays"]
+
+        self.assertEqual([bay["id"] for bay in bays], ["T10-1-HV", "T10-2-HV"])
+        self.assertEqual(
+            [bay["source_section"] for bay in bays],
+            ["35kV-I", "35kV-II"],
+        )
 
 
 if __name__ == "__main__":

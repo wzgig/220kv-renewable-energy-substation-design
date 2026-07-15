@@ -281,6 +281,37 @@
           "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
         }
       },
+      "35-aux-transformer-feeders": {
+        "id": "35-aux-transformer-feeders",
+        "role": "35_10_5kv_source_transformer_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "T10-1-HV",
+          "T10-2-HV"
+        ],
+        "continuous": {
+          "status": "pending_input",
+          "required_current_a": null,
+          "source": "10kv_reactive_compensation_and_35_10_5kv_transformer_rating_required"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
       "35-feeder-wind-A": {
         "id": "35-feeder-wind-A",
         "role": "collector_feeder",
@@ -3645,7 +3676,7 @@
   "upstream_provenance": {
     "load_results": {
       "path": "calculations/results/load_and_transformer_results.json",
-      "sha256": "cea1463188b22ae240b85553281d1a72aad0c15a6254ee55897b24771b1aee6a"
+      "sha256": "7cb13a57a387d39f9767926d06f9cf0ac6a7cac0ea45c527e36baf8e1edf5a81"
     },
     "short_circuit_results": {
       "path": "calculations/results/short_circuit/short_circuit_results.json",
@@ -3653,11 +3684,11 @@
     },
     "baseline": {
       "path": "data/design_baseline.yaml",
-      "sha256": "4466622ef0d0b182cf6d486ee4c3ec206dbaab4f6fa85389a113646cde1cf515"
+      "sha256": "914460e78ce948c73b352e6368566f53ed76618f844b96f2ad00729252dc63cb"
     },
     "design_inputs": {
       "path": "data/design_inputs.yaml",
-      "sha256": "d823a6e8df8a9dd72169b5809ab08b834adece27c1434863c46e633756a805b4"
+      "sha256": "5eef46387a39759b46f38369dcd1def22c465dd17ccc4b2567eeb52db4c8d9e3"
     }
   }
 }

@@ -175,6 +175,12 @@ def _continuous_duty(
             "required_current_a": None,
             "source": "explicit_power_flow_and_bay_placement_required",
         }
+    if duty_type == "pending_10kv_source_transformer_rating":
+        return {
+            "status": "pending_input",
+            "required_current_a": None,
+            "source": "10kv_reactive_compensation_and_35_10_5kv_transformer_rating_required",
+        }
     if duty_type == "section_allocated_base":
         section_id = duty["section_id"]
         section = section_currents[section_id]

@@ -54,6 +54,9 @@ connection_35kv:
         - {id: "ES-1", source_key: "energy_storage"}
       reserved_bays: 1
       allocated_active_power_mw: 140
+  auxiliary_transformer_bays:
+    - {id: "T10-1-HV", transformer: "T10-1", source_section: "35kV-I", rating_status: "pending_10kv_reactive_compensation"}
+    - {id: "T10-2-HV", transformer: "T10-2", source_section: "35kV-II", rating_status: "pending_10kv_reactive_compensation"}
 
 connection_10kv:
   scheme: "single_bus_two_sections"
@@ -65,14 +68,20 @@ connection_10kv:
     short_circuit_voltage_percent: 8
     rated_capacity_mva_each: null
     identifiers: ["T10-1", "T10-2"]
+    source_bays_35kv: ["T10-1-HV", "T10-2-HV"]
+    source_sections_35kv: ["35kV-I", "35kV-II"]
     rating_dependency: "confirm_reactive_compensation_Mvar_and_starting_requirements"
   load_allocation_status: "to_be_finalized_after_reactive_compensation_capacity_is_known"
 
 connection_0_4kv:
   scheme: "single_bus_sectionalized"
   system: "380_220V_three_phase_four_wire"
-  bus_tie_normal_state: "open"
-  standby_mode: "dark_standby"
+  bus_tie_normal_state: "closed"
+  standby_mode: "dark_standby_mutual_alternate"
+  normal_transformers_in_service: 1
+  normal_incomer_state: "one_closed_one_open"
+  normal_operation: "one_transformer_supplies_both_bus_sections_through_closed_bus_tie"
+  transfer_operation: "isolate_failed_incomer_then_close_standby_transformer_incomer_bus_tie_remains_closed"
   station_service_transformers:
     count: 2
     rated_capacity_kva_each: 200
@@ -89,7 +98,11 @@ operating_modes:
       220kv: "conditional_on_grid_parallel_permission"
       35kv: "open"
       10kv: "open"
-      0_4kv: "open"
+      0_4kv: "closed_under_single_transformer_operation"
+    station_service_transformers:
+      active_count: 1
+      standby_count: 1
+      rotation: "alternate_by_operation_schedule"
   main_transformer_n_minus_one:
     action_sequence:
       - "isolate_faulted_main_transformer"
@@ -101,7 +114,8 @@ operating_modes:
     action: "remaining_line_carries_export_subject_to_LGJ_400_50_temperature_corrected_ampacity"
     full_export_current_a_approx: 735.559
   auxiliary_source_n_minus_one:
-    action: "isolate_failed_source_then_close_corresponding_10kv_or_0_4kv_bus_tie"
+    action_10kv: "isolate_failed_35_10_5kv_source_then_close_10kv_bus_tie_after_fault_clearance"
+    action_0_4kv: "isolate_failed_station_service_incomer_then_close_standby_transformer_incomer_with_0_4kv_bus_tie_remaining_closed"
 
 open_engineering_inputs:
   - "10kv_reactive_compensation_capacity_mvar"

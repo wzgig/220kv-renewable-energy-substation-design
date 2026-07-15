@@ -223,6 +223,7 @@ def _calculate_station_service(
             config["station_service_loads"]["transformer_count_preference"]
         ),
         "standby_mode": config["station_service_loads"]["standby_mode"],
+        "normal_operation": config["station_service_loads"]["normal_operation"],
     }
 
 
@@ -475,7 +476,7 @@ def _write_markdown_summary(result: dict[str, Any], path: Path) -> None:
             f"| 经常短时负荷全投入场景 | {station['worst_frequent_required_kva']:.3f} kVA |",
             f"| 每台建议标准容量 | {station['recommended_each_transformer_kva']:.0f} kVA |",
             "",
-            "初选建议为两台所用变、单母线分段、暗备用。0.80 功率因数属于显式假设，最终型号需结合实际设备功率因数、启动条件和教师口径复核。",
+            "初选建议为两台所用变、单母线分段、暗备用；按课程指导书口径正常一台运行、另一台暗备用，0.4kV母联闭合。0.80功率因数属于显式假设，最终型号需结合实际设备功率因数、启动条件和教师口径复核。",
             "",
             "## 计算口径",
             "",

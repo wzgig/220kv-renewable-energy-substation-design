@@ -298,7 +298,8 @@
     "selection_basis_kva": 192.9125,
     "recommended_each_transformer_kva": 200.0,
     "recommended_transformer_count": 2,
-    "standby_mode": "dark_standby"
+    "standby_mode": "dark_standby",
+    "normal_operation": "one_transformer_in_service_bus_tie_closed_other_transformer_dark_standby"
   },
   "calculation_notes": [
     "0.95 新能源同时出力系数仅用于主变综合容量计算。",

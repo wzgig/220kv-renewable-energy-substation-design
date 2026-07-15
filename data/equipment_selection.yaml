@@ -82,6 +82,13 @@ circuit_groups:
     continuous_duty: {type: "main_transformer_35kv"}
     fault_profile: "35_bus"
 
+  - id: "35-aux-transformer-feeders"
+    role: "35_10_5kv_source_transformer_feeder"
+    voltage_class: "v35"
+    members: ["T10-1-HV", "T10-2-HV"]
+    continuous_duty: {type: "pending_10kv_source_transformer_rating"}
+    fault_profile: "35_bus"
+
   - id: "35-feeder-wind-A"
     role: "collector_feeder"
     voltage_class: "v35"
