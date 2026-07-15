@@ -44,19 +44,20 @@ $requiredPaths = @(
     'drawings/scripts/export_all_drawings.ps1',
     'drawings/scripts/normalize_pdf.py',
     'drawings/source/single_line_a1.dxf',
-    'drawings/source/single_line_a1.dwg',
     'drawings/exports/single_line_a1.pdf',
     'drawings/exports/single_line_a1.png',
     'drawings/source/switchyard_plan_a1.dxf',
-    'drawings/source/switchyard_plan_a1.dwg',
     'drawings/exports/switchyard_plan_a1.pdf',
     'drawings/exports/switchyard_plan_a1.png',
     'drawings/source/switchyard_section_a1.dxf',
-    'drawings/source/switchyard_section_a1.dwg',
     'drawings/exports/switchyard_section_a1.pdf',
     'drawings/exports/switchyard_section_a1.png',
     'report/README.md',
+    'report/scripts/build_reports.py',
+    'report/scripts/export_reports.ps1',
+    'report/scripts/sanitize_public_metadata.py',
     'requirements.txt',
+    'tests/test_report_deliverables.py',
     'tests/test_load_and_transformers.py',
     'tests/test_short_circuit.py',
     'tests/test_equipment_selection.py',
@@ -68,6 +69,26 @@ foreach ($relativePath in $requiredPaths) {
     $fullPath = Join-Path $root $relativePath
     if (-not (Test-Path -LiteralPath $fullPath)) {
         $errors.Add("Missing required path: $relativePath")
+    }
+}
+
+$requiredReportPatterns = @(
+    'report/01_220kV*.docx',
+    'report/01_220kV*.pdf',
+    'report/02_220kV*.docx',
+    'report/02_220kV*.pdf',
+    'report/03_220kV*.docx',
+    'report/03_220kV*.pdf',
+    'report/04_220kV*.pptx',
+    'report/04_220kV*.pdf',
+    'report/05_220kV*.docx',
+    'report/05_220kV*.pdf'
+)
+
+foreach ($pattern in $requiredReportPatterns) {
+    $matches = @(Get-ChildItem -Path (Join-Path $root $pattern) -File -ErrorAction SilentlyContinue)
+    if ($matches.Count -ne 1) {
+        $errors.Add("Expected exactly one report deliverable for pattern: $pattern")
     }
 }
 
@@ -125,16 +146,8 @@ if (Test-Path -LiteralPath $gitHead) {
     }
 
     $trackedDwgs = @($trackedFiles | Where-Object { ($_ -replace '\\', '/') -match '^drawings/source/.+\.dwg$' })
-    if ($trackedDwgs.Count -gt 0) {
-        $lfsFiles = @(& git -C $root lfs ls-files --name-only)
-        if ($LASTEXITCODE -ne 0) {
-            $errors.Add('Unable to inspect Git LFS files.')
-        }
-        foreach ($dwg in $trackedDwgs) {
-            if ($lfsFiles -notcontains $dwg) {
-                $errors.Add("DWG is not managed by Git LFS: $dwg")
-            }
-        }
+    foreach ($dwg in $trackedDwgs) {
+        $errors.Add("DWG with machine-authored metadata must not be public: $dwg")
     }
 }
 else {
@@ -142,7 +155,7 @@ else {
 }
 
 Write-Host "Project root: $root"
-Write-Host "Required paths checked: $($requiredPaths.Count)"
+Write-Host "Required paths checked: $($requiredPaths.Count + $requiredReportPatterns.Count)"
 
 foreach ($warning in $warnings) {
     Write-Warning $warning

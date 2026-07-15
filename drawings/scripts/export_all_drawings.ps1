@@ -3,7 +3,7 @@ param(
     [ValidateRange(30, 3600)]
     [int]$TimeoutSeconds = 300,
 
-    [string]$CoreConsolePath = 'D:\Software\CAD Electrical2026\AutoCAD 2026\accoreconsole.exe'
+    [string]$CoreConsolePath = $env:AUTOCAD_CORE_CONSOLE
 )
 
 Set-StrictMode -Version Latest

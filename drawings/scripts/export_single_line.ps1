@@ -3,7 +3,7 @@ param(
     [ValidateRange(30, 3600)]
     [int]$TimeoutSeconds = 300,
 
-    [string]$CoreConsolePath = 'D:\Software\CAD Electrical2026\AutoCAD 2026\accoreconsole.exe',
+    [string]$CoreConsolePath = $env:AUTOCAD_CORE_CONSOLE,
 
     [ValidatePattern('^[A-Za-z0-9_-]+$')]
     [string]$DrawingStem = 'single_line_a1'
@@ -83,10 +83,57 @@ function Get-AsciiPrefix {
     }
 }
 
+function Resolve-CoreConsoleExecutable {
+    param(
+        [string]$RequestedPath
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($RequestedPath)) {
+        return [System.IO.Path]::GetFullPath($RequestedPath)
+    }
+
+    $command = Get-Command accoreconsole.exe -ErrorAction SilentlyContinue
+    if ($null -ne $command) {
+        return $command.Source
+    }
+
+    $candidates = [System.Collections.Generic.List[string]]::new()
+    $candidates.Add((Join-Path $env:ProgramFiles 'Autodesk\AutoCAD 2026\accoreconsole.exe'))
+
+    foreach ($registryRoot in @(
+        'HKLM:\SOFTWARE\Autodesk\AutoCAD',
+        'HKLM:\SOFTWARE\WOW6432Node\Autodesk\AutoCAD'
+    )) {
+        if (-not (Test-Path -LiteralPath $registryRoot)) {
+            continue
+        }
+
+        foreach ($versionKey in Get-ChildItem -LiteralPath $registryRoot -ErrorAction SilentlyContinue) {
+            foreach ($productKey in Get-ChildItem -LiteralPath $versionKey.PSPath -ErrorAction SilentlyContinue) {
+                $properties = Get-ItemProperty -LiteralPath $productKey.PSPath -ErrorAction SilentlyContinue
+                $locationProperty = $properties.PSObject.Properties['AcadLocation']
+                $location = if ($null -ne $locationProperty) { $locationProperty.Value } else { $null }
+                if (-not [string]::IsNullOrWhiteSpace($location)) {
+                    $candidates.Add((Join-Path $location 'accoreconsole.exe'))
+                }
+            }
+        }
+    }
+
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+            return [System.IO.Path]::GetFullPath($candidate)
+        }
+    }
+
+    throw 'AutoCAD Core Console was not found. Set AUTOCAD_CORE_CONSOLE or pass -CoreConsolePath explicitly.'
+}
+
 $scriptDirectory = Split-Path -Parent $PSCommandPath
 $repositoryRoot = (Resolve-Path -LiteralPath (Join-Path $scriptDirectory '..\..')).Path
 $sourceDirectory = Join-Path $repositoryRoot 'drawings\source'
 $exportsDirectory = Join-Path $repositoryRoot 'drawings\exports'
+$CoreConsolePath = Resolve-CoreConsoleExecutable -RequestedPath $CoreConsolePath
 
 if (-not (Test-Path -LiteralPath $sourceDirectory -PathType Container)) {
     throw "Drawing source directory was not found: $sourceDirectory"

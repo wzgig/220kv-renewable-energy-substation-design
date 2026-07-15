@@ -15,9 +15,6 @@ requirements.txt text eol=lf
 *.lsp text eol=crlf
 *.ps1 text eol=crlf
 
-# Original project DWG files are versioned with Git LFS.
-drawings/source/**/*.dwg filter=lfs diff=lfs merge=lfs -text
-
 *.pdf binary
 *.png binary
 *.jpg binary

@@ -31,8 +31,8 @@
 >
 > ### 5. CAD 规则
 >
-> - 使用参数化 YAML/CSV、Python/ezdxf 和签名有效的 AutoCAD Core Console 生成、审计、转换和出图。
-> - 不启动当前完整性校验失败的 `acad.exe`；GUI 修复前以 Core Console、PDF 渲染和 PNG 目检闭环。
+> - 使用参数化 YAML/CSV、Python/ezdxf 和 AutoCAD Core Console 生成、审计、转换和出图。
+> - CAD 批处理以 Core Console、PDF 渲染和 PNG 目检形成可重复闭环。
 > - 平面图与断面图共用设备外形、间隔宽度、道路、净距和标高数据；不得从旧参考图按比例猜尺寸。
 > - 每张图必须有图框、图号、比例、图例、设计说明、关键尺寸、设备编号和课程假设标识，且适合打印后手绘临摹。
 >
