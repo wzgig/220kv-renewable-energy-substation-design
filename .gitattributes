@@ -8,6 +8,8 @@
 *.yaml text eol=lf
 *.json text eol=lf
 *.csv text eol=lf
+*.py text eol=lf
+requirements.txt text eol=lf
 *.dxf text eol=lf
 *.scr text eol=crlf
 *.lsp text eol=crlf

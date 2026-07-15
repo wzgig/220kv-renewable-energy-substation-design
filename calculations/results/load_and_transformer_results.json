@@ -1,0 +1,311 @@
+{
+  "project": {
+    "title": "220kV新能源汇集变电所电气一次部分初步设计",
+    "taskbook_group": 5
+  },
+  "load_35kv": {
+    "nominal_voltage_kv": 35.0,
+    "group_factor": 0.95,
+    "loss_rate": 0.05,
+    "gross_apparent_mva": 280.98818474758326,
+    "after_simultaneity_mva": 266.9387755102041,
+    "with_losses_mva": 280.28571428571433,
+    "alternative_divide_by_one_minus_loss_mva": 280.98818474758326,
+    "bus_current_a": 4623.515216938963,
+    "items": [
+      {
+        "name": "wind_farm_A",
+        "label_zh": "风电场A",
+        "active_power_mw": 80.0,
+        "power_factor": 0.95,
+        "circuits": 4,
+        "base_apparent_mva": 84.21052631578948,
+        "base_per_circuit_mva": 21.05263157894737,
+        "base_per_circuit_current_a": 347.27835740729375,
+        "design_apparent_mva_with_losses": 88.42105263157896,
+        "per_circuit_design_mva": 22.10526315789474,
+        "per_circuit_current_a": 364.6422752776585,
+        "simultaneity_applied_to_circuit": false
+      },
+      {
+        "name": "wind_farm_B",
+        "label_zh": "风电场B",
+        "active_power_mw": 60.0,
+        "power_factor": 0.95,
+        "circuits": 3,
+        "base_apparent_mva": 63.15789473684211,
+        "base_per_circuit_mva": 21.05263157894737,
+        "base_per_circuit_current_a": 347.27835740729375,
+        "design_apparent_mva_with_losses": 66.31578947368422,
+        "per_circuit_design_mva": 22.10526315789474,
+        "per_circuit_current_a": 364.6422752776585,
+        "simultaneity_applied_to_circuit": false
+      },
+      {
+        "name": "pv_plant_A",
+        "label_zh": "光伏电站A",
+        "active_power_mw": 60.0,
+        "power_factor": 0.98,
+        "circuits": 2,
+        "base_apparent_mva": 61.224489795918366,
+        "base_per_circuit_mva": 30.612244897959183,
+        "base_per_circuit_current_a": 504.971080923871,
+        "design_apparent_mva_with_losses": 64.28571428571429,
+        "per_circuit_design_mva": 32.142857142857146,
+        "per_circuit_current_a": 530.2196349700645,
+        "simultaneity_applied_to_circuit": false
+      },
+      {
+        "name": "pv_plant_B",
+        "label_zh": "光伏电站B",
+        "active_power_mw": 40.0,
+        "power_factor": 0.98,
+        "circuits": 2,
+        "base_apparent_mva": 40.816326530612244,
+        "base_per_circuit_mva": 20.408163265306122,
+        "base_per_circuit_current_a": 336.64738728258067,
+        "design_apparent_mva_with_losses": 42.85714285714286,
+        "per_circuit_design_mva": 21.42857142857143,
+        "per_circuit_current_a": 353.47975664670975,
+        "simultaneity_applied_to_circuit": false
+      },
+      {
+        "name": "energy_storage",
+        "label_zh": "储能电站",
+        "active_power_mw": 30.0,
+        "power_factor": 0.95,
+        "circuits": 1,
+        "base_apparent_mva": 31.578947368421055,
+        "base_per_circuit_mva": 31.578947368421055,
+        "base_per_circuit_current_a": 520.9175361109407,
+        "design_apparent_mva_with_losses": 33.15789473684211,
+        "per_circuit_design_mva": 33.15789473684211,
+        "per_circuit_current_a": 546.9634129164876,
+        "simultaneity_applied_to_circuit": false
+      }
+    ],
+    "equal_bus_section_current_a": 2311.7576084694815
+  },
+  "load_10kv": {
+    "nominal_voltage_kv": 10.0,
+    "group_factor": 0.8,
+    "loss_rate": 0.05,
+    "gross_apparent_mva": 2.0915032679738563,
+    "after_simultaneity_mva": 1.6732026143790852,
+    "with_losses_mva": 1.7568627450980396,
+    "alternative_divide_by_one_minus_loss_mva": 1.7612659098727215,
+    "bus_current_a": 101.4325178811578,
+    "items": [
+      {
+        "name": "station_service_backup",
+        "label_zh": "站用电备用电源",
+        "active_power_mw": 0.8,
+        "power_factor": 0.85,
+        "circuits": 1,
+        "base_apparent_mva": 0.9411764705882354,
+        "base_per_circuit_mva": 0.9411764705882354,
+        "base_per_circuit_current_a": 54.33884886490597,
+        "design_apparent_mva_with_losses": 0.9882352941176472,
+        "per_circuit_design_mva": 0.9882352941176472,
+        "per_circuit_current_a": 57.05579130815127,
+        "simultaneity_applied_to_circuit": false
+      },
+      {
+        "name": "reactive_compensation_and_cooling",
+        "label_zh": "无功补偿及冷却系统",
+        "active_power_mw": 0.6,
+        "power_factor": 0.85,
+        "circuits": 1,
+        "base_apparent_mva": 0.7058823529411765,
+        "base_per_circuit_mva": 0.7058823529411765,
+        "base_per_circuit_current_a": 40.75413664867948,
+        "design_apparent_mva_with_losses": 0.7411764705882353,
+        "per_circuit_design_mva": 0.7411764705882353,
+        "per_circuit_current_a": 42.791843481113446,
+        "simultaneity_applied_to_circuit": false
+      },
+      {
+        "name": "control_communications_and_monitoring",
+        "label_zh": "集控通信及监控系统",
+        "active_power_mw": 0.4,
+        "power_factor": 0.9,
+        "circuits": 1,
+        "base_apparent_mva": 0.4444444444444445,
+        "base_per_circuit_mva": 0.4444444444444445,
+        "base_per_circuit_current_a": 25.660011963983372,
+        "design_apparent_mva_with_losses": 0.46666666666666673,
+        "per_circuit_design_mva": 0.46666666666666673,
+        "per_circuit_current_a": 26.943012562182542,
+        "simultaneity_applied_to_circuit": false
+      }
+    ]
+  },
+  "main_transformer": {
+    "primary_case_basis": "35kV renewable aggregate",
+    "includes_10kv_load_in_primary_case": false,
+    "transformer_count": 2,
+    "rated_mva_each": 180.0,
+    "installed_capacity_mva": 360.0,
+    "total_required_mva": 280.28571428571433,
+    "per_transformer_mva": 140.14285714285717,
+    "normal_loading_percent": 77.85714285714288,
+    "n_minus_one_supply_percent": 64.22018348623853,
+    "n_minus_one_shortfall_mva": 100.28571428571433,
+    "sensitivity_including_10kv": {
+      "total_required_mva": 282.04257703081237,
+      "per_transformer_mva": 141.02128851540618,
+      "normal_loading_percent": 78.34516028633676,
+      "n_minus_one_supply_percent": 63.82015151575342,
+      "n_minus_one_shortfall_mva": 102.04257703081237
+    },
+    "rated_current_a": {
+      "220kv": 472.3774929733302,
+      "35kv": 2969.229955832361
+    },
+    "rated_current_with_1_05_margin_a": {
+      "220kv": 495.99636762199674,
+      "35kv": 3117.691453623979
+    }
+  },
+  "outgoing_220kv": {
+    "in_service_circuits": 2,
+    "equal_share_mva": 140.14285714285717,
+    "equal_share_current_a": 367.77961952923573,
+    "single_circuit_contingency_mva": 280.28571428571433,
+    "single_circuit_contingency_current_a": 735.5592390584715,
+    "basis": "35kV renewable aggregate before subtracting local auxiliary use"
+  },
+  "station_service": {
+    "applicable_items": [
+      {
+        "name": "main_transformer_fans",
+        "rated_kw_formula": "n*66*0.15",
+        "calculated_rated_kw": 19.8,
+        "duty": "continuous_frequent",
+        "applicable": true
+      },
+      {
+        "name": "main_battery_charger",
+        "rated_kw": 20,
+        "duty": "continuous_infrequent",
+        "applicable": true,
+        "calculated_rated_kw": 20.0
+      },
+      {
+        "name": "float_charger",
+        "rated_kw": 14,
+        "duty": "continuous_frequent",
+        "applicable": true,
+        "calculated_rated_kw": 14.0
+      },
+      {
+        "name": "battery_ventilation",
+        "rated_kw": 1.4,
+        "duty": "continuous_infrequent",
+        "applicable": true,
+        "calculated_rated_kw": 1.4
+      },
+      {
+        "name": "battery_exhaust",
+        "rated_kw": 1.7,
+        "duty": "continuous_infrequent",
+        "applicable": true,
+        "calculated_rated_kw": 1.7
+      },
+      {
+        "name": "domestic_and_fire_water_pump",
+        "rated_kw": 1.7,
+        "duty": "continuous_frequent",
+        "applicable": true,
+        "calculated_rated_kw": 1.7
+      },
+      {
+        "name": "air_compressors",
+        "rated_kw_formula": "2*22",
+        "calculated_rated_kw": 44.0,
+        "simultaneous_kw": 22,
+        "duty": "short_time_frequent",
+        "applicable": true
+      },
+      {
+        "name": "carrier_and_communications",
+        "rated_kw": 1.7,
+        "duty": "continuous_frequent",
+        "applicable": true,
+        "calculated_rated_kw": 1.7
+      },
+      {
+        "name": "220kv_switchyard_supply",
+        "rated_kw": 20,
+        "duty": "short_time_infrequent",
+        "applicable": true,
+        "calculated_rated_kw": 20.0
+      },
+      {
+        "name": "35kv_switchgear_supply",
+        "rated_kw": 10,
+        "duty": "short_time_infrequent",
+        "applicable": true,
+        "calculated_rated_kw": 10.0
+      },
+      {
+        "name": "220kv_breaker_winter_heating",
+        "rated_kw": 6,
+        "duty": "continuous",
+        "applicable": true,
+        "calculated_rated_kw": 6.0
+      },
+      {
+        "name": "outdoor_switchyard_lighting",
+        "rated_kw": 20,
+        "duty": "continuous",
+        "applicable": true,
+        "calculated_rated_kw": 20.0
+      },
+      {
+        "name": "indoor_lighting",
+        "rated_kw": 10,
+        "duty": "continuous",
+        "applicable": true,
+        "calculated_rated_kw": 10.0
+      },
+      {
+        "name": "maintenance_and_spare",
+        "rated_kw": 15,
+        "duty": "short_time_infrequent",
+        "applicable": true,
+        "calculated_rated_kw": 15.0
+      }
+    ],
+    "excluded_items": [
+      "110kv_switchyard_supply",
+      "110kv_breaker_winter_heating"
+    ],
+    "continuous_applicable_kw": 96.3,
+    "short_time_applicable_kw": 89.0,
+    "explicit_frequent_kw": 81.2,
+    "explicit_infrequent_kw": 68.1,
+    "frequency_unspecified_kw": 36.0,
+    "frequent_short_time_kw": 44.0,
+    "simultaneous_short_time_kw": 22.0,
+    "all_applicable_kw": 185.3,
+    "base_scenario_kw_before_margin": 118.3,
+    "worst_frequent_kw_before_margin": 140.3,
+    "assumed_power_factor": 0.8,
+    "margin_rate": 0.1,
+    "base_required_kva": 162.6625,
+    "worst_frequent_required_kva": 192.9125,
+    "selection_basis_kva": 192.9125,
+    "recommended_each_transformer_kva": 200.0,
+    "recommended_transformer_count": 2,
+    "standby_mode": "dark_standby"
+  },
+  "calculation_notes": [
+    "0.95 新能源同时出力系数仅用于主变综合容量计算。",
+    "单回馈线电流采用该类最大负荷除以回路数，不叠加系统同时系数。",
+    "主结果按乘 1.05 处理 5% 线损。",
+    "同时保留除以 (1-线损率) 的敏感性数值。",
+    "主变主校核按35kV汇集负荷；另保留叠加10kV负荷的保守敏感性场景。",
+    "所用变 kVA 建议为初选值，因其功率因数属于显式假设。"
+  ]
+}

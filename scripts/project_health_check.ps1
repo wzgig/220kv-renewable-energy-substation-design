@@ -17,8 +17,12 @@ $requiredPaths = @(
     'docs/REQUIREMENTS_TRACEABILITY.md',
     'docs/CAD_WORKFLOW.md',
     'calculations/README.md',
+    'calculations/load_and_transformers/calculate.py',
+    'calculations/results/load_and_transformer_results.json',
     'drawings/README.md',
-    'report/README.md'
+    'report/README.md',
+    'requirements.txt',
+    'tests/test_load_and_transformers.py'
 )
 
 foreach ($relativePath in $requiredPaths) {

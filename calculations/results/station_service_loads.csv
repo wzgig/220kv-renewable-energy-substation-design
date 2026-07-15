@@ -1,0 +1,15 @@
+﻿name,calculated_rated_kw,duty,simultaneous_kw
+main_transformer_fans,19.8,continuous_frequent,
+main_battery_charger,20.0,continuous_infrequent,
+float_charger,14.0,continuous_frequent,
+battery_ventilation,1.4,continuous_infrequent,
+battery_exhaust,1.7,continuous_infrequent,
+domestic_and_fire_water_pump,1.7,continuous_frequent,
+air_compressors,44.0,short_time_frequent,22
+carrier_and_communications,1.7,continuous_frequent,
+220kv_switchyard_supply,20.0,short_time_infrequent,
+35kv_switchgear_supply,10.0,short_time_infrequent,
+220kv_breaker_winter_heating,6.0,continuous,
+outdoor_switchyard_lighting,20.0,continuous,
+indoor_lighting,10.0,continuous,
+maintenance_and_spare,15.0,short_time_infrequent,

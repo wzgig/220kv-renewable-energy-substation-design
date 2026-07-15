@@ -2,14 +2,18 @@
 
 本目录用于保存可复核、可重复运行的设计计算，不把最终数值只写在说明书正文里。
 
-计划文件：
+当前已建立：
 
 ~~~text
-01_load_and_transformers/      负荷、主变与所用变选择
-02_max_continuous_current/     各回路最大持续工作电流
-03_short_circuit/              标幺网络与短路电流
-04_equipment_selection/        断路器、隔离开关、母线、CT/PT 等
-05_results/                    统一结果表，供报告和 CAD 引用
+load_and_transformers/         负荷、持续电流与主变/所用变初算
+results/                       JSON、CSV 和 Markdown 统一结果
+~~~
+
+后续将增加：
+
+~~~text
+short_circuit/                 标幺网络与短路电流
+equipment_selection/           断路器、隔离开关、母线、CT/PT 等
 ~~~
 
 计算规则：

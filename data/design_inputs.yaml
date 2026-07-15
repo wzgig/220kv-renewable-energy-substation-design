@@ -55,18 +55,18 @@ loads_35kv:
   simultaneous_output_factor: 0.95
   total_installed_active_power_mw: 270
   items:
-    - {name: "wind_farm_A", active_power_mw: 80, power_factor: 0.95, circuits: 4}
-    - {name: "wind_farm_B", active_power_mw: 60, power_factor: 0.95, circuits: 3}
-    - {name: "pv_plant_A", active_power_mw: 60, power_factor: 0.98, circuits: 2}
-    - {name: "pv_plant_B", active_power_mw: 40, power_factor: 0.98, circuits: 2}
-    - {name: "energy_storage", active_power_mw: 30, power_factor: 0.95, circuits: 1}
+    - {name: "wind_farm_A", label_zh: "风电场A", active_power_mw: 80, power_factor: 0.95, circuits: 4}
+    - {name: "wind_farm_B", label_zh: "风电场B", active_power_mw: 60, power_factor: 0.95, circuits: 3}
+    - {name: "pv_plant_A", label_zh: "光伏电站A", active_power_mw: 60, power_factor: 0.98, circuits: 2}
+    - {name: "pv_plant_B", label_zh: "光伏电站B", active_power_mw: 40, power_factor: 0.98, circuits: 2}
+    - {name: "energy_storage", label_zh: "储能电站", active_power_mw: 30, power_factor: 0.95, circuits: 1}
 
 loads_10kv:
   simultaneity_factor: 0.80
   items:
-    - {name: "station_service_backup", active_power_mw: 0.8, power_factor: 0.85, circuits: 1}
-    - {name: "reactive_compensation_and_cooling", active_power_mw: 0.6, power_factor: 0.85, circuits: 1}
-    - {name: "control_communications_and_monitoring", active_power_mw: 0.4, power_factor: 0.90, circuits: 1}
+    - {name: "station_service_backup", label_zh: "站用电备用电源", active_power_mw: 0.8, power_factor: 0.85, circuits: 1}
+    - {name: "reactive_compensation_and_cooling", label_zh: "无功补偿及冷却系统", active_power_mw: 0.6, power_factor: 0.85, circuits: 1}
+    - {name: "control_communications_and_monitoring", label_zh: "集控通信及监控系统", active_power_mw: 0.4, power_factor: 0.90, circuits: 1}
 
 station_service_loads:
   low_voltage_system: "380_220V_three_phase_four_wire"
@@ -74,14 +74,18 @@ station_service_loads:
   transformer_count_preference: 2
   standby_mode: "dark_standby"
   capacity_rule: "each_transformer_supplies_all_frequent_loads_plus_about_10_percent_margin"
+  preliminary_selection_assumptions:
+    power_factor: 0.80
+    margin_rate: 0.10
+    standard_capacity_kva: [100, 125, 160, 200, 250, 315]
   items:
-    - {name: "main_transformer_fans", rated_kw_formula: "n*66*0.15", duty: "continuous_frequent", applicable: true}
+    - {name: "main_transformer_fans", rated_kw_formula: "n*66*0.15", calculated_rated_kw: 19.8, duty: "continuous_frequent", applicable: true}
     - {name: "main_battery_charger", rated_kw: 20, duty: "continuous_infrequent", applicable: true}
     - {name: "float_charger", rated_kw: 14, duty: "continuous_frequent", applicable: true}
     - {name: "battery_ventilation", rated_kw: 1.4, duty: "continuous_infrequent", applicable: true}
     - {name: "battery_exhaust", rated_kw: 1.7, duty: "continuous_infrequent", applicable: true}
     - {name: "domestic_and_fire_water_pump", rated_kw: 1.7, duty: "continuous_frequent", applicable: true}
-    - {name: "air_compressors", rated_kw_formula: "2*22", duty: "short_time_frequent", applicable: true}
+    - {name: "air_compressors", rated_kw_formula: "2*22", calculated_rated_kw: 44, simultaneous_kw: 22, duty: "short_time_frequent", applicable: true}
     - {name: "carrier_and_communications", rated_kw: 1.7, duty: "continuous_frequent", applicable: true}
     - {name: "220kv_switchyard_supply", rated_kw: 20, duty: "short_time_infrequent", applicable: true}
     - {name: "110kv_switchyard_supply", rated_kw: 20, duty: "short_time_infrequent", applicable: false, reason: "no_110kv_level_in_this_project"}
