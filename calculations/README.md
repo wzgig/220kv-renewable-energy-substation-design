@@ -6,13 +6,13 @@
 
 ~~~text
 load_and_transformers/         负荷、持续电流与主变/所用变初算
+short_circuit/                 220kV、35kV 标幺网络与短路电流初算
 results/                       JSON、CSV 和 Markdown 统一结果
 ~~~
 
 后续将增加：
 
 ~~~text
-short_circuit/                 标幺网络与短路电流
 equipment_selection/           断路器、隔离开关、母线、CT/PT 等
 ~~~
 

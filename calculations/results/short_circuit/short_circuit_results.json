@@ -1,0 +1,222 @@
+{
+  "basis": {
+    "calculation_method": "taskbook_per_unit_x_only_preliminary",
+    "standard_reference_for_final_review": "GB/T 15544.1-2023",
+    "standard_alignment_status": "not_a_full_standard_implementation",
+    "base_capacity_mva": 100.0,
+    "average_rated_voltage_kv": {
+      "220kv": 230.0,
+      "35kv": 37.0,
+      "10kv": 10.5
+    },
+    "resistance_treatment": "ignored",
+    "peak_factor_k": 1.8,
+    "peak_factor_source": "course_assumption_pending_r_over_x_review",
+    "voltage_factor_treatment": "not_applied_under_taskbook_preliminary_method",
+    "renewable_base_case": "ignored",
+    "future_220kv_line_treatment": "sensitivity_case_pending_final_operating_mode",
+    "future_220kv_line_in_service_for_base_case": false
+  },
+  "network": {
+    "impedance_base_220kv_ohm": 529.0,
+    "source_system_reactance_pu": {
+      "source_1": 0.016666666666666666,
+      "source_2": 0.0225
+    },
+    "source_line_reactance_pu": {
+      "source_1": 0.052930056710775046,
+      "source_2": 0.06427221172022685
+    },
+    "source_paths_220kv_pu": {
+      "source_1": 0.06959672337744172,
+      "source_2": 0.08677221172022684
+    },
+    "parallel_source_equivalent_220kv_pu": 0.03862059693742504,
+    "main_transformer_reactance_pu_each": 0.07777777777777779
+  },
+  "points": {
+    "SC-220-BUS-CLOSED": {
+      "point_id": "SC-220-BUS-CLOSED",
+      "voltage_level": "220kV",
+      "base_voltage_kv": 230.0,
+      "equivalent_reactance_pu": 0.03862059693742504,
+      "grid_symmetrical_current_ka": 6.499688665509761,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 16.545506151539858,
+      "grid_short_circuit_capacity_mva": 2589.2919304697657,
+      "operating_status": "maximum_base_case",
+      "normal_operation_status": "conditional_pending_system_parallel_permission",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_status": "not_modelled_pending_converter_transformer_line_model"
+    },
+    "SC-220-I-SEPARATE": {
+      "point_id": "SC-220-I-SEPARATE",
+      "voltage_level": "220kV",
+      "base_voltage_kv": 230.0,
+      "equivalent_reactance_pu": 0.06959672337744172,
+      "grid_symmetrical_current_ka": 3.6068056653765668,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 9.181428279875382,
+      "grid_short_circuit_capacity_mva": 1436.8492530556814,
+      "operating_status": "separate_bus_sensitivity",
+      "normal_operation_status": "permitted_separate_operation",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_status": "not_modelled_pending_converter_transformer_line_model"
+    },
+    "SC-220-II-SEPARATE": {
+      "point_id": "SC-220-II-SEPARATE",
+      "voltage_level": "220kV",
+      "base_voltage_kv": 230.0,
+      "equivalent_reactance_pu": 0.08677221172022684,
+      "grid_symmetrical_current_ka": 2.892883000133194,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 7.3640778716644775,
+      "grid_short_circuit_capacity_mva": 1152.4426774140843,
+      "operating_status": "separate_bus_sensitivity",
+      "normal_operation_status": "permitted_separate_operation",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_status": "not_modelled_pending_converter_transformer_line_model"
+    },
+    "SC-35-I-220-CLOSED": {
+      "point_id": "SC-35-I-220-CLOSED",
+      "voltage_level": "35kV",
+      "base_voltage_kv": 37.0,
+      "equivalent_reactance_pu": 0.11639837471520284,
+      "grid_symmetrical_current_ka": 13.405738153671395,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 34.12543807898018,
+      "grid_short_circuit_capacity_mva": 859.1185250195675,
+      "operating_status": "35kv_sectioned_with_220kv_bus_tie_closed",
+      "normal_operation_status": "conditional_pending_system_parallel_permission",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 135.23093447905478,
+        "section_rated_current_ka": 2.2307318978356263,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 2.4538050876191893,
+        "maximum": 2.6768782774027513
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 15.859543241290584,
+        "maximum": 16.082616431074147,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      }
+    },
+    "SC-35-II-220-CLOSED": {
+      "point_id": "SC-35-II-220-CLOSED",
+      "voltage_level": "35kV",
+      "base_voltage_kv": 37.0,
+      "equivalent_reactance_pu": 0.11639837471520284,
+      "grid_symmetrical_current_ka": 13.405738153671395,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 34.12543807898018,
+      "grid_short_circuit_capacity_mva": 859.1185250195675,
+      "operating_status": "35kv_sectioned_with_220kv_bus_tie_closed",
+      "normal_operation_status": "conditional_pending_system_parallel_permission",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 145.75725026852848,
+        "section_rated_current_ka": 2.4043710765392734,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 2.644808184193201,
+        "maximum": 2.885245291847128
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 16.050546337864596,
+        "maximum": 16.290983445518524,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      }
+    },
+    "SC-35-I-220-SEPARATE": {
+      "point_id": "SC-35-I-220-SEPARATE",
+      "voltage_level": "35kV",
+      "base_voltage_kv": 37.0,
+      "equivalent_reactance_pu": 0.1473745011552195,
+      "grid_symmetrical_current_ka": 10.588033348465522,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 26.952732648465407,
+      "grid_short_circuit_capacity_mva": 678.5434333357086,
+      "operating_status": "220kv_bus_sections_separate",
+      "normal_operation_status": "permitted_separate_operation",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 135.23093447905478,
+        "section_rated_current_ka": 2.2307318978356263,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 2.4538050876191893,
+        "maximum": 2.6768782774027513
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 13.041838436084712,
+        "maximum": 13.264911625868274,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      }
+    },
+    "SC-35-II-220-SEPARATE": {
+      "point_id": "SC-35-II-220-SEPARATE",
+      "voltage_level": "35kV",
+      "base_voltage_kv": 37.0,
+      "equivalent_reactance_pu": 0.16454998949800465,
+      "grid_symmetrical_current_ka": 9.482869842199877,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 24.139445653904183,
+      "grid_short_circuit_capacity_mva": 607.7180576253553,
+      "operating_status": "220kv_bus_sections_separate",
+      "normal_operation_status": "permitted_separate_operation",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_sensitivity_ka": {
+        "section_apparent_power_mva": 145.75725026852848,
+        "section_rated_current_ka": 2.4043710765392734,
+        "minimum_multiplier": 1.1,
+        "maximum_multiplier": 1.2,
+        "minimum": 2.644808184193201,
+        "maximum": 2.885245291847128
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 12.127678026393077,
+        "maximum": 12.368115134047006,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      }
+    },
+    "SC-35-BOTH-TRANSFORMERS-SENSITIVITY": {
+      "point_id": "SC-35-BOTH-TRANSFORMERS-SENSITIVITY",
+      "voltage_level": "35kV",
+      "base_voltage_kv": 37.0,
+      "equivalent_reactance_pu": 0.07750948582631394,
+      "grid_symmetrical_current_ka": 20.131808594906037,
+      "peak_factor_k": 1.8,
+      "grid_peak_current_ka": 51.247218150027656,
+      "grid_short_circuit_capacity_mva": 1290.1646673812752,
+      "operating_status": "non_normal_parallel_sensitivity",
+      "normal_operation_status": "not_permitted_non_normal_sensitivity",
+      "current_scope": "grid_contribution_only",
+      "renewable_contribution_sensitivity_ka": {
+        "minimum": 5.09861327181239,
+        "maximum": 5.562123569249879
+      },
+      "conservative_total_symmetrical_current_range_ka": {
+        "minimum": 25.230421866718427,
+        "maximum": 25.693932164155918,
+        "combination_method": "arithmetic_upper_bound_for_course_sensitivity"
+      }
+    }
+  },
+  "pending_points": {
+    "10kv_bus": {
+      "status": "pending_input",
+      "reason": "35/10.5kV source-transformer rated capacity is unknown; reactive-compensation Mvar must be confirmed before the 10kV short-circuit current can be finalized."
+    }
+  },
+  "notes": [
+    "220kV分段断路器闭合场景须以系统1、系统2允许并列为前提，目前仅作最大基准敏感性。",
+    "35kV正常保持分段运行，不允许两台健康主变低压侧长期并列。",
+    "两台主变低压侧并列值仅保留为非正常敏感性场景。",
+    "新能源贡献采用算术相加的课程设计保守上界，不等同于变流器电磁暂态模型。",
+    "峰值仅表示电网贡献；固定k值是待按R/X复核的课程假设，并非由忽略电阻自动推导。",
+    "220kV故障点的新能源贡献及35kV新能源峰值贡献尚未建模，设备最终校验前必须补充。",
+    "第三回220kV线路L3不参加本期基准计算，远期投入场景另行计算。"
+  ]
+}

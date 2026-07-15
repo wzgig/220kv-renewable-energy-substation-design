@@ -107,6 +107,7 @@ calculation_rules:
   line_loss_rate: 0.05
   annual_growth_rate_for_sensitivity: 0.04
   short_circuit_base_mva: 100
+  short_circuit_peak_factor_k: 1.8
   average_rated_voltage_kv:
     220kv: 230
     35kv: 37
@@ -127,6 +128,7 @@ calculation_rules:
   renewable_short_circuit_contribution:
     base_case: "ignored"
     sensitivity_case: "1.1_to_1.2_times_rated_current"
+    sensitivity_multiplier_range: [1.1, 1.2]
 
 open_decisions:
   - "220kv_bus_scheme"

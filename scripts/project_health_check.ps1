@@ -16,15 +16,19 @@ $requiredPaths = @(
     'docs/PROJECT_BRIEF.md',
     'docs/MASTER_PLAN.md',
     'docs/MAIN_SCHEME_BASELINE.md',
+    'docs/STANDARDS_REGISTER.md',
     'docs/REQUIREMENTS_TRACEABILITY.md',
     'docs/CAD_WORKFLOW.md',
     'calculations/README.md',
     'calculations/load_and_transformers/calculate.py',
+    'calculations/short_circuit/calculate.py',
     'calculations/results/load_and_transformer_results.json',
+    'calculations/results/short_circuit/short_circuit_results.json',
     'drawings/README.md',
     'report/README.md',
     'requirements.txt',
-    'tests/test_load_and_transformers.py'
+    'tests/test_load_and_transformers.py',
+    'tests/test_short_circuit.py'
 )
 
 foreach ($relativePath in $requiredPaths) {
@@ -43,7 +47,9 @@ if (Test-Path -LiteralPath $inputPath) {
         'system_sources:',
         'loads_35kv:',
         'line_loss_rate:',
-        'short_circuit_base_mva:'
+        'short_circuit_base_mva:',
+        'short_circuit_peak_factor_k:',
+        'sensitivity_multiplier_range:'
     )
     foreach ($key in $requiredInputKeys) {
         if ($inputText -notmatch [regex]::Escape($key)) {
