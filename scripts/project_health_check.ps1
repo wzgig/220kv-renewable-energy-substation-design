@@ -48,7 +48,11 @@ if (Test-Path -LiteralPath $inputPath) {
 
 $gitHead = Join-Path (Join-Path $root '.git') 'HEAD'
 if (Test-Path -LiteralPath $gitHead) {
-    $trackedFiles = @(& git -C $root ls-files)
+    $trackedFiles = @(
+        & git -C $root ls-files |
+            ForEach-Object { $_.Trim() } |
+            Where-Object { $_ }
+    )
     if ($LASTEXITCODE -ne 0) {
         $errors.Add('Unable to list Git-tracked files.')
     }
@@ -64,8 +68,8 @@ if (Test-Path -LiteralPath $gitHead) {
         }
 
         $fullPath = Join-Path $root $trackedFile
-        if (Test-Path -LiteralPath $fullPath -PathType Leaf) {
-            $size = (Get-Item -LiteralPath $fullPath).Length
+        if ([System.IO.File]::Exists($fullPath)) {
+            $size = [System.IO.FileInfo]::new($fullPath).Length
             if ($size -gt 50MB) {
                 $errors.Add("Tracked file exceeds 50 MiB: $normalized")
             }
