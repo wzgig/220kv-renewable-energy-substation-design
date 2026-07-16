@@ -1,5 +1,5 @@
 metadata:
-  status: "provisional_frozen_for_calculation_and_cad"
+  status: "course_design_completed_with_engineering_boundaries"
   date: "2026-07-15"
   change_rule: "revise_only_when_teacher_guidance_or_verified_equipment_data_changes_a_basis"
 
@@ -8,9 +8,11 @@ main_transformers:
   rated_capacity_mva_each: 180
   voltage_ratio_kv: [220, 35]
   winding_type: "two_winding"
+  vector_group: "YNd11"
   installation: "outdoor_oil_immersed_on_load_tap_changing"
   short_circuit_voltage_percent: 14
   identifiers: ["T1", "T2"]
+  neutral_arrangement: "220kv_star_neutral_directly_grounded_through_neutral_ct; 35kv_delta_winding"
 
 connection_220kv:
   scheme: "single_bus_sectionalized"
@@ -36,23 +38,23 @@ connection_35kv:
     - id: "35kV-I"
       source_transformer: "T1"
       feeder_circuits:
-        - {id: "WA-1", source_key: "wind_farm_A"}
-        - {id: "WA-2", source_key: "wind_farm_A"}
-        - {id: "WB-1", source_key: "wind_farm_B"}
-        - {id: "WB-2", source_key: "wind_farm_B"}
-        - {id: "PVA-1", source_key: "pv_plant_A"}
-        - {id: "PVB-1", source_key: "pv_plant_B"}
+        - {id: "WA-1", source_key: "wind_farm_A", interface: "overhead"}
+        - {id: "WA-2", source_key: "wind_farm_A", interface: "overhead"}
+        - {id: "WB-1", source_key: "wind_farm_B", interface: "overhead"}
+        - {id: "WB-2", source_key: "wind_farm_B", interface: "overhead"}
+        - {id: "PVA-1", source_key: "pv_plant_A", interface: "cable"}
+        - {id: "PVB-1", source_key: "pv_plant_B", interface: "cable"}
       reserved_bays: 1
       allocated_active_power_mw: 130
     - id: "35kV-II"
       source_transformer: "T2"
       feeder_circuits:
-        - {id: "WA-3", source_key: "wind_farm_A"}
-        - {id: "WA-4", source_key: "wind_farm_A"}
-        - {id: "WB-3", source_key: "wind_farm_B"}
-        - {id: "PVA-2", source_key: "pv_plant_A"}
-        - {id: "PVB-2", source_key: "pv_plant_B"}
-        - {id: "ES-1", source_key: "energy_storage"}
+        - {id: "WA-3", source_key: "wind_farm_A", interface: "overhead"}
+        - {id: "WA-4", source_key: "wind_farm_A", interface: "overhead"}
+        - {id: "WB-3", source_key: "wind_farm_B", interface: "overhead"}
+        - {id: "PVA-2", source_key: "pv_plant_A", interface: "cable"}
+        - {id: "PVB-2", source_key: "pv_plant_B", interface: "cable"}
+        - {id: "ES-1", source_key: "energy_storage", interface: "cable"}
       reserved_bays: 1
       allocated_active_power_mw: 140
   auxiliary_transformer_bays:
@@ -70,6 +72,8 @@ connection_10kv:
     short_circuit_voltage_percent: 8
     rated_capacity_mva_each: 31.5
     identifiers: ["T10-1", "T10-2"]
+    vector_group: "YNd11"
+    neutral_arrangement: "35kv_star_neutral_not_used_for_system_grounding; 10_5kv_delta_winding"
     source_bays_35kv: ["T10-1-HV", "T10-2-HV"]
     source_sections_35kv: ["35kV-I", "35kV-II"]
     type_envelope: "35kv_oil_immersed_power_transformer"
@@ -105,6 +109,9 @@ connection_0_4kv:
     voltage_ratio_kv: [10, 0.4]
     identifiers: ["TS1", "TS2"]
     source_sections: ["10kV-I", "10kV-II"]
+    type: "SCB14_dry_type_cast_resin"
+    vector_group: "Dyn11"
+    short_circuit_voltage_percent: 4
 
 operating_modes:
   normal:
@@ -133,6 +140,9 @@ operating_modes:
     course_reference_ampacity_at_41c_a: 475.242
     line_only_required_curtailment_percent: 35.390
     interaction_with_main_transformer_n_minus_one: "main_transformer_35_780_percent_curtailment_is_slightly_more_restrictive_and_reduces_line_current_to_about_472_377A"
+  220kv_bus_tie_transfer:
+    conservative_continuous_duty_a: 735.559
+    basis: "one energized section transfers the full pre-curtailment export duty before operating limits are applied"
   auxiliary_source_n_minus_one:
     action_10kv: "isolate_failed_35_10_5kv_source_then_close_10kv_bus_tie_after_fault_clearance"
     full_svg_range_retained: true
@@ -149,12 +159,48 @@ site_conditions:
   altitude_status: "course_design_assumption"
   pollution_level: "d"
   pollution_status: "conservative_course_design_assumption"
+  indoor_switchgear_max_temperature_c: 40
+  indoor_temperature_basis: "ventilation_and_air_conditioning_keep_the_switchgear_room_within_normal_service_temperature_despite_41C_outdoor_maximum"
 
 neutral_grounding:
   220kv: "direct_grounding"
   35kv: "grounding_transformer_plus_low_resistance_course_assumption"
   10kv: "grounding_transformer_plus_low_resistance_course_assumption"
-  status: "course_design_scheme_only_resistance_and_ground_fault_current_pending"
+  35kv_ground_fault_current_a: 400
+  35kv_resistor_ohm_approx: 50.5
+  35kv_short_time_s: 10
+  10kv_ground_fault_current_a: 200
+  10kv_resistor_ohm_approx: 28.9
+  10kv_short_time_s: 10
+  sectionalized_source_scheme:
+    normal:
+      35kv: {bus_tie: "open", sources_in_service: ["GT35-I", "GT35-II"], rule: "one_grounding_source_per_energized_section"}
+      10kv: {bus_tie: "open", sources_in_service: ["GT10-I", "GT10-II"], rule: "one_grounding_source_per_energized_section"}
+    bus_tie_transfer:
+      sequence:
+        - "isolate_the_faulted_or_receiving_section_grounding_source_before_bus_tie_closure"
+        - "verify_only_the_healthy_source_side_grounding_transformer_resistor_set_remains_in_service"
+        - "close_bus_tie_only_after_the_grounding_source_interlock_permissive_is_true"
+      prohibited: "bus_tie_closed_with_two_section_grounding_sources_connected_in_parallel"
+    sectionalized_restoration: "open_bus_tie_then_restore_one_grounding_source_on_each_energized_section"
+  equipment_packages:
+    35kv:
+      quantity: 2
+      identifiers: ["GT35-I", "GT35-II"]
+      connection: "ZN_neutral_forming"
+      rated_ground_fault_current_a: 400
+      duration_s: 10
+      resistor_ohm_approx: 50.5
+      selected_capacity_kva_each: 1000
+    10kv:
+      quantity: 2
+      identifiers: ["GT10-I", "GT10-II"]
+      connection: "ZN_neutral_forming"
+      rated_ground_fault_current_a: 200
+      duration_s: 10
+      resistor_ohm_approx: 28.9
+      selected_capacity_kva_each: 200
+  status: "taskbook_grounding_category_satisfied; low_resistance_values_are_course_design_selections_pending_protection_and_vendor_coordination"
 
 protection_and_thermal_duty:
   main_protection_operating_s: 0.05
@@ -169,10 +215,13 @@ switchyard_220kv:
   arrangement: "outdoor_AIS_phase_segregated_medium_type"
   plan_sheet: {format: "A1", orientation: "landscape", scale: "1:200"}
   section_sheet: {format: "A1", orientation: "landscape", scale: "1:100"}
+  line_bay_detail_sheet: {format: "A1", orientation: "landscape", scale: "1:50", drawing_id: "SEC-220-L1-01"}
   plan_site_size_m: [145, 90]
   normal_road_width_m: 4
   phase_spacing_m: 4
   typical_function_center_pitch_m: 14
+  bus_support_span_for_course_mechanical_check_m: 8
+  bus_support_span_status: "conservative_course_mechanical_assumption_pending_manufacturer_support_design"
   line_bus_to_gantry_m: 29
   transformer_bus_to_gantry_m: 20
   transformer_bus_to_center_m: 27
@@ -194,4 +243,5 @@ open_engineering_inputs:
   - "teacher_reliability_requirement_for_220kv_bus_maintenance"
   - "final_LGJ_400_50_manufacturer_thermal_rating_with_defined_weather_conditions"
   - "final_reactive_power_voltage_harmonic_and_svg_short_circuit_study"
-  - "T10_SVG_and_switchgear_exact_vendor_models_for_41C_service"
+  - "T10_and_outdoor_SVG_exact_vendor_models_for_41C_service"
+  - "indoor_35kv_10kv_switchgear_exact_vendor_models_for_controlled_40C_room"

@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 
 from pypdf import PdfReader, PdfWriter
+from pypdf.generic import NameObject
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -28,6 +29,10 @@ def normalize_pdf(
     reader = PdfReader(input_path, strict=False)
     writer = PdfWriter()
     for page in reader.pages:
+        # AutoCAD may emit searchable SHX text as /Square annotations. They do
+        # not affect the plotted graphics, but they appear as PDF comments and
+        # are unsuitable for the public zero-review-residue deliverable.
+        page.pop(NameObject("/Annots"), None)
         writer.add_page(page)
     writer.add_metadata(
         {
@@ -46,6 +51,8 @@ def normalize_pdf(
         raise ValueError(
             f"Expected one A1 drawing page, found {len(strict_reader.pages)} pages"
         )
+    if strict_reader.pages[0].get("/Annots"):
+        raise ValueError("Normalized drawing PDF still contains annotations")
     media_box = strict_reader.pages[0].mediabox
     width_points = float(media_box.width)
     height_points = float(media_box.height)

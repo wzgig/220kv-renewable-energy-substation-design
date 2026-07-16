@@ -226,12 +226,45 @@ def validate_project_data(data: dict[str, dict[str, Any]]) -> None:
         raise ValueError(f"Bus-tie states mismatch: {tie_states!r}")
 
     grounding = design_inputs["calculation_rules"]["grounding"]
-    expected_grounding = "grounding_transformer_plus_low_resistance_course_assumption"
+    expected_method = "grounding_transformer_plus_low_resistance"
+    expected_baseline = f"{expected_method}_course_assumption"
     for level in ("35kv", "10kv"):
-        if grounding[level] != expected_grounding:
-            raise ValueError(f"Unexpected {level} grounding basis: {grounding[level]!r}")
-        if baseline["neutral_grounding"][level] != grounding[level]:
+        specification = grounding[level]
+        if not isinstance(specification, dict):
+            raise ValueError(f"Expected structured {level} grounding data")
+        if specification.get("method") != expected_method:
+            raise ValueError(f"Unexpected {level} grounding basis: {specification!r}")
+        if baseline["neutral_grounding"][level] != expected_baseline:
             raise ValueError(f"Baseline and design inputs disagree on {level} grounding")
+        prefix = level.replace("kv", "kv_")
+        comparisons = {
+            "target_ground_fault_current_a": f"{prefix}ground_fault_current_a",
+            "resistor_ohm_approx": f"{prefix}resistor_ohm_approx",
+            "short_time_s": f"{prefix}short_time_s",
+        }
+        for input_key, baseline_key in comparisons.items():
+            if not abs(
+                float(specification[input_key])
+                - float(baseline["neutral_grounding"][baseline_key])
+            ) < 1e-9:
+                raise ValueError(
+                    f"Baseline and design inputs disagree on {level} {input_key}"
+                )
+        package = baseline["neutral_grounding"]["equipment_packages"][level]
+        if int(specification["source_count"]) != int(package["quantity"]):
+            raise ValueError(f"Baseline and design inputs disagree on {level} source count")
+        if specification["grounding_transformer_connection"] != package["connection"]:
+            raise ValueError(f"Baseline and design inputs disagree on {level} connection")
+        if int(specification["selected_grounding_transformer_capacity_kva_each"]) != int(
+            package["selected_capacity_kva_each"]
+        ):
+            raise ValueError(f"Baseline and design inputs disagree on {level} capacity")
+
+    grounding_scheme = baseline["neutral_grounding"]["sectionalized_source_scheme"]
+    if grounding_scheme["bus_tie_transfer"]["prohibited"] != (
+        "bus_tie_closed_with_two_section_grounding_sources_connected_in_parallel"
+    ):
+        raise ValueError("Grounding-source bus-tie interlock baseline is incomplete")
 
     station_incomers = layout["circuits"]["0_4kv"]["station_service_incomers"]
     closed_incomers = [item for item in station_incomers if item["state"] == "closed"]
@@ -479,7 +512,7 @@ def _draw_frame_and_title(
     _add_rect(msp, note_bounds, layer="E-TITLE")
     _add_mtext(
         msp,
-        "图例：QF-断路器  QS-隔离开关  TA-电流互感器  TV/CVT-电压互感器  MOA-避雷器  P-暂定  R-预留  NO-正常断开",
+        "图例：QF-断路器  QS-隔离开关  ES-接地开关  TA-电流互感器  TV/CVT-电压互感器  MOA-避雷器  ZN+R-接地变及低电阻  R-预留  NO-正常断开",
         (40.0, 59.0),
         height=2.7,
         width=590.0,
@@ -487,14 +520,18 @@ def _draw_frame_and_title(
         attachment=1,
     )
     footer_notes = (
+        "配置说明：35/10kV各段设PT+MOA柜；7回35kV架空入口设MOA；5回35kV电缆及10kV电缆/SVG回路设ZCT。"
+        "现有短路水平低于31.5kA设备能力，本方案不设限流电抗器。\n"
+        "接地源联锁：35/10kV母联合闸前退出受电/故障段接地源，仅保留健康侧1套；禁止母联合闸且两套并联。\n"
         "制图边界：T10=2×31.5MVA、SVG=2×±12Mvar、海拔≤1000m、污秽d级均按课程设计基线表达；"
-        "精确型号、CT/PT二次参数、谐波和厂家41℃适配待最终复核。220/35/10kV母联正常断开。"
+        "精确型号、CT/PT二次参数、谐波、室外设备41℃及室内开关柜≤40℃厂家适配待最终复核。"
+        "220kV分段断路器、35/10kV母联正常断开。"
     )
     _add_mtext(
         msp,
         footer_notes,
-        (40.0, 46.0),
-        height=2.6,
+        (40.0, 48.0),
+        height=2.15,
         width=590.0,
         layer="E-NOTE",
         attachment=1,
@@ -613,6 +650,7 @@ def _draw_shunt_symbol(
     device_type: str,
     status: str,
     section: str,
+    state: str = "closed",
 ) -> None:
     _add_polyline(
         msp,
@@ -626,7 +664,7 @@ def _draw_shunt_symbol(
         layer=layer,
         bay_id=bay_id,
         device_type=device_type,
-        state="closed",
+        state=state,
         status=status,
         section=section,
     )
@@ -651,16 +689,28 @@ def _draw_220kv(
         status = str(circuit["status"])
         layer = _status_layer(status)
         breaker = "SLD_CB_OPEN" if status == "reserved" else "SLD_CB_CLOSED"
+        disconnector = "SLD_DS_OPEN" if status == "reserved" else "SLD_DS_CLOSED"
+        disconnector_state = "open" if status == "reserved" else "closed"
         _draw_vertical_series(
             msp,
             x=x,
             y1=bus_y,
             y2=557.0,
             devices=[
-                {"center": 511.0, "block": "SLD_DS_CLOSED", "type": "bus_disconnector"},
+                {
+                    "center": 511.0,
+                    "block": disconnector,
+                    "type": "bus_disconnector",
+                    "state": disconnector_state,
+                },
                 {"center": 523.0, "block": breaker, "type": "circuit_breaker", "state": "open" if status == "reserved" else "closed"},
                 {"center": 535.0, "block": "SLD_CT", "type": "current_transformer"},
-                {"center": 547.0, "block": "SLD_DS_CLOSED", "type": "line_disconnector"},
+                {
+                    "center": 547.0,
+                    "block": disconnector,
+                    "type": "line_disconnector",
+                    "state": disconnector_state,
+                },
             ],
             layer=layer,
             bay_id=str(circuit["id"]),
@@ -690,6 +740,20 @@ def _draw_220kv(
             device_type="surge_arrester",
             status=status,
             section=str(circuit["section"]),
+        )
+        _draw_shunt_symbol(
+            msp,
+            main_x=x,
+            main_y=554.0,
+            symbol_x=x + 28.0,
+            symbol_y=543.0,
+            block="SLD_ES_OPEN",
+            layer=layer,
+            bay_id=str(circuit["id"]),
+            device_type="line_earthing_switch",
+            status=status,
+            section=str(circuit["section"]),
+            state="open",
         )
         _draw_shunt_symbol(
             msp,
@@ -749,6 +813,7 @@ def _draw_main_transformers(
     msp: Any,
     layout: dict[str, Any],
     load_results: dict[str, Any],
+    baseline: dict[str, Any],
 ) -> None:
     bus_35 = float(layout["level_geometry"]["bus_y"]["35kv"])
     bus_220 = float(layout["level_geometry"]["bus_y"]["220kv"])
@@ -794,20 +859,36 @@ def _draw_main_transformers(
             status=str(transformer["status"]),
             section=section,
         )
-        _add_line(msp, (x, center_y), (x + 17.0, center_y), layer="E-CONDUCTOR")
+        _add_line(msp, (x, center_y), (x + 6.0, center_y), layer="E-CONDUCTOR")
+        insert_symbol(
+            msp,
+            "SLD_CT",
+            (x + 11.0, center_y),
+            layer="E-SYMBOL",
+            bay_id=transformer_id,
+            device_type="220kv_neutral_current_transformer",
+            state="closed",
+            status=str(transformer["status"]),
+            section=section,
+            rotation=90.0,
+        )
+        _add_line(msp, (x + 16.0, center_y), (x + 23.0, center_y), layer="E-CONDUCTOR")
         insert_symbol(
             msp,
             "SLD_GROUND",
-            (x + 17.0, center_y - 3.0),
+            (x + 23.0, center_y - 3.0),
             layer="E-SYMBOL",
             bay_id=transformer_id,
             device_type="220kv_neutral_ground",
-            status="provisional",
+            state="direct_grounded",
+            status="in_service",
             section=section,
         )
+        if baseline["neutral_grounding"]["220kv"] != "direct_grounding":
+            raise ValueError("Main-transformer neutral drawing expects direct grounding")
         _add_mtext(
             msp,
-            f"{transformer_id} 180MVA\n220/35kV 双绕组 OLTC\nuk=14%(P)",
+            f"{transformer_id} 180MVA\n220/35kV YNd11 OLTC\nuk=14%  中性点TA直接接地",
             (x + 17.0, center_y + 18.0),
             height=2.5,
             width=70.0,
@@ -828,9 +909,16 @@ def _draw_35kv(
     layout: dict[str, Any],
     standard: dict[str, Any],
     duty_map: dict[str, float | None],
+    design_inputs: dict[str, Any],
+    baseline: dict[str, Any],
 ) -> None:
     bus_y = float(layout["level_geometry"]["bus_y"]["35kv"])
     text_height = float(standard["text_heights_mm"]["device_id"])
+    interface_by_id = {
+        str(item["id"]): str(item["interface"])
+        for section in baseline["connection_35kv"]["sections"]
+        for item in section["feeder_circuits"]
+    }
     for feeder in layout["circuits"]["35kv"]["collector_feeders"]:
         x = float(feeder["x"])
         bay_id = str(feeder["id"])
@@ -858,9 +946,14 @@ def _draw_35kv(
             status=str(feeder["status"]),
             section=str(feeder["section"]),
         )
+        interface_note = (
+            "架空+入口MOA"
+            if interface_by_id[bay_id] == "overhead"
+            else "电缆+ZCT"
+        )
         _add_mtext(
             msp,
-            f"{bay_id} {feeder['label']}\n{_current_text(duty_map.get(bay_id))}",
+            f"{bay_id} {feeder['label']}\n{interface_note}\n{_current_text(duty_map.get(bay_id))}",
             (x, 264.0),
             height=text_height,
             width=32.0,
@@ -905,6 +998,7 @@ def _draw_35kv(
             attachment=2,
         )
 
+    arrester = design_inputs["calculation_rules"]["insulation_levels_and_arresters"]["35kv"]["arrester"]
     for item in layout["circuits"]["35kv"]["voltage_transformers"]:
         x = float(item["x"])
         _add_line(msp, (x, bus_y), (x, 311.0), layer="E-CONDUCTOR")
@@ -918,9 +1012,22 @@ def _draw_35kv(
             status=str(item["status"]),
             section=str(item["section"]),
         )
+        _draw_shunt_symbol(
+            msp,
+            main_x=x,
+            main_y=bus_y,
+            symbol_x=x - 14.0,
+            symbol_y=305.0,
+            block="SLD_LA",
+            layer="E-DEVICE",
+            bay_id=f"MOA-{item['section']}",
+            device_type="bus_surge_arrester",
+            status=str(item["status"]),
+            section=str(item["section"]),
+        )
         _add_mtext(
             msp,
-            str(item["label"]),
+            f"{item['label']}+MOA柜\n{arrester}",
             (x, 286.0),
             height=2.2,
             width=42.0,
@@ -929,24 +1036,33 @@ def _draw_35kv(
 
     # Each normally separated medium-voltage section uses the frozen course
     # assumption of a grounding transformer plus low resistance.
-    for x, section in ((280.0, "35kV-I"), (590.0, "35kV-II")):
-        _add_line(msp, (x, bus_y), (x, 319.0), layer="E-CONDITIONAL")
+    grounding = design_inputs["calculation_rules"]["grounding"]["35kv"]
+    for x, label_x, label_y, section in (
+        (280.0, 310.0, 304.0, "35kV-I"),
+        (590.0, 555.0, 275.0, "35kV-II"),
+    ):
         insert_symbol(
             msp,
-            "SLD_GROUND",
-            (x, 316.0),
+            "SLD_GROUNDING_TX_RESISTOR",
+            (x, bus_y - 9.0),
             layer="E-CONDITIONAL",
             bay_id=f"GROUND-{section}",
             device_type="grounding_transformer_low_resistance",
+            state="grounded",
             status="course_assumption",
             section=section,
         )
         _add_mtext(
             msp,
-            "接地变+小电阻",
-            (x, 302.0),
-            height=2.5,
-            width=28.0,
+            (
+                f"{float(grounding['selected_grounding_transformer_capacity_kva_each']):g}kVA ZN接地变+低电阻\n"
+                f"{float(grounding['target_ground_fault_current_a']):g}A / "
+                f"{float(grounding['resistor_ohm_approx']):g}Ω / "
+                f"{float(grounding['short_time_s']):g}s"
+            ),
+            (label_x, label_y),
+            height=2.3,
+            width=42.0,
             layer="E-CONDITIONAL",
             attachment=2,
         )
@@ -965,6 +1081,7 @@ def _draw_35kv(
 def _draw_source_transformers(
     msp: Any,
     layout: dict[str, Any],
+    baseline: dict[str, Any],
 ) -> None:
     bus_35 = float(layout["level_geometry"]["bus_y"]["35kv"])
     bus_10 = float(layout["level_geometry"]["bus_y"]["10kv"])
@@ -977,6 +1094,7 @@ def _draw_source_transformers(
         item["id"].split("-IN")[0]: item
         for item in layout["circuits"]["10kv"]["source_transformer_incomers"]
     }
+    source_spec = baseline["connection_10kv"]["source_transformers"]
     for transformer in layout["transformers"]["source_35_10"]:
         transformer_id = str(transformer["id"])
         high = high_bays[transformer_id]
@@ -1046,7 +1164,11 @@ def _draw_source_transformers(
             )
         _add_mtext(
             msp,
-            f"{transformer_id} {float(transformer['rated_capacity_mva']):g}MVA\n35/10.5kV  uk={float(transformer['short_circuit_voltage_percent']):g}%",
+            (
+                f"{transformer_id} {float(transformer['rated_capacity_mva']):g}MVA\n"
+                f"35/10.5kV {source_spec['vector_group']}  "
+                f"uk={float(transformer['short_circuit_voltage_percent']):g}%"
+            ),
             (high_x + 15.0, center_y + 3.0),
             height=2.4,
             width=62.0,
@@ -1058,11 +1180,14 @@ def _draw_10kv_and_station_service(
     msp: Any,
     layout: dict[str, Any],
     load_results: dict[str, Any],
+    design_inputs: dict[str, Any],
+    baseline: dict[str, Any],
 ) -> None:
     bus_10 = float(layout["level_geometry"]["bus_y"]["10kv"])
     bus_04 = float(layout["level_geometry"]["bus_y"]["0_4kv"])
     center_y = float(layout["level_geometry"]["transformer_center_y"]["station_service"])
 
+    arrester = design_inputs["calculation_rules"]["insulation_levels_and_arresters"]["10kv"]["arrester"]
     for item in layout["circuits"]["10kv"]["voltage_transformers"]:
         x = float(item["x"])
         _add_line(msp, (x, bus_10), (x, 161.0), layer="E-CONDUCTOR")
@@ -1076,9 +1201,22 @@ def _draw_10kv_and_station_service(
             status=str(item["status"]),
             section=str(item["section"]),
         )
+        _draw_shunt_symbol(
+            msp,
+            main_x=x,
+            main_y=bus_10,
+            symbol_x=x + 14.0,
+            symbol_y=155.0,
+            block="SLD_LA",
+            layer="E-DEVICE",
+            bay_id=f"MOA-{item['section']}",
+            device_type="bus_surge_arrester",
+            status=str(item["status"]),
+            section=str(item["section"]),
+        )
         _add_mtext(
             msp,
-            str(item["label"]),
+            f"{item['label']}+MOA柜\n{arrester}",
             (x, 138.0),
             height=2.2,
             width=40.0,
@@ -1118,7 +1256,7 @@ def _draw_10kv_and_station_service(
         )
         _add_mtext(
             msp,
-            f"{group['label']}\nImax={float(load_item['per_circuit_current_a']):.3f}A",
+            f"{group['label']}\n电缆+ZCT\nImax={float(load_item['per_circuit_current_a']):.3f}A",
             (x, float(group.get("label_y", 132.0))),
             height=2.5,
             width=56.0,
@@ -1155,8 +1293,11 @@ def _draw_10kv_and_station_service(
         )
         _add_mtext(
             msp,
-            f"{group['label']}\n动态无功补偿",
-            (x, 132.0),
+            f"{group['label']}\n电缆+ZCT\n动态无功补偿",
+            (
+                float(group.get("label_x", x)),
+                float(group.get("label_y", 132.0)),
+            ),
             height=2.5,
             width=48.0,
             layer="E-TEXT",
@@ -1171,6 +1312,7 @@ def _draw_10kv_and_station_service(
         item["id"].split("-LV-IN")[0]: item
         for item in layout["circuits"]["0_4kv"]["station_service_incomers"]
     }
+    station_spec = baseline["connection_0_4kv"]["station_service_transformers"]
     for transformer in layout["transformers"]["station_service"]:
         transformer_id = str(transformer["id"])
         high = high_feeders[transformer_id]
@@ -1226,33 +1368,52 @@ def _draw_10kv_and_station_service(
             status=str(low["status"]),
             section=str(low["section"]),
         )
+        text_x = low_x + 13.0
+        text_attachment = 4
+        if transformer_id == "TS2":
+            text_x = low_x - 13.0
+            text_attachment = 6
         _add_mtext(
             msp,
-            f"{transformer_id} {int(transformer['rated_capacity_kva'])}kVA\n10/0.4kV  {low['state'].upper()}",
-            (low_x + 13.0, center_y + 4.0),
+            (
+                f"{transformer_id} {int(transformer['rated_capacity_kva'])}kVA SCB14干式\n"
+                f"10/0.4kV {station_spec['vector_group']} uk="
+                f"{float(station_spec['short_circuit_voltage_percent']):g}%  "
+                f"{low['state'].upper()}"
+            ),
+            (text_x, center_y + 4.0),
             height=2.2,
             width=54.0,
-            attachment=4,
+            attachment=text_attachment,
         )
 
-    for x, section in ((305.0, "10kV-I"), (540.0, "10kV-II")):
-        _add_line(msp, (x, bus_10), (x, 169.0), layer="E-CONDITIONAL")
+    grounding = design_inputs["calculation_rules"]["grounding"]["10kv"]
+    for x, label_x, section in (
+        (305.0, 335.0, "10kV-I"),
+        (540.0, 570.0, "10kV-II"),
+    ):
         insert_symbol(
             msp,
-            "SLD_GROUND",
-            (x, 166.0),
+            "SLD_GROUNDING_TX_RESISTOR",
+            (x, bus_10 - 9.0),
             layer="E-CONDITIONAL",
             bay_id=f"GROUND-{section}",
             device_type="grounding_transformer_low_resistance",
+            state="grounded",
             status="course_assumption",
             section=section,
         )
         _add_mtext(
             msp,
-            "接地变+小电阻",
-            (x, 153.0),
-            height=2.5,
-            width=24.0,
+            (
+                f"{float(grounding['selected_grounding_transformer_capacity_kva_each']):g}kVA ZN接地变+低电阻\n"
+                f"{float(grounding['target_ground_fault_current_a']):g}A / "
+                f"{float(grounding['resistor_ohm_approx']):g}Ω / "
+                f"{float(grounding['short_time_s']):g}s"
+            ),
+            (label_x, 165.0),
+            height=2.2,
+            width=42.0,
             layer="E-NOTE",
             attachment=2,
         )
@@ -1325,15 +1486,23 @@ def build_document(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
     _draw_frame_and_title(msp, layout, standard)
     _draw_buses_and_ties(msp, layout, standard)
     _draw_220kv(msp, layout, standard, data["load_results"])
-    _draw_main_transformers(msp, layout, data["load_results"])
+    _draw_main_transformers(msp, layout, data["load_results"], data["baseline"])
     _draw_35kv(
         msp,
         layout,
         standard,
         _duty_current_map(data["equipment_results"]),
+        data["design_inputs"],
+        data["baseline"],
     )
-    _draw_source_transformers(msp, layout)
-    _draw_10kv_and_station_service(msp, layout, data["load_results"])
+    _draw_source_transformers(msp, layout, data["baseline"])
+    _draw_10kv_and_station_service(
+        msp,
+        layout,
+        data["load_results"],
+        data["design_inputs"],
+        data["baseline"],
+    )
     _draw_notes(msp, layout)
 
     return doc
@@ -1379,12 +1548,15 @@ def validate_document(
         "SLD_CB_CLOSED",
         "SLD_CB_OPEN",
         "SLD_DS_CLOSED",
+        "SLD_DS_OPEN",
+        "SLD_ES_OPEN",
         "SLD_CT",
         "SLD_PT",
         "SLD_CVT",
         "SLD_LA",
         "SLD_TX_2W",
         "SLD_GROUND",
+        "SLD_GROUNDING_TX_RESISTOR",
         "SLD_ARROW_UP",
         "SLD_ARROW_DOWN",
     }

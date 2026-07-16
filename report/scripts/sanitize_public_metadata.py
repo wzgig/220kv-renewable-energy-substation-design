@@ -16,12 +16,14 @@ DC_NS = "http://purl.org/dc/elements/1.1/"
 DCTERMS_NS = "http://purl.org/dc/terms/"
 DCMITYPE_NS = "http://purl.org/dc/dcmitype/"
 XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
+APP_NS = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"
 
 ET.register_namespace("cp", CP_NS)
 ET.register_namespace("dc", DC_NS)
 ET.register_namespace("dcterms", DCTERMS_NS)
 ET.register_namespace("dcmitype", DCMITYPE_NS)
 ET.register_namespace("xsi", XSI_NS)
+ET.register_namespace("ap", APP_NS)
 
 BASE_TITLE = "220kV新能源汇集变电所电气一次部分初步设计"
 DEFENSE_TITLE = f"{BASE_TITLE}答辩汇报"
@@ -30,8 +32,8 @@ SUBJECT = "发电厂电气部分课程设计"
 PUBLIC_THEME_NAME = "课程设计主题"
 PUBLIC_TIMESTAMP = "2026-07-15T00:00:00Z"
 DOCX_PAGE_COUNTS = {
-    "01_": 20,
-    "02_": 17,
+    "01_": 25,
+    "02_": 18,
     "03_": 4,
     "05_": 7,
 }
@@ -97,18 +99,25 @@ def sanitize_docx_app_xml(data: bytes, page_count: int) -> bytes:
 
 
 def sanitize_pptx_app_xml(data: bytes) -> bytes:
-    matches = list(APP_STRING_RE.finditer(data))
-    if len(matches) < 2:
-        raise ValueError("PowerPoint app properties do not contain a theme entry")
-    theme_entry = matches[1]
-    theme_name = PUBLIC_THEME_NAME.encode("utf-8")
-    return (
-        data[: theme_entry.start()]
-        + theme_entry.group(1)
-        + theme_name
-        + theme_entry.group(3)
-        + data[theme_entry.end() :]
-    )
+    """Normalize both Microsoft PowerPoint and artifact-tool app.xml variants."""
+
+    root = ET.fromstring(data)
+    values = {
+        "Application": "Microsoft PowerPoint",
+        "PresentationFormat": "On-screen Show (16:9)",
+        "Template": PUBLIC_THEME_NAME,
+        "Slides": "11",
+        "Notes": "0",
+        "HiddenSlides": "0",
+        "SharedDoc": "false",
+        "Company": "",
+    }
+    for local_name, value in values.items():
+        node = root.find(f"{{{APP_NS}}}{local_name}")
+        if node is None:
+            node = ET.SubElement(root, f"{{{APP_NS}}}{local_name}")
+        node.text = value
+    return ET.tostring(root, encoding="utf-8", xml_declaration=True)
 
 
 def sanitize_ooxml(path: Path) -> None:

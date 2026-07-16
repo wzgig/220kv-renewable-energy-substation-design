@@ -100,7 +100,7 @@ sections:
         - {id: "DS-BUS", kind: "disconnector", x_m: 6, terminal_elevation_m: 6.0, label: "母线侧隔离开关"}
         - {id: "CB", kind: "circuit_breaker", x_m: 10, terminal_elevation_m: 5.5, label: "SF6断路器"}
         - {id: "CT", kind: "current_transformer", x_m: 14, terminal_elevation_m: 5.0, label: "电流互感器"}
-        - {id: "DS-LINE", kind: "disconnector", x_m: 18, terminal_elevation_m: 6.0, label: "线路侧隔离开关"}
+        - {id: "DS-LINE", kind: "disconnector", x_m: 18, terminal_elevation_m: 6.0, earthing_switch: true, label: "线路侧隔离开关+常开ES"}
         - {id: "CVT", kind: "cvt", x_m: 22, terminal_elevation_m: 5.2, label: "CVT"}
         - {id: "LA", kind: "surge_arrester", x_m: 25, terminal_elevation_m: 5.0, label: "避雷器"}
         - {id: "LINE-GANTRY", kind: "line_gantry", x_m: 31, terminal_elevation_m: 14.5, label: "出线构架"}
@@ -124,3 +124,33 @@ sections:
     - "设备高度与占位为课程几何假设，正式工程必须由厂家外形图、端子荷载和基础图覆盖。"
     - "课程设计假设：海拔≤1000m、污秽d级；超过1000m或污区更严时重新校核绝缘与净距。"
     - "净距表采用课程第七章表7-2的220J列；正式工程或施工前必须按DL/T 5352-2018正文复核。"
+
+line_bay_detail:
+  drawing_id: "SEC-220-L1-01"
+  drawing_title: "220kV I段L1线路间隔断面详图"
+  sheet: {format: "A1", orientation: "landscape", width: 841, height: 594, scale: 50, scale_label: "1:50"}
+  paper_origin_mm: [65, 120]
+  width_m: 34
+  ground_elevation_m: 0
+  grounding_grid_elevation_m: -0.8
+  equipment_sequence:
+    - {id: "BUS-SUPPORT", equipment_no: "220-L1-BUS", kind: "bus_support", x_m: 2, terminal_elevation_m: 9.0, label: "220kV I段Φ100/90管母"}
+    - {id: "DS-BUS", equipment_no: "220-L1-QS1", kind: "disconnector", x_m: 6, terminal_elevation_m: 6.0, label: "母线侧QS"}
+    - {id: "CB", equipment_no: "220-L1-QF", kind: "circuit_breaker", x_m: 10, terminal_elevation_m: 5.5, label: "SF6断路器QF"}
+    - {id: "CT", equipment_no: "220-L1-TA", kind: "current_transformer", x_m: 14, terminal_elevation_m: 5.0, label: "电流互感器TA"}
+    - {id: "DS-LINE", equipment_no: "220-L1-QS2/ES", kind: "disconnector", x_m: 18, terminal_elevation_m: 6.0, earthing_switch: true, label: "线路侧QS+ES(NO)"}
+    - {id: "CVT", equipment_no: "220-L1-CVT", kind: "cvt", x_m: 22, terminal_elevation_m: 5.2, label: "电容式电压互感器CVT"}
+    - {id: "LA", equipment_no: "220-L1-MOA", kind: "surge_arrester", x_m: 25, terminal_elevation_m: 5.0, label: "金属氧化物避雷器MOA"}
+    - {id: "LINE-GANTRY", equipment_no: "220-L1-G", kind: "line_gantry", x_m: 31, terminal_elevation_m: 14.5, label: "出线构架"}
+  parameter_rows:
+    - ["系统/绝缘", "Un=220kV；Um=252kV；LIWV=950kV"]
+    - ["QF课程目标", "252kV；3150A；50kA(3s)；峰值125kA"]
+    - ["QS课程目标", "252kV；3150A；50kA(3s)；峰值125kA"]
+    - ["TA/CVT", "TA=1000/1A；CVT=220/√3kV / 100/√3V，另保护及100/3V开口三角；二次负荷/准确级组合待复核"]
+    - ["MOA", "YH10W-204/532；Uc=159kV；In=10kA"]
+    - ["导体/净距", "Φ100/90铝合金管母；相间4.0m；A1/A2/C见图"]
+  notes:
+    - "本图为L1单间隔课程设计详图，设备外形、基础和端子荷载须由最终厂家图覆盖。"
+    - "线路侧QS配常开ES，并与QF、QS设置机械/电气防误联锁；检修接地须按操作票执行。"
+    - "地下接地网与设备/构架接地仅作连接示意；接地电阻、接触电压和跨步电压尚需专项计算。"
+    - "MOA用于限制雷电及操作过电压；本图不代表全站避雷针/避雷线直击雷保护范围已完成。"

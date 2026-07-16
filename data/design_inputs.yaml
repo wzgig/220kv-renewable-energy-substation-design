@@ -24,12 +24,15 @@ system:
     rated_capacity_mva_each: 180
     installation: "outdoor_oil_immersed_on_load_tap_changing"
     winding_scheme: "220_35_two_winding_plus_two_35_10_5kv_source_transformers"
+    vector_group: "YNd11"
+    neutral_arrangement: "220kv_star_neutral_direct_grounding; 35kv_delta"
   auxiliary_transformer_proposal:
     count: 2
     rated_capacity_mva_each: 31.5
     voltage_ratio_kv: [35, 10.5]
     short_circuit_voltage_percent: 8
     installation: "oil_immersed_power_transformer"
+    vector_group: "YNd11"
     evidence_class: "course_design_assumption_supported_by_official_standard_metadata_and_manufacturer_catalog"
   outgoing_220kv:
     in_service_circuits: 2
@@ -48,6 +51,9 @@ system:
     in_service_circuits: 12
     reserved_circuits: 2
     line_type: "mixed_overhead_and_cable"
+    circuit_interfaces:
+      overhead: ["WA-1", "WA-2", "WA-3", "WA-4", "WB-1", "WB-2", "WB-3"]
+      cable: ["PVA-1", "PVA-2", "PVB-1", "PVB-2", "ES-1"]
     directions: ["east", "south"]
   auxiliary_10kv:
     purposes: ["station_service", "reactive_compensation", "cooling", "auxiliary_systems", "backup_supply"]
@@ -110,6 +116,9 @@ station_service_loads:
     power_factor: 0.80
     margin_rate: 0.10
     standard_capacity_kva: [100, 125, 160, 200, 250, 315]
+    selected_type: "SCB14_dry_type_cast_resin"
+    selected_vector_group: "Dyn11"
+    selected_short_circuit_voltage_percent: 4
   items:
     - {name: "main_transformer_fans", rated_kw_formula: "n*66*0.15", calculated_rated_kw: 19.8, duty: "continuous_frequent", applicable: true}
     - {name: "main_battery_charger", rated_kw: 20, duty: "continuous_infrequent", applicable: true}
@@ -136,6 +145,8 @@ natural_conditions:
   altitude_basis: "course_design_assumption_as_normal_service_upper_limit"
   pollution_level: "d"
   pollution_basis: "conservative_heavy_pollution_course_design_assumption"
+  indoor_switchgear_max_temperature_c: 40
+  indoor_temperature_control: "mechanical_ventilation_and_air_conditioning_course_design_basis"
 
 calculation_rules:
   line_loss_rate: 0.05
@@ -157,8 +168,38 @@ calculation_rules:
     35_10_5_distribution_transformer: 8
   grounding:
     220kv: "direct_grounding"
-    35kv: "grounding_transformer_plus_low_resistance_course_assumption"
-    10kv: "grounding_transformer_plus_low_resistance_course_assumption"
+    35kv:
+      method: "grounding_transformer_plus_low_resistance"
+      taskbook_category: "non_direct_grounding"
+      target_ground_fault_current_a: 400
+      resistor_ohm_approx: 50.5
+      short_time_s: 10
+      source_count: 2
+      normal_source_allocation: "one_grounding_transformer_resistor_set_per_35kv_bus_section"
+      transfer_interlock: "before_closing_the_35kv_bus_tie_open_the_grounding_source_on_the_receiving_or_faulted_section; keep_only_the_healthy_source_side_set_in_service"
+      prohibited_state: "35kv_bus_tie_closed_with_both_section_grounding_sources_in_parallel"
+      restoration_state: "after_bus_sections_are_separated_restore_one_grounding_source_per_section"
+      grounding_transformer_connection: "ZN_neutral_forming"
+      selected_grounding_transformer_capacity_kva_each: 1000
+      short_time_overload_factor: 10
+    10kv:
+      method: "grounding_transformer_plus_low_resistance"
+      taskbook_category: "non_direct_grounding"
+      target_ground_fault_current_a: 200
+      resistor_ohm_approx: 28.9
+      short_time_s: 10
+      source_count: 2
+      normal_source_allocation: "one_grounding_transformer_resistor_set_per_10kv_bus_section"
+      transfer_interlock: "before_closing_the_10kv_bus_tie_open_the_grounding_source_on_the_receiving_or_faulted_section; keep_only_the_healthy_source_side_set_in_service"
+      prohibited_state: "10kv_bus_tie_closed_with_both_section_grounding_sources_in_parallel"
+      restoration_state: "after_bus_sections_are_separated_restore_one_grounding_source_per_section"
+      grounding_transformer_connection: "ZN_neutral_forming"
+      selected_grounding_transformer_capacity_kva_each: 200
+      short_time_overload_factor: 10
+  insulation_levels_and_arresters:
+    220kv: {highest_voltage_kv: 252, lightning_impulse_withstand_kv: 950, arrester: "YH10W-204/532"}
+    35kv: {highest_voltage_kv: 40.5, lightning_impulse_withstand_kv: 185, arrester: "YH5WZ-51/134"}
+    10kv: {highest_voltage_kv: 12, lightning_impulse_withstand_kv: 75, arrester: "YH5WZ-17/45"}
   renewable_short_circuit_contribution:
     base_case: "ignored"
     sensitivity_case: "1.1_to_1.2_times_rated_current"

@@ -1,10 +1,17 @@
 [CmdletBinding()]
 param(
-    [string]$ReportDirectory = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+    [string]$ReportDirectory
 )
 
 $ErrorActionPreference = 'Stop'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+if ([string]::IsNullOrWhiteSpace($ReportDirectory)) {
+    $ReportDirectory = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+}
+else {
+    $ReportDirectory = (Resolve-Path -LiteralPath $ReportDirectory).Path
+}
 
 $documents = Get-ChildItem -LiteralPath $ReportDirectory -Filter '*.docx' -File |
     Where-Object { $_.Name -notlike '~$*' } |
@@ -17,6 +24,7 @@ if (-not $documents) {
 $word = New-Object -ComObject Word.Application
 $word.Visible = $false
 $word.DisplayAlerts = 0
+$publicFiles = [System.Collections.Generic.List[string]]::new()
 
 try {
     foreach ($file in $documents) {
@@ -35,6 +43,7 @@ try {
                 }
             }
             $doc.Save()
+            $publicFiles.Add($file.FullName)
             $pdfPath = [System.IO.Path]::ChangeExtension($file.FullName, '.pdf')
             $doc.ExportAsFixedFormat(
                 $pdfPath,
@@ -52,6 +61,7 @@ try {
                 $true,
                 $false
             )
+            $publicFiles.Add($pdfPath)
             Write-Output ([System.IO.Path]::GetFileName($pdfPath))
         }
         finally {
@@ -76,7 +86,7 @@ else {
 }
 $sanitizer = Join-Path $PSScriptRoot 'sanitize_public_metadata.py'
 
-& $python $sanitizer --report-dir $ReportDirectory
+& $python $sanitizer --report-dir $ReportDirectory @publicFiles
 if ($LASTEXITCODE -ne 0) {
     throw "Public metadata sanitization failed with exit code $LASTEXITCODE"
 }

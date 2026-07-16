@@ -48,9 +48,11 @@ jobs:
           python drawings/scripts/generate_switchyard_drawings.py
           --plan-output tmp/ci_switchyard_plan_a1.dxf
           --section-output tmp/ci_switchyard_section_a1.dxf
+          --detail-output tmp/ci_switchyard_line_bay_detail_a1.dxf
           --verify-against
           drawings/source/switchyard_plan_a1.dxf
           drawings/source/switchyard_section_a1.dxf
+          drawings/source/switchyard_line_bay_detail_a1.dxf
 
       - name: Verify generated results are committed
         run: >-

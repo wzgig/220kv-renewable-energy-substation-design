@@ -141,9 +141,10 @@
           "220-BS"
         ],
         "continuous": {
-          "status": "pending_topology_flow",
-          "required_current_a": null,
-          "source": "explicit_power_flow_and_bay_placement_required"
+          "status": "known_conservative",
+          "required_current_a": 735.5592390584715,
+          "source": "conservative_equal_to_outgoing_220kv.single_circuit_contingency_current_a",
+          "basis": "Course-design closure: before a final power-flow study, the 220kV bus-section bay is assigned the N-1 outgoing-line duty."
         },
         "fault_profile_id": "220_bus",
         "fault": {
@@ -296,6 +297,38 @@
           "status": "known",
           "required_current_a": 545.5960043841964,
           "source": "auxiliary_transformer.rated_current_with_1_05_margin_a.35kv"
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "35-grounding-transformer-feeders": {
+        "id": "35-grounding-transformer-feeders",
+        "role": "section_grounding_transformer_resistor_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "GT35-I",
+          "GT35-II"
+        ],
+        "continuous": {
+          "status": "known_course_target",
+          "required_current_a": 400.0,
+          "source": "grounding_package_35kv_fault_current_course_feeder_target",
+          "basis": "Fixed course-design feeder current used only for rating-class screening; the exact grounding-transformer steady-state magnetizing current and vendor protection coordination remain pending."
         },
         "fault_profile_id": "35_bus",
         "fault": {
@@ -544,6 +577,38 @@
           "status": "known",
           "required_current_a": 1909.5860153446874,
           "source": "auxiliary_transformer.rated_current_with_1_05_margin_a.10kv_equipment_basis"
+        },
+        "fault_profile_id": "10_bus",
+        "fault": {
+          "status": "course_model_complete_exact_svg_and_motor_model_pending",
+          "mandatory_rms_ka": 14.492238781731057,
+          "conditional_rms_ka": 15.638094419605405,
+          "provisional_required_rms_ka": 15.638094419605405,
+          "advisory_rms_ka": 28.472321513746653,
+          "known_grid_peak_ka": 37.79250926097412,
+          "course_total_peak_sensitivity_ka": 39.808089392178566,
+          "advisory_course_peak_sensitivity_ka": 72.478697826578,
+          "rms_scope": "grid_plus_local_svg_current_limited_course_upper_bound",
+          "peak_scope": "fixed_course_k_applied_to_conservative_total_rms",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "220kv_bus_tie_closed_only_with_dispatch_permission",
+          "advisory_reason": "healthy_T10_parallel_operation_prohibited"
+        }
+      },
+      "10-grounding-transformer-feeders": {
+        "id": "10-grounding-transformer-feeders",
+        "role": "section_grounding_transformer_resistor_feeder",
+        "voltage_class": "v10",
+        "members": [
+          "GT10-I",
+          "GT10-II"
+        ],
+        "continuous": {
+          "status": "known_course_target",
+          "required_current_a": 200.0,
+          "source": "grounding_package_10kv_fault_current_course_feeder_target",
+          "basis": "Fixed course-design feeder current used only for rating-class screening; the exact grounding-transformer steady-state magnetizing current and vendor protection coordination remain pending."
         },
         "fault_profile_id": "10_bus",
         "fault": {
@@ -1767,9 +1832,10 @@
           "220-BS"
         ],
         "continuous": {
-          "status": "pending_topology_flow",
-          "required_current_a": null,
-          "source": "explicit_power_flow_and_bay_placement_required"
+          "status": "known_conservative",
+          "required_current_a": 735.5592390584715,
+          "source": "conservative_equal_to_outgoing_220kv.single_circuit_contingency_current_a",
+          "basis": "Course-design closure: before a final power-flow study, the 220kV bus-section bay is assigned the N-1 outgoing-line duty."
         },
         "fault_profile_id": "220_bus",
         "fault": {
@@ -1849,11 +1915,11 @@
         },
         {
           "id": "continuous_current",
-          "status": "pending",
-          "required": null,
-          "available": 3150,
+          "status": "provisional_pass",
+          "required": 735.5592390584715,
+          "available": 3150.0,
           "unit": "A",
-          "margin": null,
+          "margin": 2414.4407609415284,
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
@@ -1923,11 +1989,11 @@
         },
         {
           "id": "continuous_current",
-          "status": "pending",
-          "required": null,
-          "available": 3150,
+          "status": "provisional_pass",
+          "required": 735.5592390584715,
+          "available": 3150.0,
           "unit": "A",
-          "margin": null,
+          "margin": 2414.4407609415284,
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
@@ -2039,7 +2105,7 @@
           "note": "Candidate evidence status is target_only; exact model evidence is required."
         }
       ],
-      "numeric_precheck_status": "pending",
+      "numeric_precheck_status": "provisional_pass",
       "final_selection_status": "pending"
     },
     {
@@ -2114,10 +2180,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -2214,15 +2283,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -2269,12 +2329,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -2396,10 +2456,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -2496,15 +2559,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -2551,12 +2605,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -2672,10 +2726,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -2772,15 +2829,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -2827,12 +2875,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -2947,10 +2995,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -3047,15 +3098,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -3102,12 +3144,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -3221,10 +3263,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -3321,15 +3366,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -3376,12 +3412,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -3495,10 +3531,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -3595,15 +3634,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -3650,12 +3680,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -3768,10 +3798,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -3868,15 +3901,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 16.290983445518524,
@@ -3923,12 +3947,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -4042,10 +4066,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -4142,13 +4169,273 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Initial symmetrical current is retained as a conservative course precheck at the 0.09s contact-separation assumption."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck using the fixed-k converter-inclusive RMS upper bound."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic course precheck; exact R/X and converter peak treatment remain for final engineering review."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Short-time current-level screen before the explicit I²t comparison."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "provisional_pass",
+          "required": 291.9357557843745,
+          "available": 3969.0,
+          "unit": "kA^2 s",
+          "margin": 3677.0642442156254,
+          "note": "Course I²t screen uses 1.10s, based on backup protection plus total breaker clearing time rounded upward."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
+        },
+        {
+          "id": "altitude",
           "status": "pending",
           "required": null,
           "available": null,
           "unit": null,
           "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
+          "note": "The course-design altitude is 1000m, but the exact candidate service limit is not verified."
+        },
+        {
+          "id": "pollution_level",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project course assumption is pollution class d; exact candidate external-insulation data are not verified."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is family_verified; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-35-GT",
+      "circuit_group": "35-grounding-transformer-feeders",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "35-grounding-transformer-feeders",
+        "role": "section_grounding_transformer_resistor_feeder",
+        "voltage_class": "v35",
+        "members": [
+          "GT35-I",
+          "GT35-II"
+        ],
+        "continuous": {
+          "status": "known_course_target",
+          "required_current_a": 400.0,
+          "source": "grounding_package_35kv_fault_current_course_feeder_target",
+          "basis": "Fixed course-design feeder current used only for rating-class screening; the exact grounding-transformer steady-state magnetizing current and vendor protection coordination remain pending."
+        },
+        "fault_profile_id": "35_bus",
+        "fault": {
+          "status": "known_with_incomplete_peak_scope",
+          "mandatory_rms_ka": 13.264911625868274,
+          "conditional_rms_ka": 16.290983445518524,
+          "provisional_required_rms_ka": 16.290983445518524,
+          "advisory_rms_ka": 25.693932164155918,
+          "known_grid_peak_ka": 34.12543807898018,
+          "course_total_peak_sensitivity_ka": 41.47007351948617,
+          "advisory_course_peak_sensitivity_ka": 65.40607320703846,
+          "rms_scope": "grid_plus_renewable_arithmetic_upper_bound",
+          "peak_scope": "course_only_fixed_k_applied_to_conservative_rms_not_final",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "system_1_and_system_2_parallel_permission",
+          "advisory_reason": "healthy_main_transformer_low_sides_parallel_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-35-1250",
+        "kind": "switchgear",
+        "manufacturer": "CHINT",
+        "family": "KYN61-40.5(Z)",
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "family_verified",
+          "document_title": "KYN61-40.5(Z) MV Air Insulated Switchgear Catalog",
+          "edition_or_revision": "catalog metadata modified 2025-04-16",
+          "issue_date": "2024-05-31",
+          "url": "https://www.chintglobal.com/content/dam/chint/global/product-center/power-transmission-and-distribution/distribution/mv-switchgear/mv-air-insulated-switchgear/kyn61-40-5(z)(630~3150)/catalog/KYN61-40.5(Z)-MV%20Air%20Insulated%20Switchgear-Catalog.pdf",
+          "page": 22,
+          "verified_on": "2026-07-15"
+        },
+        "ratings": {
+          "highest_voltage_kv": 40.5,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": 40,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage class precheck."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 400.0,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 850.0,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Initial symmetrical current is retained as a conservative course precheck at the 0.09s contact-separation assumption."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Course-only peak precheck using the fixed-k converter-inclusive RMS upper bound."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 41.47007351948617,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 38.52992648051383,
+          "note": "Dynamic course precheck; exact R/X and converter peak treatment remain for final engineering review."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 16.290983445518524,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.209016554481476,
+          "note": "Short-time current-level screen before the explicit I²t comparison."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "provisional_pass",
+          "required": 291.9357557843745,
+          "available": 3969.0,
+          "unit": "kA^2 s",
+          "margin": 3677.0642442156254,
+          "note": "Course I²t screen uses 1.10s, based on backup protection plus total breaker clearing time rounded upward."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 35.0,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 5.5,
+          "note": "Nominal-voltage class precheck."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pass",
+          "required": 40.5,
+          "available": 40.5,
+          "unit": "kV",
+          "margin": 0.0,
+          "note": "Final voltage-class check."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 400.0,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 850.0,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
           "id": "short_circuit_breaking_current",
@@ -4197,12 +4484,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -4289,7 +4576,7 @@
         }
       },
       "candidate": {
-        "id": "TARGET-SWGR-10-2000",
+        "id": "TARGET-SWGR-10-2500",
         "kind": "switchgear",
         "manufacturer": null,
         "family": null,
@@ -4308,14 +4595,14 @@
           {
             "manufacturer": "Siemens",
             "family": "NXAirS or equivalent 12kV metal-clad switchgear",
-            "scope": "Official manufacturer family availability only; exact 2000A/31.5kA project panel and 41C service data remain to be verified",
+            "scope": "Official manufacturer family availability only; exact 2500A/31.5kA project panel and controlled-indoor service data remain to be verified",
             "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
             "verified_on": "2026-07-15"
           }
         ],
         "ratings": {
           "highest_voltage_kv": 12,
-          "continuous_current_a": 2000,
+          "continuous_current_a": 2500,
           "short_circuit_breaking_current_ka_rms": 31.5,
           "short_circuit_making_current_ka_peak": 80,
           "peak_withstand_current_ka": 80,
@@ -4325,10 +4612,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -4345,9 +4635,9 @@
           "id": "continuous_current",
           "status": "provisional_pass",
           "required": 1909.5860153446874,
-          "available": 2000.0,
+          "available": 2500.0,
           "unit": "A",
-          "margin": 90.41398465531256,
+          "margin": 590.4139846553126,
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
@@ -4419,19 +4709,10 @@
           "id": "continuous_current",
           "status": "provisional_pass",
           "required": 1909.5860153446874,
-          "available": 2000.0,
+          "available": 2500.0,
           "unit": "A",
-          "margin": 90.41398465531256,
+          "margin": 590.4139846553126,
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
-        },
-        {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
         },
         {
           "id": "short_circuit_breaking_current",
@@ -4480,12 +4761,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -4571,7 +4852,7 @@
         }
       },
       "candidate": {
-        "id": "TARGET-SWGR-10-2000",
+        "id": "TARGET-SWGR-10-2500",
         "kind": "switchgear",
         "manufacturer": null,
         "family": null,
@@ -4590,14 +4871,14 @@
           {
             "manufacturer": "Siemens",
             "family": "NXAirS or equivalent 12kV metal-clad switchgear",
-            "scope": "Official manufacturer family availability only; exact 2000A/31.5kA project panel and 41C service data remain to be verified",
+            "scope": "Official manufacturer family availability only; exact 2500A/31.5kA project panel and controlled-indoor service data remain to be verified",
             "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
             "verified_on": "2026-07-15"
           }
         ],
         "ratings": {
           "highest_voltage_kv": 12,
-          "continuous_current_a": 2000,
+          "continuous_current_a": 2500,
           "short_circuit_breaking_current_ka_rms": 31.5,
           "short_circuit_making_current_ka_peak": 80,
           "peak_withstand_current_ka": 80,
@@ -4607,10 +4888,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -4627,9 +4911,9 @@
           "id": "continuous_current",
           "status": "provisional_pass",
           "required": 1909.5860153446874,
-          "available": 2000.0,
+          "available": 2500.0,
           "unit": "A",
-          "margin": 90.41398465531256,
+          "margin": 590.4139846553126,
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
@@ -4701,19 +4985,10 @@
           "id": "continuous_current",
           "status": "provisional_pass",
           "required": 1909.5860153446874,
-          "available": 2000.0,
+          "available": 2500.0,
           "unit": "A",
-          "margin": 90.41398465531256,
+          "margin": 590.4139846553126,
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
-        },
-        {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
         },
         {
           "id": "short_circuit_breaking_current",
@@ -4762,12 +5037,290 @@
         },
         {
           "id": "ambient_temperature",
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
+        },
+        {
+          "id": "altitude",
           "status": "pending",
           "required": null,
           "available": null,
           "unit": null,
           "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "note": "The course-design altitude is 1000m, but the exact candidate service limit is not verified."
+        },
+        {
+          "id": "pollution_level",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Project course assumption is pollution class d; exact candidate external-insulation data are not verified."
+        },
+        {
+          "id": "fault_rms_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable contribution or contact-separation current scope is incomplete."
+        },
+        {
+          "id": "fault_peak_scope",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Renewable dynamic peak and standard peak-factor treatment are incomplete."
+        },
+        {
+          "id": "candidate_evidence",
+          "status": "pending",
+          "required": null,
+          "available": null,
+          "unit": null,
+          "margin": null,
+          "note": "Candidate evidence status is target_only; exact model evidence is required."
+        }
+      ],
+      "numeric_precheck_status": "provisional_pass",
+      "final_selection_status": "pending"
+    },
+    {
+      "id": "SEL-SWGR-10-GT",
+      "circuit_group": "10-grounding-transformer-feeders",
+      "device_kind": "switchgear",
+      "duty": {
+        "id": "10-grounding-transformer-feeders",
+        "role": "section_grounding_transformer_resistor_feeder",
+        "voltage_class": "v10",
+        "members": [
+          "GT10-I",
+          "GT10-II"
+        ],
+        "continuous": {
+          "status": "known_course_target",
+          "required_current_a": 200.0,
+          "source": "grounding_package_10kv_fault_current_course_feeder_target",
+          "basis": "Fixed course-design feeder current used only for rating-class screening; the exact grounding-transformer steady-state magnetizing current and vendor protection coordination remain pending."
+        },
+        "fault_profile_id": "10_bus",
+        "fault": {
+          "status": "course_model_complete_exact_svg_and_motor_model_pending",
+          "mandatory_rms_ka": 14.492238781731057,
+          "conditional_rms_ka": 15.638094419605405,
+          "provisional_required_rms_ka": 15.638094419605405,
+          "advisory_rms_ka": 28.472321513746653,
+          "known_grid_peak_ka": 37.79250926097412,
+          "course_total_peak_sensitivity_ka": 39.808089392178566,
+          "advisory_course_peak_sensitivity_ka": 72.478697826578,
+          "rms_scope": "grid_plus_local_svg_current_limited_course_upper_bound",
+          "peak_scope": "fixed_course_k_applied_to_conservative_total_rms",
+          "final_breaking_scope_complete": false,
+          "final_peak_scope_complete": false,
+          "conditional_reason": "220kv_bus_tie_closed_only_with_dispatch_permission",
+          "advisory_reason": "healthy_T10_parallel_operation_prohibited"
+        }
+      },
+      "candidate": {
+        "id": "TARGET-SWGR-10-1250",
+        "kind": "switchgear",
+        "manufacturer": null,
+        "family": null,
+        "model": null,
+        "installation": "indoor_metal_clad_withdrawable",
+        "evidence": {
+          "status": "target_only",
+          "document_title": null,
+          "edition_or_revision": null,
+          "issue_date": null,
+          "url": null,
+          "page": null,
+          "verified_on": null
+        },
+        "availability_evidence": [
+          {
+            "manufacturer": "Siemens",
+            "family": "NXAirS or equivalent 12kV metal-clad switchgear",
+            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and controlled-indoor 40C service data remain to be verified",
+            "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
+            "verified_on": "2026-07-15"
+          }
+        ],
+        "ratings": {
+          "highest_voltage_kv": 12,
+          "continuous_current_a": 1250,
+          "short_circuit_breaking_current_ka_rms": 31.5,
+          "short_circuit_making_current_ka_peak": 80,
+          "peak_withstand_current_ka": 80,
+          "short_time_withstand": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          }
+        },
+        "service_conditions": {
+          "max_ambient_c": 40,
+          "max_altitude_m": null,
+          "pollution_level": null,
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
+        }
+      },
+      "numeric_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 10.0,
+          "available": 12.0,
+          "unit": "kV",
+          "margin": 2.0,
+          "note": "Nominal-voltage class precheck."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 200.0,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 1050.0,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 15.638094419605405,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.861905580394595,
+          "note": "Initial symmetrical current is retained as a conservative course precheck at the 0.09s contact-separation assumption."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 39.808089392178566,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 40.191910607821434,
+          "note": "Course-only peak precheck using the fixed-k converter-inclusive RMS upper bound."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 39.808089392178566,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 40.191910607821434,
+          "note": "Dynamic course precheck; exact R/X and converter peak treatment remain for final engineering review."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 15.638094419605405,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.861905580394595,
+          "note": "Short-time current-level screen before the explicit I²t comparison."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "provisional_pass",
+          "required": 269.00499678414315,
+          "available": 3969.0,
+          "unit": "kA^2 s",
+          "margin": 3699.9950032158567,
+          "note": "Course I²t screen uses 1.10s, based on backup protection plus total breaker clearing time rounded upward."
+        }
+      ],
+      "final_checks": [
+        {
+          "id": "nominal_voltage_class",
+          "status": "provisional_pass",
+          "required": 10.0,
+          "available": 12.0,
+          "unit": "kV",
+          "margin": 2.0,
+          "note": "Nominal-voltage class precheck."
+        },
+        {
+          "id": "highest_system_voltage",
+          "status": "pass",
+          "required": 12.0,
+          "available": 12.0,
+          "unit": "kV",
+          "margin": 0.0,
+          "note": "Final voltage-class check."
+        },
+        {
+          "id": "continuous_current",
+          "status": "provisional_pass",
+          "required": 200.0,
+          "available": 1250.0,
+          "unit": "A",
+          "margin": 1050.0,
+          "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
+        },
+        {
+          "id": "short_circuit_breaking_current",
+          "status": "provisional_pass",
+          "required": 15.638094419605405,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.861905580394595,
+          "note": "Initial symmetrical current is retained as a conservative course precheck at the 0.09s contact-separation assumption."
+        },
+        {
+          "id": "short_circuit_making_current",
+          "status": "provisional_pass",
+          "required": 39.808089392178566,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 40.191910607821434,
+          "note": "Course-only peak precheck using the fixed-k converter-inclusive RMS upper bound."
+        },
+        {
+          "id": "peak_withstand_current",
+          "status": "provisional_pass",
+          "required": 39.808089392178566,
+          "available": 80.0,
+          "unit": "kA peak",
+          "margin": 40.191910607821434,
+          "note": "Dynamic course precheck; exact R/X and converter peak treatment remain for final engineering review."
+        },
+        {
+          "id": "short_time_withstand_current",
+          "status": "provisional_pass",
+          "required": 15.638094419605405,
+          "available": 31.5,
+          "unit": "kA rms",
+          "margin": 15.861905580394595,
+          "note": "Short-time current-level screen before the explicit I²t comparison."
+        },
+        {
+          "id": "thermal_energy",
+          "status": "provisional_pass",
+          "required": 269.00499678414315,
+          "available": 3969.0,
+          "unit": "kA^2 s",
+          "margin": 3699.9950032158567,
+          "note": "Course I²t screen uses 1.10s, based on backup protection plus total breaker clearing time rounded upward."
+        },
+        {
+          "id": "ambient_temperature",
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -4873,7 +5426,7 @@
           {
             "manufacturer": "Siemens",
             "family": "NXAirS or equivalent 12kV metal-clad switchgear",
-            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and 41C service data remain to be verified",
+            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and controlled-indoor 40C service data remain to be verified",
             "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
             "verified_on": "2026-07-15"
           }
@@ -4890,10 +5443,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -4990,15 +5546,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 15.638094419605405,
@@ -5045,12 +5592,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -5155,7 +5702,7 @@
           {
             "manufacturer": "Siemens",
             "family": "NXAirS or equivalent 12kV metal-clad switchgear",
-            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and 41C service data remain to be verified",
+            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and controlled-indoor 40C service data remain to be verified",
             "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
             "verified_on": "2026-07-15"
           }
@@ -5172,10 +5719,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -5272,15 +5822,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 15.638094419605405,
@@ -5327,12 +5868,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -5437,7 +5978,7 @@
           {
             "manufacturer": "Siemens",
             "family": "NXAirS or equivalent 12kV metal-clad switchgear",
-            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and 41C service data remain to be verified",
+            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and controlled-indoor 40C service data remain to be verified",
             "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
             "verified_on": "2026-07-15"
           }
@@ -5454,10 +5995,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -5554,15 +6098,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 15.638094419605405,
@@ -5609,12 +6144,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -5719,7 +6254,7 @@
           {
             "manufacturer": "Siemens",
             "family": "NXAirS or equivalent 12kV metal-clad switchgear",
-            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and 41C service data remain to be verified",
+            "scope": "Official manufacturer family availability only; exact 1250A/31.5kA project panel and controlled-indoor 40C service data remain to be verified",
             "url": "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/",
             "verified_on": "2026-07-15"
           }
@@ -5736,10 +6271,13 @@
           }
         },
         "service_conditions": {
-          "max_ambient_c": null,
+          "max_ambient_c": 40,
           "max_altitude_m": null,
           "pollution_level": null,
-          "current_correction_factor": null
+          "current_correction_factor": 1.0,
+          "temperature_basis": "indoor_controlled",
+          "temperature_basis_source": "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c",
+          "final_vendor_confirmation_required": true
         }
       },
       "numeric_checks": [
@@ -5836,15 +6374,6 @@
           "note": "Candidate current after one configured correction factor; missing verified correction keeps the final check pending."
         },
         {
-          "id": "current_correction_factor",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Verified 41C and installation current correction is not available."
-        },
-        {
           "id": "short_circuit_breaking_current",
           "status": "provisional_pass",
           "required": 15.638094419605405,
@@ -5891,12 +6420,12 @@
         },
         {
           "id": "ambient_temperature",
-          "status": "pending",
-          "required": null,
-          "available": null,
-          "unit": null,
-          "margin": null,
-          "note": "Candidate ambient limit and 41C current correction are not verified."
+          "status": "pass",
+          "required": 40.0,
+          "available": 40.0,
+          "unit": "degC",
+          "margin": 0.0,
+          "note": "Controlled-indoor maximum temperature course basis; exact HVAC and manufacturer temperature-rise confirmation remain pending."
         },
         {
           "id": "altitude",
@@ -5948,18 +6477,2430 @@
       "final_selection_status": "pending"
     }
   ],
-  "numeric_precheck_status": "pending",
+  "course_completion": {
+    "scope": {
+      "status": "course_design_complete_final_engineering_models_pending",
+      "purpose": "close the course-design checks for conductors, surge arresters, CT/PT, insulators, bushings and earthing switches",
+      "ordering_boundary": "all supplementary rows are course target classes, not purchase specifications or construction release data"
+    },
+    "common_assumptions": {
+      "thermal_stability_constant_c": 87,
+      "thermal_equivalent_duration_s": 1.1,
+      "thermal_formula": "Ith_allow_kA = C * S_mm2 / (1000 * sqrt(t_s))"
+    },
+    "design_decisions": {
+      "current_limiting_reactor": {
+        "decision": "not_required_on_course_fault_level",
+        "checks": [
+          {
+            "voltage_class": "v35",
+            "fault_profile": "35_bus",
+            "candidate_id": "TARGET-SWGR-35-3150",
+            "required_fault_current_ka": 16.290983445518524,
+            "selected_switchgear_breaking_current_ka": 31.5,
+            "check": {
+              "id": "current_limiting_reactor_v35",
+              "status": "provisional_pass",
+              "required": 16.290983445518524,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.209016554481476,
+              "note": "A limiting reactor is not required on the course fault level when the selected switchgear breaking class exceeds the conditional duty."
+            }
+          },
+          {
+            "voltage_class": "v10",
+            "fault_profile": "10_bus",
+            "candidate_id": "TARGET-SWGR-10-2500",
+            "required_fault_current_ka": 15.638094419605405,
+            "selected_switchgear_breaking_current_ka": 31.5,
+            "check": {
+              "id": "current_limiting_reactor_v10",
+              "status": "provisional_pass",
+              "required": 15.638094419605405,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.861905580394595,
+              "note": "A limiting reactor is not required on the course fault level when the selected switchgear breaking class exceeds the conditional duty."
+            }
+          }
+        ],
+        "boundary": "reassess if the final grid, converter or parallel-operation study exceeds the selected 31.5kA switchgear rating",
+        "course_precheck_status": "provisional_pass"
+      },
+      "high_voltage_fuse": {
+        "decision": "not_a_main_circuit_selection_item",
+        "scope": "only a manufacturer-coordinated primary protection component inside 35kV/10kV VT panels where required",
+        "boundary": "fuse type, rating and selectivity belong to the exact VT-panel manufacturer design",
+        "course_boundary_status": "defined"
+      }
+    },
+    "grounding_source_interlock": {
+      "status": "course_operating_logic_defined_final_control_design_pending",
+      "voltage_levels": [
+        {
+          "voltage_class": "v35",
+          "bus_tie_circuit_group": "35-bus-tie",
+          "section_ids": [
+            "35kV-I",
+            "35kV-II"
+          ],
+          "source_ids": [
+            "GT35-I",
+            "GT35-II"
+          ],
+          "normal_sources_in_service": 2,
+          "transfer_sources_in_service": 1,
+          "restored_sources_in_service": 2,
+          "normal_rule": "one_grounding_source_per_energized_bus_section",
+          "preclose_sequence": "open_the_receiving_or_faulted_section_grounding_source_before_closing_the_bus_tie",
+          "close_permissive": "only_the_healthy_source_side_grounding_source_is_connected",
+          "prohibited_state": "bus_tie_closed_and_two_grounding_sources_connected_in_parallel",
+          "restored_rule": "after_bus_tie_opening_restore_one_grounding_source_per_energized_section",
+          "bus_tie_role": "bus_tie",
+          "checks": [
+            {
+              "id": "grounding_normal_one_source_per_section",
+              "status": "provisional_pass",
+              "required": 2,
+              "available": 2,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "Normal sectionalized operation keeps one grounding source on each energized section."
+            },
+            {
+              "id": "grounding_source_count_matches_sections",
+              "status": "provisional_pass",
+              "required": 2,
+              "available": 2,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "Each bus section has one dedicated grounding-transformer and resistor set."
+            },
+            {
+              "id": "grounding_transfer_single_healthy_source",
+              "status": "provisional_pass",
+              "required": 1,
+              "available": 1,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "Before bus-tie closure, the receiving or faulted section source is opened and only the healthy-side source remains."
+            },
+            {
+              "id": "grounding_restoration_one_source_per_section",
+              "status": "provisional_pass",
+              "required": 2,
+              "available": 2,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "After sectionalized operation is restored, each energized section regains one grounding source."
+            },
+            {
+              "id": "grounding_parallel_interlock_defined",
+              "status": "provisional_pass",
+              "required": true,
+              "available": true,
+              "unit": null,
+              "margin": 0.0,
+              "note": "The bus tie cannot close with both section grounding sources connected in parallel."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "voltage_class": "v10",
+          "bus_tie_circuit_group": "10-bus-tie",
+          "section_ids": [
+            "10kV-I",
+            "10kV-II"
+          ],
+          "source_ids": [
+            "GT10-I",
+            "GT10-II"
+          ],
+          "normal_sources_in_service": 2,
+          "transfer_sources_in_service": 1,
+          "restored_sources_in_service": 2,
+          "normal_rule": "one_grounding_source_per_energized_bus_section",
+          "preclose_sequence": "open_the_receiving_or_faulted_section_grounding_source_before_closing_the_bus_tie",
+          "close_permissive": "only_the_healthy_source_side_grounding_source_is_connected",
+          "prohibited_state": "bus_tie_closed_and_two_grounding_sources_connected_in_parallel",
+          "restored_rule": "after_bus_tie_opening_restore_one_grounding_source_per_energized_section",
+          "bus_tie_role": "bus_tie_n_minus_one_transfer",
+          "checks": [
+            {
+              "id": "grounding_normal_one_source_per_section",
+              "status": "provisional_pass",
+              "required": 2,
+              "available": 2,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "Normal sectionalized operation keeps one grounding source on each energized section."
+            },
+            {
+              "id": "grounding_source_count_matches_sections",
+              "status": "provisional_pass",
+              "required": 2,
+              "available": 2,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "Each bus section has one dedicated grounding-transformer and resistor set."
+            },
+            {
+              "id": "grounding_transfer_single_healthy_source",
+              "status": "provisional_pass",
+              "required": 1,
+              "available": 1,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "Before bus-tie closure, the receiving or faulted section source is opened and only the healthy-side source remains."
+            },
+            {
+              "id": "grounding_restoration_one_source_per_section",
+              "status": "provisional_pass",
+              "required": 2,
+              "available": 2,
+              "unit": "sources",
+              "margin": 0.0,
+              "note": "After sectionalized operation is restored, each energized section regains one grounding source."
+            },
+            {
+              "id": "grounding_parallel_interlock_defined",
+              "status": "provisional_pass",
+              "required": true,
+              "available": true,
+              "unit": null,
+              "margin": 0.0,
+              "note": "The bus tie cannot close with both section grounding sources connected in parallel."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        }
+      ],
+      "final_engineering_boundary": "hardwired_and_software_interlocks_control_power_failure_modes_and_protection_trip_matrix_require_final_vendor_design",
+      "course_precheck_status": "provisional_pass"
+    },
+    "grounding_transformer_resistor_packages": [
+      {
+        "id": "GRD-PKG-35",
+        "voltage_class": "v35",
+        "candidate_id": "TARGET-GRD-PKG-35-ZN-NGR",
+        "circuit_group": "35-grounding-transformer-feeders",
+        "feeder_switchgear_selection_id": "SEL-SWGR-35-GT",
+        "section_ids": [
+          "35kV-I",
+          "35kV-II"
+        ],
+        "source_ids": [
+          "GT35-I",
+          "GT35-II"
+        ],
+        "quantity": 2,
+        "grounding_transformer_connection": "ZN_neutral_forming",
+        "nominal_line_voltage_kv": 35,
+        "target_ground_fault_current_a": 400,
+        "short_time_s": 10,
+        "target_resistance_ohm": 50.5,
+        "maximum_resistance_deviation_percent": 1.0,
+        "short_time_overload_factor": 10,
+        "selected_transformer_capacity_kva_each": 1000,
+        "phase_ct_target": {
+          "ratio": "600/1A",
+          "primary_rated_current_a": 600,
+          "accuracy": "5P20 protection plus 0.5 measurement",
+          "location": "grounding-transformer feeder panel"
+        },
+        "neutral_ct_target": {
+          "ratio": "400/1A",
+          "primary_rated_current_a": 400,
+          "accuracy": "5P20 zero-sequence protection",
+          "location": "neutral resistor branch"
+        },
+        "protection_functions": [
+          "feeder_phase_overcurrent",
+          "neutral_zero_sequence_overcurrent",
+          "bus_zero_sequence_overvoltage",
+          "grounding_transformer_overtemperature",
+          "neutral_resistor_temperature_and_continuity",
+          "breaker_failure"
+        ],
+        "final_engineering_status": "pending_exact_grounding_transformer_resistor_ct_switchgear_and_protection_vendor_coordination",
+        "candidate": {
+          "id": "TARGET-GRD-PKG-35-ZN-NGR",
+          "kind": "grounding_transformer_resistor_package",
+          "evidence_status": "target_only",
+          "final_vendor_boundary": "exact zero-sequence impedance, 10s thermal duty, insulation level, losses, temperature rise, CTs, NGR enclosure and protection interfaces require one coordinated manufacturer package"
+        },
+        "calculated": {
+          "phase_to_earth_voltage_kv": 20.207259421636902,
+          "resistance_ohm": 50.51814855409226,
+          "configured_resistance_deviation_percent": 0.035924820310514805,
+          "short_time_equivalent_power_kva": 8082.903768654761,
+          "short_time_equivalent_power_mva": 8.082903768654761,
+          "short_time_energy_mj": 80.82903768654761,
+          "minimum_transformer_capacity_kva_at_overload_factor": 808.2903768654761
+        },
+        "checks": [
+          {
+            "id": "grounding_package_nominal_voltage",
+            "status": "provisional_pass",
+            "required": 35.0,
+            "available": 35.0,
+            "unit": "kV",
+            "margin": 0.0,
+            "note": "Grounding-resistor arithmetic uses nominal line voltage and phase-to-earth voltage U/sqrt(3)."
+          },
+          {
+            "id": "grounding_resistance_deviation",
+            "status": "provisional_pass",
+            "required": 0.035924820310514805,
+            "available": 1.0,
+            "unit": "percent",
+            "margin": 0.9640751796894852,
+            "note": "Configured course resistance is checked against Uphase/Ig."
+          },
+          {
+            "id": "grounding_transformer_short_time_capacity",
+            "status": "provisional_pass",
+            "required": 808.2903768654761,
+            "available": 1000.0,
+            "unit": "kVA",
+            "margin": 191.7096231345239,
+            "note": "Minimum transformer capacity equals the 10s equivalent power divided by the configured short-time overload factor."
+          },
+          {
+            "id": "grounding_feeder_fixed_course_current",
+            "status": "provisional_pass",
+            "required": 400.0,
+            "available": 400.0,
+            "unit": "A",
+            "margin": 0.0,
+            "note": "Grounding-transformer feeder switchgear uses the frozen course current target."
+          },
+          {
+            "id": "grounding_package_quantity_per_section",
+            "status": "provisional_pass",
+            "required": 2,
+            "available": 2,
+            "unit": "sets",
+            "margin": 0.0,
+            "note": "One package is provided for each bus section."
+          },
+          {
+            "id": "grounding_phase_ct_primary_target",
+            "status": "provisional_pass",
+            "required": 400.0,
+            "available": 600.0,
+            "unit": "A primary",
+            "margin": 200.0,
+            "note": "Phase CT course target covers the feeder current target; exact burden and saturation remain pending."
+          },
+          {
+            "id": "grounding_neutral_ct_primary_target",
+            "status": "provisional_pass",
+            "required": 400.0,
+            "available": 400.0,
+            "unit": "A primary",
+            "margin": 0.0,
+            "note": "Neutral CT course target covers the limited ground-fault current; exact burden and saturation remain pending."
+          },
+          {
+            "id": "grounding_catalog_current_target",
+            "status": "provisional_pass",
+            "required": 400.0,
+            "available": 400.0,
+            "unit": "A",
+            "margin": 0.0,
+            "note": "Catalog row is a course target package, not an exact manufacturer model."
+          },
+          {
+            "id": "grounding_catalog_connection_target",
+            "status": "provisional_pass",
+            "required": "ZN_neutral_forming",
+            "available": "ZN_neutral_forming",
+            "unit": null,
+            "margin": null,
+            "note": "Catalog course target uses the same ZN neutral-forming connection."
+          },
+          {
+            "id": "grounding_catalog_duration_target",
+            "status": "provisional_pass",
+            "required": 10.0,
+            "available": 10.0,
+            "unit": "s",
+            "margin": 0.0,
+            "note": "Course target package retains the required resistor duration."
+          },
+          {
+            "id": "grounding_catalog_capacity_target",
+            "status": "provisional_pass",
+            "required": 1000.0,
+            "available": 1000.0,
+            "unit": "kVA",
+            "margin": 0.0,
+            "note": "Catalog target and selected course transformer capacity are aligned."
+          },
+          {
+            "id": "grounding_catalog_resistance_deviation",
+            "status": "provisional_pass",
+            "required": 0.035924820310514805,
+            "available": 1.0,
+            "unit": "percent",
+            "margin": 0.9640751796894852,
+            "note": "Catalog target resistance is consistent with Uphase/Ig within the course tolerance."
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      },
+      {
+        "id": "GRD-PKG-10",
+        "voltage_class": "v10",
+        "candidate_id": "TARGET-GRD-PKG-10-ZN-NGR",
+        "circuit_group": "10-grounding-transformer-feeders",
+        "feeder_switchgear_selection_id": "SEL-SWGR-10-GT",
+        "section_ids": [
+          "10kV-I",
+          "10kV-II"
+        ],
+        "source_ids": [
+          "GT10-I",
+          "GT10-II"
+        ],
+        "quantity": 2,
+        "grounding_transformer_connection": "ZN_neutral_forming",
+        "nominal_line_voltage_kv": 10,
+        "target_ground_fault_current_a": 200,
+        "short_time_s": 10,
+        "target_resistance_ohm": 28.9,
+        "maximum_resistance_deviation_percent": 1.0,
+        "short_time_overload_factor": 10,
+        "selected_transformer_capacity_kva_each": 200,
+        "phase_ct_target": {
+          "ratio": "300/1A",
+          "primary_rated_current_a": 300,
+          "accuracy": "5P20 protection plus 0.5 measurement",
+          "location": "grounding-transformer feeder panel"
+        },
+        "neutral_ct_target": {
+          "ratio": "200/1A",
+          "primary_rated_current_a": 200,
+          "accuracy": "5P20 zero-sequence protection",
+          "location": "neutral resistor branch"
+        },
+        "protection_functions": [
+          "feeder_phase_overcurrent",
+          "neutral_zero_sequence_overcurrent",
+          "bus_zero_sequence_overvoltage",
+          "grounding_transformer_overtemperature",
+          "neutral_resistor_temperature_and_continuity",
+          "breaker_failure"
+        ],
+        "final_engineering_status": "pending_exact_grounding_transformer_resistor_ct_switchgear_and_protection_vendor_coordination",
+        "candidate": {
+          "id": "TARGET-GRD-PKG-10-ZN-NGR",
+          "kind": "grounding_transformer_resistor_package",
+          "evidence_status": "target_only",
+          "final_vendor_boundary": "exact zero-sequence impedance, 10s thermal duty, insulation level, losses, temperature rise, CTs, NGR enclosure and protection interfaces require one coordinated manufacturer package"
+        },
+        "calculated": {
+          "phase_to_earth_voltage_kv": 5.773502691896258,
+          "resistance_ohm": 28.86751345948129,
+          "configured_resistance_deviation_percent": 0.11253667748109306,
+          "short_time_equivalent_power_kva": 1154.7005383792516,
+          "short_time_equivalent_power_mva": 1.1547005383792517,
+          "short_time_energy_mj": 11.547005383792515,
+          "minimum_transformer_capacity_kva_at_overload_factor": 115.47005383792516
+        },
+        "checks": [
+          {
+            "id": "grounding_package_nominal_voltage",
+            "status": "provisional_pass",
+            "required": 10.0,
+            "available": 10.0,
+            "unit": "kV",
+            "margin": 0.0,
+            "note": "Grounding-resistor arithmetic uses nominal line voltage and phase-to-earth voltage U/sqrt(3)."
+          },
+          {
+            "id": "grounding_resistance_deviation",
+            "status": "provisional_pass",
+            "required": 0.11253667748109306,
+            "available": 1.0,
+            "unit": "percent",
+            "margin": 0.8874633225189069,
+            "note": "Configured course resistance is checked against Uphase/Ig."
+          },
+          {
+            "id": "grounding_transformer_short_time_capacity",
+            "status": "provisional_pass",
+            "required": 115.47005383792516,
+            "available": 200.0,
+            "unit": "kVA",
+            "margin": 84.52994616207484,
+            "note": "Minimum transformer capacity equals the 10s equivalent power divided by the configured short-time overload factor."
+          },
+          {
+            "id": "grounding_feeder_fixed_course_current",
+            "status": "provisional_pass",
+            "required": 200.0,
+            "available": 200.0,
+            "unit": "A",
+            "margin": 0.0,
+            "note": "Grounding-transformer feeder switchgear uses the frozen course current target."
+          },
+          {
+            "id": "grounding_package_quantity_per_section",
+            "status": "provisional_pass",
+            "required": 2,
+            "available": 2,
+            "unit": "sets",
+            "margin": 0.0,
+            "note": "One package is provided for each bus section."
+          },
+          {
+            "id": "grounding_phase_ct_primary_target",
+            "status": "provisional_pass",
+            "required": 200.0,
+            "available": 300.0,
+            "unit": "A primary",
+            "margin": 100.0,
+            "note": "Phase CT course target covers the feeder current target; exact burden and saturation remain pending."
+          },
+          {
+            "id": "grounding_neutral_ct_primary_target",
+            "status": "provisional_pass",
+            "required": 200.0,
+            "available": 200.0,
+            "unit": "A primary",
+            "margin": 0.0,
+            "note": "Neutral CT course target covers the limited ground-fault current; exact burden and saturation remain pending."
+          },
+          {
+            "id": "grounding_catalog_current_target",
+            "status": "provisional_pass",
+            "required": 200.0,
+            "available": 200.0,
+            "unit": "A",
+            "margin": 0.0,
+            "note": "Catalog row is a course target package, not an exact manufacturer model."
+          },
+          {
+            "id": "grounding_catalog_connection_target",
+            "status": "provisional_pass",
+            "required": "ZN_neutral_forming",
+            "available": "ZN_neutral_forming",
+            "unit": null,
+            "margin": null,
+            "note": "Catalog course target uses the same ZN neutral-forming connection."
+          },
+          {
+            "id": "grounding_catalog_duration_target",
+            "status": "provisional_pass",
+            "required": 10.0,
+            "available": 10.0,
+            "unit": "s",
+            "margin": 0.0,
+            "note": "Course target package retains the required resistor duration."
+          },
+          {
+            "id": "grounding_catalog_capacity_target",
+            "status": "provisional_pass",
+            "required": 200.0,
+            "available": 200.0,
+            "unit": "kVA",
+            "margin": 0.0,
+            "note": "Catalog target and selected course transformer capacity are aligned."
+          },
+          {
+            "id": "grounding_catalog_resistance_deviation",
+            "status": "provisional_pass",
+            "required": 0.11253667748109306,
+            "available": 1.0,
+            "unit": "percent",
+            "margin": 0.8874633225189069,
+            "note": "Catalog target resistance is consistent with Uphase/Ig within the course tolerance."
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      }
+    ],
+    "course_precheck_status": "provisional_pass",
+    "final_engineering_status": "pending",
+    "busbars": [
+      {
+        "id": "BUS-220-TUBE-100-90",
+        "voltage_class": "v220",
+        "circuit_groups": [
+          "220-bus-section"
+        ],
+        "description": "220kV aluminum-alloy tubular busbar, phi100/90mm",
+        "material": "aluminum_alloy",
+        "geometry": {
+          "type": "tube",
+          "outer_diameter_mm": 100,
+          "inner_diameter_mm": 90
+        },
+        "reference_ampacity": {
+          "current_a": 2000,
+          "ambient_c": 25
+        },
+        "temperature_correction": {
+          "enabled": true,
+          "project_ambient_c": 41,
+          "allowable_conductor_temperature_c": 70,
+          "formula": "sqrt((theta_allow-theta_ambient)/(theta_allow-theta_reference))"
+        },
+        "dynamic_check": {
+          "enabled": true,
+          "phase_spacing_m": 3.0,
+          "frozen_layout_phase_spacing_m": 4.0,
+          "spacing_basis": "conservative calculation spacing 3.0m is not greater than the frozen AIS layout spacing 4.0m",
+          "support_span_m": 8.0,
+          "support_span_basis": "data.design_baseline.switchyard_220kv.bus_support_span_for_course_mechanical_check_m",
+          "dynamic_amplification_factor": 1.8,
+          "allowable_bending_stress_mpa": 70,
+          "formula": "f=2e-7*ip^2/a; M=f*kd*L^2/8; sigma=M/W"
+        },
+        "corona_check": {
+          "enabled": true,
+          "surface_factor": 0.85,
+          "atmospheric_density_factor": 0.9,
+          "peek_constant_kv_per_cm": 21.1,
+          "formula": "Ucr_phase=21.1*m*delta*r_cm*ln(D_cm/r_cm)"
+        },
+        "final_engineering_status": "pending_exact_conductor_and_support_manufacturer_data",
+        "requirements": {
+          "covered_circuit_groups": [
+            "220-bus-section"
+          ],
+          "required_continuous_current_a": 735.5592390584715,
+          "required_short_circuit_rms_ka": 7.384571960617697,
+          "required_peak_current_ka": 18.798051274246124,
+          "required_highest_system_voltage_kv": 252.0
+        },
+        "calculated": {
+          "cross_section_area_mm2": 1492.2565104551518,
+          "section_modulus_mm3": 33762.30354904781,
+          "current_correction_factor": 0.8027729719194864,
+          "corrected_ampacity_a": 1605.5459438389728,
+          "thermal_allowable_current_ka": 123.78453579611303,
+          "minimum_thermal_area_mm2": 89.02303922120741,
+          "dynamic": {
+            "calculation_phase_spacing_m": 3.0,
+            "frozen_layout_phase_spacing_m": 4.0,
+            "base_electromagnetic_force_n_per_m": 23.55778211394576,
+            "design_force_n_per_m": 42.40400780510237,
+            "maximum_bending_moment_nm": 339.23206244081894,
+            "calculated_bending_stress_mpa": 10.047657499080398
+          },
+          "corona": {
+            "conductor_radius_cm": 5.0,
+            "phase_spacing_cm": 300.0,
+            "critical_disruptive_phase_voltage_kv": 330.4443137555403,
+            "highest_operating_phase_voltage_kv": 145.4922678357857
+          }
+        },
+        "checks": [
+          {
+            "id": "continuous_ampacity",
+            "status": "provisional_pass",
+            "required": 735.5592390584715,
+            "available": 1605.5459438389728,
+            "unit": "A",
+            "margin": 869.9867047805013,
+            "note": "Course ampacity check using the configured table value and temperature basis."
+          },
+          {
+            "id": "thermal_stability",
+            "status": "provisional_pass",
+            "required": 7.384571960617697,
+            "available": 123.78453579611303,
+            "unit": "kA rms at 1.10s",
+            "margin": 116.39996383549534,
+            "note": "Adiabatic course check using C=87 and t=1.10s."
+          },
+          {
+            "id": "simplified_dynamic_bending_stress",
+            "status": "provisional_pass",
+            "required": 10.047657499080398,
+            "available": 70.0,
+            "unit": "MPa",
+            "margin": 59.9523425009196,
+            "note": "Simplified simply-supported uniform-load course check; support resonance and connection forces remain pending."
+          },
+          {
+            "id": "simplified_corona_inception",
+            "status": "provisional_pass",
+            "required": 145.4922678357857,
+            "available": 330.4443137555403,
+            "unit": "kV phase-to-earth rms",
+            "margin": 184.9520459197546,
+            "note": "Peek-formula course screen; surface condition, weather, radio interference and audible-noise design remain pending."
+          }
+        ],
+        "engineering_pending_checks": [],
+        "course_precheck_status": "provisional_pass"
+      },
+      {
+        "id": "BUS-35-3X125X10",
+        "voltage_class": "v35",
+        "circuit_groups": [
+          "35-transformer-incomers",
+          "35-bus-tie",
+          "35-bus-I",
+          "35-bus-II"
+        ],
+        "description": "35kV rectangular aluminum busbar, 3x125x10mm per phase",
+        "material": "aluminum",
+        "geometry": {
+          "type": "rectangular_bundle",
+          "count_per_phase": 3,
+          "width_mm": 125,
+          "thickness_mm": 10
+        },
+        "reference_ampacity": {
+          "current_a": 4194,
+          "basis": "controlled_indoor_course_table_value"
+        },
+        "temperature_correction": {
+          "enabled": false,
+          "basis": "maximum indoor design temperature controlled at 40C"
+        },
+        "dynamic_check": {
+          "enabled": false,
+          "status": "pending",
+          "reason": "support_spacing_resonance_connection_force_and_exact_busbar_arrangement_not_frozen"
+        },
+        "final_engineering_status": "pending_exact_busbar_arrangement_and_manufacturer_temperature_rise_data",
+        "requirements": {
+          "covered_circuit_groups": [
+            "35-transformer-incomers",
+            "35-bus-tie",
+            "35-bus-I",
+            "35-bus-II"
+          ],
+          "required_continuous_current_a": 3117.691453623979,
+          "required_short_circuit_rms_ka": 16.290983445518524,
+          "required_peak_current_ka": 41.47007351948617,
+          "required_highest_system_voltage_kv": 40.5
+        },
+        "calculated": {
+          "cross_section_area_mm2": 3750.0,
+          "section_modulus_mm3": null,
+          "current_correction_factor": 1.0,
+          "corrected_ampacity_a": 4194.0,
+          "thermal_allowable_current_ka": 311.06716974137447,
+          "minimum_thermal_area_mm2": 196.39227106957804
+        },
+        "checks": [
+          {
+            "id": "continuous_ampacity",
+            "status": "provisional_pass",
+            "required": 3117.691453623979,
+            "available": 4194.0,
+            "unit": "A",
+            "margin": 1076.3085463760208,
+            "note": "Course ampacity check using the configured table value and temperature basis."
+          },
+          {
+            "id": "thermal_stability",
+            "status": "provisional_pass",
+            "required": 16.290983445518524,
+            "available": 311.06716974137447,
+            "unit": "kA rms at 1.10s",
+            "margin": 294.77618629585595,
+            "note": "Adiabatic course check using C=87 and t=1.10s."
+          }
+        ],
+        "engineering_pending_checks": [
+          {
+            "id": "busbar_mechanical_dynamic_stability",
+            "status": "pending",
+            "required": null,
+            "available": null,
+            "unit": null,
+            "margin": null,
+            "note": "support_spacing_resonance_connection_force_and_exact_busbar_arrangement_not_frozen"
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      },
+      {
+        "id": "BUS-10-2X125X10",
+        "voltage_class": "v10",
+        "circuit_groups": [
+          "10-transformer-incomers",
+          "10-bus-tie"
+        ],
+        "description": "10kV rectangular aluminum busbar, 2x125x10mm per phase",
+        "material": "aluminum",
+        "geometry": {
+          "type": "rectangular_bundle",
+          "count_per_phase": 2,
+          "width_mm": 125,
+          "thickness_mm": 10
+        },
+        "reference_ampacity": {
+          "current_a": 3282,
+          "basis": "controlled_indoor_course_table_value"
+        },
+        "temperature_correction": {
+          "enabled": false,
+          "basis": "maximum indoor design temperature controlled at 40C"
+        },
+        "dynamic_check": {
+          "enabled": false,
+          "status": "pending",
+          "reason": "support_spacing_resonance_connection_force_and_exact_busbar_arrangement_not_frozen"
+        },
+        "final_engineering_status": "pending_exact_busbar_arrangement_and_manufacturer_temperature_rise_data",
+        "requirements": {
+          "covered_circuit_groups": [
+            "10-transformer-incomers",
+            "10-bus-tie"
+          ],
+          "required_continuous_current_a": 1909.5860153446874,
+          "required_short_circuit_rms_ka": 15.638094419605405,
+          "required_peak_current_ka": 39.808089392178566,
+          "required_highest_system_voltage_kv": 12.0
+        },
+        "calculated": {
+          "cross_section_area_mm2": 2500.0,
+          "section_modulus_mm3": null,
+          "current_correction_factor": 1.0,
+          "corrected_ampacity_a": 3282.0,
+          "thermal_allowable_current_ka": 207.3781131609163,
+          "minimum_thermal_area_mm2": 188.5215148942807
+        },
+        "checks": [
+          {
+            "id": "continuous_ampacity",
+            "status": "provisional_pass",
+            "required": 1909.5860153446874,
+            "available": 3282.0,
+            "unit": "A",
+            "margin": 1372.4139846553126,
+            "note": "Course ampacity check using the configured table value and temperature basis."
+          },
+          {
+            "id": "thermal_stability",
+            "status": "provisional_pass",
+            "required": 15.638094419605405,
+            "available": 207.3781131609163,
+            "unit": "kA rms at 1.10s",
+            "margin": 191.7400187413109,
+            "note": "Adiabatic course check using C=87 and t=1.10s."
+          }
+        ],
+        "engineering_pending_checks": [
+          {
+            "id": "busbar_mechanical_dynamic_stability",
+            "status": "pending",
+            "required": null,
+            "available": null,
+            "unit": null,
+            "margin": null,
+            "note": "support_spacing_resonance_connection_force_and_exact_busbar_arrangement_not_frozen"
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      }
+    ],
+    "surge_arresters": [
+      {
+        "id": "MOA-220",
+        "voltage_class": "v220",
+        "candidate_id": "TARGET-MOA-220-YH10W-204-532",
+        "locations": [
+          "220kV line entrance",
+          "main-transformer 220kV terminal"
+        ],
+        "required_continuous_voltage_factor_to_um": 0.5773502691896258,
+        "continuous_voltage_basis": "effectively grounded system, Um/sqrt(3)",
+        "protected_equipment_liwv_kv": 950,
+        "minimum_protection_ratio": 1.15,
+        "final_engineering_status": "pending_grounding_study_energy_duty_and_exact_manufacturer_model",
+        "interface_coverage": [],
+        "model": "YH10W-204/532",
+        "evidence_status": "target_only",
+        "ratings": {
+          "rated_voltage_kv": 204,
+          "continuous_operating_voltage_kv": 159,
+          "nominal_discharge_current_ka": 10,
+          "lightning_residual_voltage_kv": 532
+        },
+        "calculated": {
+          "required_continuous_voltage_kv": 145.49226783578573,
+          "continuous_voltage_margin_kv": 13.507732164214275,
+          "protection_ratio": 1.7857142857142858,
+          "protection_margin_percent": 78.57142857142858
+        },
+        "checks": [
+          {
+            "id": "continuous_operating_voltage",
+            "status": "provisional_pass",
+            "required": 145.49226783578573,
+            "available": 159.0,
+            "unit": "kV rms",
+            "margin": 13.507732164214275,
+            "note": "effectively grounded system, Um/sqrt(3)"
+          },
+          {
+            "id": "lightning_protection_ratio",
+            "status": "provisional_pass",
+            "required": 1.15,
+            "available": 1.7857142857142858,
+            "unit": "p.u. LIWV/residual voltage",
+            "margin": 0.6357142857142859,
+            "note": "Course insulation-coordination margin screen."
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      },
+      {
+        "id": "MOA-35",
+        "voltage_class": "v35",
+        "candidate_id": "TARGET-MOA-35-YH5WZ-51-134",
+        "locations": [
+          "35kV overhead collector-line entrances",
+          "35kV bus VT panels",
+          "main-transformer 35kV terminals"
+        ],
+        "interface_coverage": [
+          {
+            "id": "MOA-35-OHL-ENTRY",
+            "interface_type": "overhead_line_entry",
+            "coverage_mode": "all_group_members",
+            "covered_circuit_groups": [
+              "35-feeder-wind-A",
+              "35-feeder-wind-B"
+            ],
+            "covered_members": [
+              "WA-1",
+              "WA-2",
+              "WA-3",
+              "WA-4",
+              "WB-1",
+              "WB-2",
+              "WB-3"
+            ],
+            "resolved_group_members": [
+              "WA-1",
+              "WA-2",
+              "WA-3",
+              "WA-4",
+              "WB-1",
+              "WB-2",
+              "WB-3"
+            ],
+            "coverage_check_status": "provisional_pass"
+          }
+        ],
+        "required_continuous_voltage_factor_to_um": 1.0,
+        "continuous_voltage_basis": "non-effectively grounded course upper bound, Um",
+        "protected_equipment_liwv_kv": 185,
+        "minimum_protection_ratio": 1.15,
+        "final_engineering_status": "pending_grounding_study_energy_duty_and_exact_manufacturer_model",
+        "model": "YH5WZ-51/134",
+        "evidence_status": "target_only",
+        "ratings": {
+          "rated_voltage_kv": 51,
+          "continuous_operating_voltage_kv": 40.8,
+          "nominal_discharge_current_ka": 5,
+          "lightning_residual_voltage_kv": 134
+        },
+        "calculated": {
+          "required_continuous_voltage_kv": 40.5,
+          "continuous_voltage_margin_kv": 0.29999999999999716,
+          "protection_ratio": 1.3805970149253732,
+          "protection_margin_percent": 38.05970149253732
+        },
+        "checks": [
+          {
+            "id": "continuous_operating_voltage",
+            "status": "provisional_pass",
+            "required": 40.5,
+            "available": 40.8,
+            "unit": "kV rms",
+            "margin": 0.29999999999999716,
+            "note": "non-effectively grounded course upper bound, Um"
+          },
+          {
+            "id": "lightning_protection_ratio",
+            "status": "provisional_pass",
+            "required": 1.15,
+            "available": 1.3805970149253732,
+            "unit": "p.u. LIWV/residual voltage",
+            "margin": 0.23059701492537332,
+            "note": "Course insulation-coordination margin screen."
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      },
+      {
+        "id": "MOA-10",
+        "voltage_class": "v10",
+        "candidate_id": "TARGET-MOA-10-YH5WZ-17-45",
+        "locations": [
+          "10kV bus VT panels",
+          "T10 low-voltage and SVG terminals"
+        ],
+        "required_continuous_voltage_factor_to_um": 1.0,
+        "continuous_voltage_basis": "non-effectively grounded course upper bound, Um",
+        "protected_equipment_liwv_kv": 75,
+        "minimum_protection_ratio": 1.15,
+        "final_engineering_status": "pending_grounding_study_energy_duty_and_exact_manufacturer_model",
+        "interface_coverage": [],
+        "model": "YH5WZ-17/45",
+        "evidence_status": "target_only",
+        "ratings": {
+          "rated_voltage_kv": 17,
+          "continuous_operating_voltage_kv": 13.6,
+          "nominal_discharge_current_ka": 5,
+          "lightning_residual_voltage_kv": 45
+        },
+        "calculated": {
+          "required_continuous_voltage_kv": 12.0,
+          "continuous_voltage_margin_kv": 1.5999999999999996,
+          "protection_ratio": 1.6666666666666667,
+          "protection_margin_percent": 66.66666666666667
+        },
+        "checks": [
+          {
+            "id": "continuous_operating_voltage",
+            "status": "provisional_pass",
+            "required": 12.0,
+            "available": 13.6,
+            "unit": "kV rms",
+            "margin": 1.5999999999999996,
+            "note": "non-effectively grounded course upper bound, Um"
+          },
+          {
+            "id": "lightning_protection_ratio",
+            "status": "provisional_pass",
+            "required": 1.15,
+            "available": 1.6666666666666667,
+            "unit": "p.u. LIWV/residual voltage",
+            "margin": 0.5166666666666668,
+            "note": "Course insulation-coordination margin screen."
+          }
+        ],
+        "course_precheck_status": "provisional_pass"
+      }
+    ],
+    "supplementary": {
+      "status": "course_target_table_final_models_pending",
+      "ordering_boundary": "ratios, classes and withstand levels are course-design targets only, not purchase specifications; burden, saturation, transient class and exact catalog numbers remain to be engineered",
+      "current_transformers": [
+        {
+          "id": "CT-220-LINE",
+          "covered_circuit_groups": [
+            "220-line-bays"
+          ],
+          "ratio": "1000/1A",
+          "primary_rated_current_a": 1000,
+          "cores": [
+            "0.2S metering",
+            "0.5 measurement",
+            "5P30 protection",
+            "PX differential as required"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          },
+          "rated_dynamic_current_ka_peak": 125,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "220-line-bays"
+            ],
+            "required_continuous_current_a": 735.5592390584715,
+            "required_short_circuit_rms_ka": 7.384571960617697,
+            "required_peak_current_ka": 18.798051274246124,
+            "required_highest_system_voltage_kv": 252.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 59.985093345695205,
+            "available_thermal_energy_ka2s": 7500.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 735.5592390584715,
+              "available": 1000.0,
+              "unit": "A primary",
+              "margin": 264.44076094152854,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 7.384571960617697,
+              "available": 50.0,
+              "unit": "kA rms",
+              "margin": 42.6154280393823,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 59.985093345695205,
+              "available": 7500.0,
+              "unit": "kA^2 s",
+              "margin": 7440.0149066543045,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 18.798051274246124,
+              "available": 125.0,
+              "unit": "kA peak",
+              "margin": 106.20194872575388,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "CT-220-TRANSFORMER",
+          "covered_circuit_groups": [
+            "220-transformer-bays"
+          ],
+          "ratio": "600/1A",
+          "primary_rated_current_a": 600,
+          "cores": [
+            "0.2S metering",
+            "0.5 measurement",
+            "5P30 protection",
+            "PX differential"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          },
+          "rated_dynamic_current_ka_peak": 125,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "220-transformer-bays"
+            ],
+            "required_continuous_current_a": 495.99636762199674,
+            "required_short_circuit_rms_ka": 7.384571960617697,
+            "required_peak_current_ka": 18.798051274246124,
+            "required_highest_system_voltage_kv": 252.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 59.985093345695205,
+            "available_thermal_energy_ka2s": 7500.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 495.99636762199674,
+              "available": 600.0,
+              "unit": "A primary",
+              "margin": 104.00363237800326,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 7.384571960617697,
+              "available": 50.0,
+              "unit": "kA rms",
+              "margin": 42.6154280393823,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 59.985093345695205,
+              "available": 7500.0,
+              "unit": "kA^2 s",
+              "margin": 7440.0149066543045,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 18.798051274246124,
+              "available": 125.0,
+              "unit": "kA peak",
+              "margin": 106.20194872575388,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "CT-220-TRANSFORMER-NEUTRAL",
+          "covered_circuit_groups": [
+            "220-transformer-bays"
+          ],
+          "application": "dedicated main-transformer 220kV neutral CT",
+          "evaluation_basis": "single_phase_ground_and_zero_sequence_study_pending",
+          "exclude_from_course_precheck": true,
+          "ratio": "600/1A",
+          "primary_rated_current_a": 600,
+          "cores": [
+            "PX restricted-earth-fault protection",
+            "5P30 neutral overcurrent protection"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          },
+          "rated_dynamic_current_ka_peak": 125,
+          "final_engineering_status": "pending_grounding_fault_study_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "220-transformer-bays"
+            ],
+            "required_continuous_current_a": null,
+            "required_short_circuit_rms_ka": null,
+            "required_peak_current_ka": null,
+            "required_highest_system_voltage_kv": 252.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": null,
+            "available_thermal_energy_ka2s": null
+          },
+          "checks": [
+            {
+              "id": "ct_neutral_continuous_current",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Neutral CT continuous duty requires the transformer neutral and zero-sequence protection study; phase-load current is not applicable."
+            },
+            {
+              "id": "ct_neutral_short_time_current_level",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Neutral CT short-time duty requires the maximum single-phase-to-ground and zero-sequence current study."
+            },
+            {
+              "id": "ct_neutral_thermal_energy",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Neutral CT I2t remains pending the ground-fault clearing time and zero-sequence duty."
+            },
+            {
+              "id": "ct_neutral_dynamic_current",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Neutral CT peak duty remains pending the single-phase ground-fault study."
+            }
+          ],
+          "course_precheck_status": "pending"
+        },
+        {
+          "id": "CT-220-BUS-SECTION",
+          "covered_circuit_groups": [
+            "220-bus-section"
+          ],
+          "ratio": "1000/1A",
+          "primary_rated_current_a": 1000,
+          "cores": [
+            "0.5 measurement",
+            "5P30 bus protection",
+            "PX bus differential"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          },
+          "rated_dynamic_current_ka_peak": 125,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "220-bus-section"
+            ],
+            "required_continuous_current_a": 735.5592390584715,
+            "required_short_circuit_rms_ka": 7.384571960617697,
+            "required_peak_current_ka": 18.798051274246124,
+            "required_highest_system_voltage_kv": 252.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 59.985093345695205,
+            "available_thermal_energy_ka2s": 7500.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 735.5592390584715,
+              "available": 1000.0,
+              "unit": "A primary",
+              "margin": 264.44076094152854,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 7.384571960617697,
+              "available": 50.0,
+              "unit": "kA rms",
+              "margin": 42.6154280393823,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 59.985093345695205,
+              "available": 7500.0,
+              "unit": "kA^2 s",
+              "margin": 7440.0149066543045,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 18.798051274246124,
+              "available": 125.0,
+              "unit": "kA peak",
+              "margin": 106.20194872575388,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "CT-35-INCOMER-TIE",
+          "covered_circuit_groups": [
+            "35-transformer-incomers",
+            "35-bus-tie"
+          ],
+          "ratio": "4000/1A",
+          "primary_rated_current_a": 4000,
+          "cores": [
+            "0.2S metering",
+            "0.5 measurement",
+            "5P30 protection",
+            "PX differential"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "rated_dynamic_current_ka_peak": 80,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "35-transformer-incomers",
+              "35-bus-tie"
+            ],
+            "required_continuous_current_a": 3117.691453623979,
+            "required_short_circuit_rms_ka": 16.290983445518524,
+            "required_peak_current_ka": 41.47007351948617,
+            "required_highest_system_voltage_kv": 40.5
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 291.9357557843745,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 3117.691453623979,
+              "available": 4000.0,
+              "unit": "A primary",
+              "margin": 882.3085463760208,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 16.290983445518524,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.209016554481476,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 291.9357557843745,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3677.0642442156254,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 41.47007351948617,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 38.52992648051383,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "CT-35-FEEDER",
+          "covered_circuit_groups": [
+            "35-aux-transformer-feeders",
+            "35-feeder-wind-A",
+            "35-feeder-wind-B",
+            "35-feeder-pv-A",
+            "35-feeder-pv-B",
+            "35-feeder-storage"
+          ],
+          "ratio": "800/1A",
+          "primary_rated_current_a": 800,
+          "cores": [
+            "0.2S metering",
+            "0.5 measurement",
+            "5P30 protection"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "rated_dynamic_current_ka_peak": 80,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "35-aux-transformer-feeders",
+              "35-feeder-wind-A",
+              "35-feeder-wind-B",
+              "35-feeder-pv-A",
+              "35-feeder-pv-B",
+              "35-feeder-storage"
+            ],
+            "required_continuous_current_a": 546.9634129164876,
+            "required_short_circuit_rms_ka": 16.290983445518524,
+            "required_peak_current_ka": 41.47007351948617,
+            "required_highest_system_voltage_kv": 40.5
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 291.9357557843745,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 546.9634129164876,
+              "available": 800.0,
+              "unit": "A primary",
+              "margin": 253.03658708351236,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 16.290983445518524,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.209016554481476,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 291.9357557843745,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3677.0642442156254,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 41.47007351948617,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 38.52992648051383,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "CT-10-INCOMER-TIE",
+          "covered_circuit_groups": [
+            "10-transformer-incomers",
+            "10-bus-tie"
+          ],
+          "ratio": "2500/1A",
+          "primary_rated_current_a": 2500,
+          "cores": [
+            "0.2S metering",
+            "0.5 measurement",
+            "5P30 protection",
+            "PX differential"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "rated_dynamic_current_ka_peak": 80,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "10-transformer-incomers",
+              "10-bus-tie"
+            ],
+            "required_continuous_current_a": 1909.5860153446874,
+            "required_short_circuit_rms_ka": 15.638094419605405,
+            "required_peak_current_ka": 39.808089392178566,
+            "required_highest_system_voltage_kv": 12.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 269.00499678414315,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 1909.5860153446874,
+              "available": 2500.0,
+              "unit": "A primary",
+              "margin": 590.4139846553126,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 15.638094419605405,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.861905580394595,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 269.00499678414315,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3699.9950032158567,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 39.808089392178566,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 40.191910607821434,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "CT-10-FEEDER-SVG",
+          "covered_circuit_groups": [
+            "10-svg-feeders",
+            "10-load-station-service-backup",
+            "10-load-reactive-and-cooling",
+            "10-load-control-and-monitoring"
+          ],
+          "ratio": "1000/1A",
+          "primary_rated_current_a": 1000,
+          "cores": [
+            "0.2S metering",
+            "0.5 measurement",
+            "5P30 protection"
+          ],
+          "rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "rated_dynamic_current_ka_peak": 80,
+          "final_engineering_status": "pending_burden_knee_point_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "10-svg-feeders",
+              "10-load-station-service-backup",
+              "10-load-reactive-and-cooling",
+              "10-load-control-and-monitoring"
+            ],
+            "required_continuous_current_a": 692.820323027551,
+            "required_short_circuit_rms_ka": 15.638094419605405,
+            "required_peak_current_ka": 39.808089392178566,
+            "required_highest_system_voltage_kv": 12.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 269.00499678414315,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "ct_primary_continuous_current",
+              "status": "provisional_pass",
+              "required": 692.820323027551,
+              "available": 1000.0,
+              "unit": "A primary",
+              "margin": 307.179676972449,
+              "note": "Course CT ratio and continuous-current target screen."
+            },
+            {
+              "id": "ct_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 15.638094419605405,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.861905580394595,
+              "note": "CT short-time current-level course screen."
+            },
+            {
+              "id": "ct_thermal_energy",
+              "status": "provisional_pass",
+              "required": 269.00499678414315,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3699.9950032158567,
+              "note": "CT I2t course precheck at the 1.10s project equivalent duration."
+            },
+            {
+              "id": "ct_dynamic_current",
+              "status": "provisional_pass",
+              "required": 39.808089392178566,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 40.191910607821434,
+              "note": "CT dynamic-current course precheck."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        }
+      ],
+      "zero_sequence_current_transformers": [
+        {
+          "id": "ZCT-35-CABLE-FEEDERS",
+          "interface_type": "cable_feeder_entry",
+          "coverage_mode": "all_group_members",
+          "covered_circuit_groups": [
+            "35-feeder-pv-A",
+            "35-feeder-pv-B",
+            "35-feeder-storage"
+          ],
+          "covered_members": [
+            "PVA-1",
+            "PVA-2",
+            "PVB-1",
+            "PVB-2",
+            "ES-1"
+          ],
+          "ratio": "100/1A",
+          "protection_accuracy_target": "5P20_or_manufacturer_equivalent_for_residual_protection",
+          "target_primary_residual_current_a": 400,
+          "minimum_linear_primary_residual_current_a": 400,
+          "installation": "window_ZCT_over_all_three_cable_phase_conductors_with_shield_grounding_return_routed_outside_the_window",
+          "final_engineering_status": "pending_window_size_cable_shield_routing_burden_knee_point_and_exact_model",
+          "resolved_group_members": [
+            "PVA-1",
+            "PVA-2",
+            "PVB-1",
+            "PVB-2",
+            "ES-1"
+          ],
+          "coverage_check_status": "provisional_pass",
+          "voltage_class": "v35",
+          "checks": [
+            {
+              "id": "zct_ground_fault_target_alignment",
+              "status": "provisional_pass",
+              "required": 400.0,
+              "available": 400.0,
+              "unit": "A residual primary",
+              "margin": 0.0,
+              "note": "ZCT course target follows the limited ground-fault current of its voltage level."
+            },
+            {
+              "id": "zct_primary_residual_current_target",
+              "status": "provisional_pass",
+              "required": 400.0,
+              "available": 400.0,
+              "unit": "A residual primary",
+              "margin": 0.0,
+              "note": "Minimum linear residual-current target check only; burden, knee point, cable-window size and shield routing remain pending."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "ZCT-10-CABLE-FEEDERS",
+          "interface_type": "cable_feeder_entry",
+          "coverage_mode": "all_group_members",
+          "covered_circuit_groups": [
+            "10-svg-feeders",
+            "10-load-station-service-backup",
+            "10-load-reactive-and-cooling",
+            "10-load-control-and-monitoring"
+          ],
+          "covered_members": [
+            "SVG-1",
+            "SVG-2",
+            "station_service_backup",
+            "reactive_compensation_and_cooling",
+            "control_communications_and_monitoring"
+          ],
+          "ratio": "50/1A",
+          "protection_accuracy_target": "5P20_or_manufacturer_equivalent_for_residual_protection",
+          "target_primary_residual_current_a": 200,
+          "minimum_linear_primary_residual_current_a": 200,
+          "installation": "window_ZCT_over_all_three_cable_phase_conductors_with_shield_grounding_return_routed_outside_the_window",
+          "final_engineering_status": "pending_window_size_cable_shield_routing_burden_knee_point_and_exact_model",
+          "resolved_group_members": [
+            "SVG-1",
+            "SVG-2",
+            "station_service_backup",
+            "reactive_compensation_and_cooling",
+            "control_communications_and_monitoring"
+          ],
+          "coverage_check_status": "provisional_pass",
+          "voltage_class": "v10",
+          "checks": [
+            {
+              "id": "zct_ground_fault_target_alignment",
+              "status": "provisional_pass",
+              "required": 200.0,
+              "available": 200.0,
+              "unit": "A residual primary",
+              "margin": 0.0,
+              "note": "ZCT course target follows the limited ground-fault current of its voltage level."
+            },
+            {
+              "id": "zct_primary_residual_current_target",
+              "status": "provisional_pass",
+              "required": 200.0,
+              "available": 200.0,
+              "unit": "A residual primary",
+              "margin": 0.0,
+              "note": "Minimum linear residual-current target check only; burden, knee point, cable-window size and shield routing remain pending."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        }
+      ],
+      "voltage_transformers": [
+        {
+          "id": "PT-220-BUS",
+          "voltage_class": "v220",
+          "type": "single-phase CVT set",
+          "primary_ratio": "220/sqrt(3)kV",
+          "secondary_windings": [
+            "100/sqrt(3)V measurement",
+            "100/sqrt(3)V protection",
+            "100/3V open-delta"
+          ],
+          "accuracy_targets": [
+            "0.2",
+            "3P"
+          ],
+          "final_engineering_status": "pending_burden_resonance_and_exact_model",
+          "required_highest_system_voltage_kv": 252,
+          "course_target_status": "defined"
+        },
+        {
+          "id": "PT-35-BUS",
+          "voltage_class": "v35",
+          "type": "three single-phase inductive VT set",
+          "primary_ratio": "35/sqrt(3)kV",
+          "secondary_windings": [
+            "100/sqrt(3)V measurement",
+            "100/sqrt(3)V protection",
+            "100/3V open-delta"
+          ],
+          "accuracy_targets": [
+            "0.5",
+            "3P"
+          ],
+          "final_engineering_status": "pending_burden_ferroresonance_and_exact_model",
+          "required_highest_system_voltage_kv": 40.5,
+          "course_target_status": "defined"
+        },
+        {
+          "id": "PT-10-BUS",
+          "voltage_class": "v10",
+          "type": "three single-phase inductive VT set",
+          "primary_ratio": "10/sqrt(3)kV",
+          "secondary_windings": [
+            "100/sqrt(3)V measurement",
+            "100/sqrt(3)V protection",
+            "100/3V open-delta"
+          ],
+          "accuracy_targets": [
+            "0.5",
+            "3P"
+          ],
+          "final_engineering_status": "pending_burden_ferroresonance_and_exact_model",
+          "required_highest_system_voltage_kv": 12,
+          "course_target_status": "defined"
+        }
+      ],
+      "insulators_and_bushings": [
+        {
+          "id": "INS-BUSH-220",
+          "voltage_class": "v220",
+          "application": "outdoor post insulators and main-transformer 220kV bushings",
+          "covered_circuit_groups": [
+            "220-transformer-bays"
+          ],
+          "target_highest_voltage_kv": 252,
+          "target_liwv_kv": 950,
+          "bushing_rated_continuous_current_a": 630,
+          "bushing_rated_short_time": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          },
+          "bushing_rated_dynamic_current_ka_peak": 125,
+          "pollution_level": "d",
+          "pending_engineering_checks": [
+            "creepage_distance",
+            "cantilever_and_terminal_mechanical_load",
+            "seismic_load",
+            "exact_model"
+          ],
+          "final_engineering_status": "pending_creepage_mechanical_load_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "220-transformer-bays"
+            ],
+            "required_continuous_current_a": 495.99636762199674,
+            "required_short_circuit_rms_ka": 7.384571960617697,
+            "required_peak_current_ka": 18.798051274246124,
+            "required_highest_system_voltage_kv": 252.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 59.985093345695205,
+            "available_thermal_energy_ka2s": 7500.0
+          },
+          "checks": [
+            {
+              "id": "insulator_bushing_highest_voltage",
+              "status": "provisional_pass",
+              "required": 252.0,
+              "available": 252.0,
+              "unit": "kV",
+              "margin": 0.0,
+              "note": "Course highest-system-voltage target."
+            },
+            {
+              "id": "insulator_bushing_liwv",
+              "status": "provisional_pass",
+              "required": 950.0,
+              "available": 950.0,
+              "unit": "kV peak",
+              "margin": 0.0,
+              "note": "Course lightning-impulse withstand target."
+            },
+            {
+              "id": "bushing_continuous_current",
+              "status": "provisional_pass",
+              "required": 495.99636762199674,
+              "available": 630.0,
+              "unit": "A",
+              "margin": 134.00363237800326,
+              "note": "Bushing continuous-current target for the covered circuit groups."
+            },
+            {
+              "id": "bushing_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 7.384571960617697,
+              "available": 50.0,
+              "unit": "kA rms",
+              "margin": 42.6154280393823,
+              "note": "Bushing short-time current-level target."
+            },
+            {
+              "id": "bushing_thermal_energy",
+              "status": "provisional_pass",
+              "required": 59.985093345695205,
+              "available": 7500.0,
+              "unit": "kA^2 s",
+              "margin": 7440.0149066543045,
+              "note": "Bushing I2t course precheck at the 1.10s equivalent duration."
+            },
+            {
+              "id": "bushing_dynamic_current",
+              "status": "provisional_pass",
+              "required": 18.798051274246124,
+              "available": 125.0,
+              "unit": "kA peak",
+              "margin": 106.20194872575388,
+              "note": "Bushing dynamic-current course precheck."
+            }
+          ],
+          "engineering_pending_checks": [
+            {
+              "id": "insulator_bushing_creepage_distance",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final creepage distance remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_cantilever_and_terminal_mechanical_load",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final cantilever and terminal mechanical load remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_seismic_load",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final seismic load remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_exact_model",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final exact model remains pending exact geometry, installation loads and manufacturer data."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "INS-BUSH-35",
+          "voltage_class": "v35",
+          "application": "indoor supports and main-transformer or switchgear 35kV bushings",
+          "covered_circuit_groups": [
+            "35-transformer-incomers",
+            "35-bus-tie"
+          ],
+          "target_highest_voltage_kv": 40.5,
+          "target_liwv_kv": 185,
+          "bushing_rated_continuous_current_a": 4000,
+          "bushing_rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "bushing_rated_dynamic_current_ka_peak": 80,
+          "pollution_level": "d at outdoor interfaces",
+          "pending_engineering_checks": [
+            "creepage_distance",
+            "cantilever_and_terminal_mechanical_load",
+            "seismic_load",
+            "exact_model"
+          ],
+          "final_engineering_status": "pending_creepage_mechanical_load_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "35-transformer-incomers",
+              "35-bus-tie"
+            ],
+            "required_continuous_current_a": 3117.691453623979,
+            "required_short_circuit_rms_ka": 16.290983445518524,
+            "required_peak_current_ka": 41.47007351948617,
+            "required_highest_system_voltage_kv": 40.5
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 291.9357557843745,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "insulator_bushing_highest_voltage",
+              "status": "provisional_pass",
+              "required": 40.5,
+              "available": 40.5,
+              "unit": "kV",
+              "margin": 0.0,
+              "note": "Course highest-system-voltage target."
+            },
+            {
+              "id": "insulator_bushing_liwv",
+              "status": "provisional_pass",
+              "required": 185.0,
+              "available": 185.0,
+              "unit": "kV peak",
+              "margin": 0.0,
+              "note": "Course lightning-impulse withstand target."
+            },
+            {
+              "id": "bushing_continuous_current",
+              "status": "provisional_pass",
+              "required": 3117.691453623979,
+              "available": 4000.0,
+              "unit": "A",
+              "margin": 882.3085463760208,
+              "note": "Bushing continuous-current target for the covered circuit groups."
+            },
+            {
+              "id": "bushing_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 16.290983445518524,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.209016554481476,
+              "note": "Bushing short-time current-level target."
+            },
+            {
+              "id": "bushing_thermal_energy",
+              "status": "provisional_pass",
+              "required": 291.9357557843745,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3677.0642442156254,
+              "note": "Bushing I2t course precheck at the 1.10s equivalent duration."
+            },
+            {
+              "id": "bushing_dynamic_current",
+              "status": "provisional_pass",
+              "required": 41.47007351948617,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 38.52992648051383,
+              "note": "Bushing dynamic-current course precheck."
+            }
+          ],
+          "engineering_pending_checks": [
+            {
+              "id": "insulator_bushing_creepage_distance",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final creepage distance remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_cantilever_and_terminal_mechanical_load",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final cantilever and terminal mechanical load remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_seismic_load",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final seismic load remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_exact_model",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final exact model remains pending exact geometry, installation loads and manufacturer data."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "INS-BUSH-10",
+          "voltage_class": "v10",
+          "application": "indoor supports and T10 or switchgear 10kV bushings",
+          "covered_circuit_groups": [
+            "10-transformer-incomers",
+            "10-bus-tie"
+          ],
+          "target_highest_voltage_kv": 12,
+          "target_liwv_kv": 75,
+          "bushing_rated_continuous_current_a": 2500,
+          "bushing_rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "bushing_rated_dynamic_current_ka_peak": 80,
+          "pollution_level": "d at outdoor interfaces",
+          "pending_engineering_checks": [
+            "creepage_distance",
+            "cantilever_and_terminal_mechanical_load",
+            "seismic_load",
+            "exact_model"
+          ],
+          "final_engineering_status": "pending_creepage_mechanical_load_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "10-transformer-incomers",
+              "10-bus-tie"
+            ],
+            "required_continuous_current_a": 1909.5860153446874,
+            "required_short_circuit_rms_ka": 15.638094419605405,
+            "required_peak_current_ka": 39.808089392178566,
+            "required_highest_system_voltage_kv": 12.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 269.00499678414315,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "insulator_bushing_highest_voltage",
+              "status": "provisional_pass",
+              "required": 12.0,
+              "available": 12.0,
+              "unit": "kV",
+              "margin": 0.0,
+              "note": "Course highest-system-voltage target."
+            },
+            {
+              "id": "insulator_bushing_liwv",
+              "status": "provisional_pass",
+              "required": 75.0,
+              "available": 75.0,
+              "unit": "kV peak",
+              "margin": 0.0,
+              "note": "Course lightning-impulse withstand target."
+            },
+            {
+              "id": "bushing_continuous_current",
+              "status": "provisional_pass",
+              "required": 1909.5860153446874,
+              "available": 2500.0,
+              "unit": "A",
+              "margin": 590.4139846553126,
+              "note": "Bushing continuous-current target for the covered circuit groups."
+            },
+            {
+              "id": "bushing_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 15.638094419605405,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.861905580394595,
+              "note": "Bushing short-time current-level target."
+            },
+            {
+              "id": "bushing_thermal_energy",
+              "status": "provisional_pass",
+              "required": 269.00499678414315,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3699.9950032158567,
+              "note": "Bushing I2t course precheck at the 1.10s equivalent duration."
+            },
+            {
+              "id": "bushing_dynamic_current",
+              "status": "provisional_pass",
+              "required": 39.808089392178566,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 40.191910607821434,
+              "note": "Bushing dynamic-current course precheck."
+            }
+          ],
+          "engineering_pending_checks": [
+            {
+              "id": "insulator_bushing_creepage_distance",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final creepage distance remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_cantilever_and_terminal_mechanical_load",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final cantilever and terminal mechanical load remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_seismic_load",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final seismic load remains pending exact geometry, installation loads and manufacturer data."
+            },
+            {
+              "id": "insulator_bushing_exact_model",
+              "status": "pending",
+              "required": null,
+              "available": null,
+              "unit": null,
+              "margin": null,
+              "note": "Final exact model remains pending exact geometry, installation loads and manufacturer data."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        }
+      ],
+      "earthing_switches": [
+        {
+          "id": "ES-220-LINE",
+          "covered_circuit_groups": [
+            "220-line-bays"
+          ],
+          "target_highest_voltage_kv": 252,
+          "rated_short_time": {
+            "current_ka_rms": 50,
+            "duration_s": 3
+          },
+          "rated_dynamic_current_ka_peak": 125,
+          "special_duty": "line-side induced-current switching duty pending study",
+          "final_engineering_status": "pending_induced_current_class_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "220-line-bays"
+            ],
+            "required_continuous_current_a": 735.5592390584715,
+            "required_short_circuit_rms_ka": 7.384571960617697,
+            "required_peak_current_ka": 18.798051274246124,
+            "required_highest_system_voltage_kv": 252.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 59.985093345695205,
+            "available_thermal_energy_ka2s": 7500.0
+          },
+          "checks": [
+            {
+              "id": "earthing_switch_voltage",
+              "status": "provisional_pass",
+              "required": 252.0,
+              "available": 252.0,
+              "unit": "kV",
+              "margin": 0.0,
+              "note": "Course highest-voltage target check."
+            },
+            {
+              "id": "earthing_switch_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 7.384571960617697,
+              "available": 50.0,
+              "unit": "kA rms",
+              "margin": 42.6154280393823,
+              "note": "Course short-time current-level target check."
+            },
+            {
+              "id": "earthing_switch_thermal_energy",
+              "status": "provisional_pass",
+              "required": 59.985093345695205,
+              "available": 7500.0,
+              "unit": "kA^2 s",
+              "margin": 7440.0149066543045,
+              "note": "Course I2t target check."
+            },
+            {
+              "id": "earthing_switch_dynamic_current",
+              "status": "provisional_pass",
+              "required": 18.798051274246124,
+              "available": 125.0,
+              "unit": "kA peak",
+              "margin": 106.20194872575388,
+              "note": "Course dynamic-current target check."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "ES-35-SWITCHGEAR",
+          "covered_circuit_groups": [
+            "35-transformer-incomers",
+            "35-bus-tie",
+            "35-aux-transformer-feeders",
+            "35-grounding-transformer-feeders",
+            "35-feeder-wind-A",
+            "35-feeder-wind-B",
+            "35-feeder-pv-A",
+            "35-feeder-pv-B",
+            "35-feeder-storage"
+          ],
+          "target_highest_voltage_kv": 40.5,
+          "rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "rated_dynamic_current_ka_peak": 80,
+          "special_duty": "integrated switchgear earthing switch course target",
+          "final_engineering_status": "pending_interlock_scheme_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "35-transformer-incomers",
+              "35-bus-tie",
+              "35-aux-transformer-feeders",
+              "35-grounding-transformer-feeders",
+              "35-feeder-wind-A",
+              "35-feeder-wind-B",
+              "35-feeder-pv-A",
+              "35-feeder-pv-B",
+              "35-feeder-storage"
+            ],
+            "required_continuous_current_a": 3117.691453623979,
+            "required_short_circuit_rms_ka": 16.290983445518524,
+            "required_peak_current_ka": 41.47007351948617,
+            "required_highest_system_voltage_kv": 40.5
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 291.9357557843745,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "earthing_switch_voltage",
+              "status": "provisional_pass",
+              "required": 40.5,
+              "available": 40.5,
+              "unit": "kV",
+              "margin": 0.0,
+              "note": "Course highest-voltage target check."
+            },
+            {
+              "id": "earthing_switch_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 16.290983445518524,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.209016554481476,
+              "note": "Course short-time current-level target check."
+            },
+            {
+              "id": "earthing_switch_thermal_energy",
+              "status": "provisional_pass",
+              "required": 291.9357557843745,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3677.0642442156254,
+              "note": "Course I2t target check."
+            },
+            {
+              "id": "earthing_switch_dynamic_current",
+              "status": "provisional_pass",
+              "required": 41.47007351948617,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 38.52992648051383,
+              "note": "Course dynamic-current target check."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        },
+        {
+          "id": "ES-10-SWITCHGEAR",
+          "covered_circuit_groups": [
+            "10-transformer-incomers",
+            "10-bus-tie",
+            "10-grounding-transformer-feeders",
+            "10-svg-feeders",
+            "10-load-station-service-backup",
+            "10-load-reactive-and-cooling",
+            "10-load-control-and-monitoring"
+          ],
+          "target_highest_voltage_kv": 12,
+          "rated_short_time": {
+            "current_ka_rms": 31.5,
+            "duration_s": 4
+          },
+          "rated_dynamic_current_ka_peak": 80,
+          "special_duty": "integrated switchgear earthing switch course target",
+          "final_engineering_status": "pending_interlock_scheme_and_exact_model",
+          "requirements": {
+            "covered_circuit_groups": [
+              "10-transformer-incomers",
+              "10-bus-tie",
+              "10-grounding-transformer-feeders",
+              "10-svg-feeders",
+              "10-load-station-service-backup",
+              "10-load-reactive-and-cooling",
+              "10-load-control-and-monitoring"
+            ],
+            "required_continuous_current_a": 1909.5860153446874,
+            "required_short_circuit_rms_ka": 15.638094419605405,
+            "required_peak_current_ka": 39.808089392178566,
+            "required_highest_system_voltage_kv": 12.0
+          },
+          "calculated": {
+            "required_thermal_energy_ka2s": 269.00499678414315,
+            "available_thermal_energy_ka2s": 3969.0
+          },
+          "checks": [
+            {
+              "id": "earthing_switch_voltage",
+              "status": "provisional_pass",
+              "required": 12.0,
+              "available": 12.0,
+              "unit": "kV",
+              "margin": 0.0,
+              "note": "Course highest-voltage target check."
+            },
+            {
+              "id": "earthing_switch_short_time_current_level",
+              "status": "provisional_pass",
+              "required": 15.638094419605405,
+              "available": 31.5,
+              "unit": "kA rms",
+              "margin": 15.861905580394595,
+              "note": "Course short-time current-level target check."
+            },
+            {
+              "id": "earthing_switch_thermal_energy",
+              "status": "provisional_pass",
+              "required": 269.00499678414315,
+              "available": 3969.0,
+              "unit": "kA^2 s",
+              "margin": 3699.9950032158567,
+              "note": "Course I2t target check."
+            },
+            {
+              "id": "earthing_switch_dynamic_current",
+              "status": "provisional_pass",
+              "required": 39.808089392178566,
+              "available": 80.0,
+              "unit": "kA peak",
+              "margin": 40.191910607821434,
+              "note": "Course dynamic-current target check."
+            }
+          ],
+          "course_precheck_status": "provisional_pass"
+        }
+      ]
+    }
+  },
+  "numeric_precheck_status": "provisional_pass",
   "final_selection_status": "pending",
   "pending_final_inputs": [
     "highest system voltage classes and insulation levels",
     "system 1/system 2 parallel-operation permission",
-    "final reactive-power/voltage/harmonic study and 41C T10/SVG vendor confirmation",
+    "final reactive-power/voltage/harmonic study and 41C outdoor T10/SVG vendor confirmation",
     "final protection coordination and manufacturer breaker clearing data",
     "renewable peak-current and 220kV fault-contribution model",
-    "site-confirmed altitude/pollution and manufacturer 41C service ratings",
+    "site-confirmed altitude/pollution, 41C outdoor ratings, and controlled-indoor 40C switchgear ratings",
     "exact manufacturer models, verified datasheets, and dimensions",
     "LGJ-400/50 manufacturer thermal rating under defined weather plus mechanical and corona checks",
-    "CT/PT secondary allocation, accuracy, burden, and protection data"
+    "final CT/PT burden, saturation, transient class, resonance, and protection-core coordination",
+    "busbar support resonance/end-force study and exact conductor temperature-rise data",
+    "surge-arrester grounding, energy-duty and exact insulation-coordination study",
+    "grounding-transformer zero-sequence impedance, neutral-resistor thermal design, CT saturation, protection and interlock vendor coordination",
+    "ZCT window size, cable-shield return routing, burden, knee point and exact model",
+    "insulator creepage/mechanical loads, 35/10kV busbar mechanical dynamic stability and earthing-switch induced-current duty"
   ],
   "upstream_provenance": {
     "load_results": {
@@ -5972,11 +8913,11 @@
     },
     "baseline": {
       "path": "data/design_baseline.yaml",
-      "sha256": "4e644d28a9d9306d1301f24ea6ec68ec9a73fb51be506f9f53a71e5cd6c89895"
+      "sha256": "2377b5b8acf791665a67dd32c5981c2800b92f2bb7db36faa3674ae84cd4139d"
     },
     "design_inputs": {
       "path": "data/design_inputs.yaml",
-      "sha256": "5ace870a040d9eff8667277dcf365d20384ab4a84398a1d1806fb76c7a67d35e"
+      "sha256": "6dab3f436248d78fea4cf1eef327f7eb5c7dfb9110f836211a56545bae70acb3"
     }
   }
 }

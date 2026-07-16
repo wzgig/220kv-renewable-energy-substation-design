@@ -125,6 +125,26 @@ class DesignBaselineTests(unittest.TestCase):
             self.baseline["neutral_grounding"]["10kv"],
             "grounding_transformer_plus_low_resistance_course_assumption",
         )
+        packages = self.baseline["neutral_grounding"]["equipment_packages"]
+        self.assertEqual(packages["35kv"]["quantity"], 2)
+        self.assertEqual(packages["35kv"]["selected_capacity_kva_each"], 1000)
+        self.assertEqual(packages["10kv"]["quantity"], 2)
+        self.assertEqual(packages["10kv"]["selected_capacity_kva_each"], 200)
+        grounding_scheme = self.baseline["neutral_grounding"][
+            "sectionalized_source_scheme"
+        ]
+        self.assertEqual(
+            grounding_scheme["normal"]["35kv"]["rule"],
+            "one_grounding_source_per_energized_section",
+        )
+        self.assertIn(
+            "isolate_the_faulted_or_receiving_section_grounding_source",
+            grounding_scheme["bus_tie_transfer"]["sequence"][0],
+        )
+        self.assertEqual(
+            grounding_scheme["bus_tie_transfer"]["prohibited"],
+            "bus_tie_closed_with_two_section_grounding_sources_connected_in_parallel",
+        )
         self.assertEqual(
             self.baseline["protection_and_thermal_duty"][
                 "thermal_equivalent_duration_s"

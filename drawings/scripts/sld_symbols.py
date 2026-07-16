@@ -78,6 +78,27 @@ def _add_ds(block: BlockLayout, *, open_state: bool) -> None:
     _add_hidden_attributes(block)
 
 
+def _add_earthing_switch(block: BlockLayout, *, open_state: bool) -> None:
+    """Draw a shunt earthing switch with its normal state made explicit."""
+
+    attribs = _entity_attribs()
+    block.add_line((0.0, 6.0), (0.0, 2.8), dxfattribs=attribs)
+    block.add_circle((0.0, 2.3), 0.45, dxfattribs=attribs)
+    block.add_circle((0.0, -2.0), 0.45, dxfattribs=attribs)
+    if open_state:
+        block.add_line((0.0, -1.6), (2.4, 1.8), dxfattribs=attribs)
+    else:
+        block.add_line((0.0, -1.6), (0.0, 1.8), dxfattribs=attribs)
+    _add_ground_geometry(block, y=-6.0)
+    block.add_line((0.0, -3.0), (0.0, -2.45), dxfattribs=attribs)
+    block.add_text(
+        "ES",
+        height=1.5,
+        dxfattribs={**attribs, "style": "LATIN"},
+    ).set_placement((3.2, -0.8))
+    _add_hidden_attributes(block)
+
+
 def _add_ct(block: BlockLayout) -> None:
     attribs = _entity_attribs()
     block.add_line((0.0, -5.0), (0.0, 5.0), dxfattribs=attribs)
@@ -131,6 +152,39 @@ def _add_ground(block: BlockLayout) -> None:
     _add_hidden_attributes(block)
 
 
+def _add_grounding_transformer_resistor(block: BlockLayout) -> None:
+    """Draw a grounding transformer followed by a neutral resistor and earth."""
+
+    attribs = _entity_attribs()
+    block.add_line((0.0, 9.0), (0.0, 6.6), dxfattribs=attribs)
+    block.add_circle((0.0, 4.0), 2.8, dxfattribs=attribs)
+    block.add_circle((0.0, 0.0), 2.8, dxfattribs=attribs)
+    block.add_text(
+        "ZN",
+        height=1.4,
+        dxfattribs={**attribs, "style": "LATIN"},
+    ).set_placement((3.5, 1.1))
+    block.add_line((0.0, -2.8), (0.0, -3.6), dxfattribs=attribs)
+    block.add_lwpolyline(
+        [
+            (0.0, -3.6),
+            (-1.6, -4.2),
+            (1.6, -4.8),
+            (-1.6, -5.4),
+            (1.6, -6.0),
+            (0.0, -7.0),
+        ],
+        dxfattribs=attribs,
+    )
+    block.add_text(
+        "R",
+        height=1.4,
+        dxfattribs={**attribs, "style": "LATIN"},
+    ).set_placement((2.4, -5.8))
+    _add_ground_geometry(block, y=-10.0)
+    _add_hidden_attributes(block)
+
+
 def _add_arrow(block: BlockLayout, *, upward: bool) -> None:
     attribs = _entity_attribs()
     if upward:
@@ -157,12 +211,14 @@ def ensure_symbol_blocks(doc: Drawing) -> None:
         "SLD_CB_OPEN": lambda block: _add_cb(block, open_state=True),
         "SLD_DS_CLOSED": lambda block: _add_ds(block, open_state=False),
         "SLD_DS_OPEN": lambda block: _add_ds(block, open_state=True),
+        "SLD_ES_OPEN": lambda block: _add_earthing_switch(block, open_state=True),
         "SLD_CT": _add_ct,
         "SLD_PT": lambda block: _add_voltage_transformer(block, "TV"),
         "SLD_CVT": lambda block: _add_voltage_transformer(block, "CVT"),
         "SLD_LA": _add_la,
         "SLD_TX_2W": _add_transformer,
         "SLD_GROUND": _add_ground,
+        "SLD_GROUNDING_TX_RESISTOR": _add_grounding_transformer_resistor,
         "SLD_ARROW_UP": lambda block: _add_arrow(block, upward=True),
         "SLD_ARROW_DOWN": lambda block: _add_arrow(block, upward=False),
         "SLD_TERMINAL": _add_terminal,

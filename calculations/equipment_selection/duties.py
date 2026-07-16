@@ -184,6 +184,21 @@ def _continuous_duty(
             ]["220kv"],
             "source": "main_transformer.rated_current_with_1_05_margin_a.220kv",
         }
+    if duty_type == "220_bus_section_conservative":
+        return {
+            "status": "known_conservative",
+            "required_current_a": load_result["outgoing_220kv"][
+                "single_circuit_contingency_current_a"
+            ],
+            "source": (
+                "conservative_equal_to_outgoing_220kv."
+                "single_circuit_contingency_current_a"
+            ),
+            "basis": (
+                "Course-design closure: before a final power-flow study, the 220kV "
+                "bus-section bay is assigned the N-1 outgoing-line duty."
+            ),
+        }
     if duty_type == "main_transformer_35kv":
         return {
             "status": "known",
@@ -193,11 +208,10 @@ def _continuous_duty(
             "source": "main_transformer.rated_current_with_1_05_margin_a.35kv",
         }
     if duty_type == "pending_topology_flow":
-        return {
-            "status": "pending_topology_flow",
-            "required_current_a": None,
-            "source": "explicit_power_flow_and_bay_placement_required",
-        }
+        raise ValueError(
+            "pending_topology_flow is obsolete after the conservative 220kV "
+            "bus-section duty was frozen"
+        )
     if duty_type == "pending_10kv_source_transformer_rating":
         raise ValueError(
             "pending_10kv_source_transformer_rating is obsolete after the T10 freeze"
@@ -225,6 +239,20 @@ def _continuous_duty(
                 "svg_rated_current_a"
             ]["10_5kv_each_with_1_05_margin"],
             "source": "reactive_compensation.svg_rated_current_a.10_5kv_each_with_1_05_margin",
+        }
+    if duty_type == "fixed_course_current":
+        current_a = float(duty["current_a"])
+        if current_a <= 0:
+            raise ValueError("fixed_course_current must be positive")
+        return {
+            "status": "known_course_target",
+            "required_current_a": current_a,
+            "source": duty.get("source", "equipment_selection.fixed_course_current"),
+            "basis": (
+                "Fixed course-design feeder current used only for rating-class "
+                "screening; the exact grounding-transformer steady-state magnetizing "
+                "current and vendor protection coordination remain pending."
+            ),
         }
     if duty_type == "section_allocated_base":
         section_id = duty["section_id"]

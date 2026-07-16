@@ -25,12 +25,15 @@ voltage_classes:
   v220:
     nominal_kv: 220
     highest_system_voltage_kv: 252
+    required_liwv_kv: 950
   v35:
     nominal_kv: 35
     highest_system_voltage_kv: 40.5
+    required_liwv_kv: 185
   v10:
     nominal_kv: 10
     highest_system_voltage_kv: 12
+    required_liwv_kv: 75
 
 circuit_groups:
   - id: "220-line-bays"
@@ -51,7 +54,7 @@ circuit_groups:
     role: "bus_section"
     voltage_class: "v220"
     members: ["220-BS"]
-    continuous_duty: {type: "pending_topology_flow"}
+    continuous_duty: {type: "220_bus_section_conservative"}
     fault_profile: "220_bus"
 
   - id: "35-transformer-incomers"
@@ -87,6 +90,13 @@ circuit_groups:
     voltage_class: "v35"
     members: ["T10-1-HV", "T10-2-HV"]
     continuous_duty: {type: "aux_transformer_35kv"}
+    fault_profile: "35_bus"
+
+  - id: "35-grounding-transformer-feeders"
+    role: "section_grounding_transformer_resistor_feeder"
+    voltage_class: "v35"
+    members: ["GT35-I", "GT35-II"]
+    continuous_duty: {type: "fixed_course_current", current_a: 400, source: "grounding_package_35kv_fault_current_course_feeder_target"}
     fault_profile: "35_bus"
 
   - id: "35-feeder-wind-A"
@@ -145,6 +155,13 @@ circuit_groups:
     continuous_duty: {type: "aux_transformer_10kv"}
     fault_profile: "10_bus"
 
+  - id: "10-grounding-transformer-feeders"
+    role: "section_grounding_transformer_resistor_feeder"
+    voltage_class: "v10"
+    members: ["GT10-I", "GT10-II"]
+    continuous_duty: {type: "fixed_course_current", current_a: 200, source: "grounding_package_10kv_fault_current_course_feeder_target"}
+    fault_profile: "10_bus"
+
   - id: "10-svg-feeders"
     role: "dynamic_reactive_compensation_feeder"
     voltage_class: "v10"
@@ -180,9 +197,355 @@ selections:
   - {id: "SEL-SWGR-35-PVB", circuit_group: "35-feeder-pv-B", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
   - {id: "SEL-SWGR-35-ES", circuit_group: "35-feeder-storage", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
   - {id: "SEL-SWGR-35-T10", circuit_group: "35-aux-transformer-feeders", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
-  - {id: "SEL-SWGR-10-IN", circuit_group: "10-transformer-incomers", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-2000"}
-  - {id: "SEL-SWGR-10-BT", circuit_group: "10-bus-tie", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-2000"}
+  - {id: "SEL-SWGR-35-GT", circuit_group: "35-grounding-transformer-feeders", device_kind: "switchgear", candidate_id: "TARGET-SWGR-35-1250"}
+  - {id: "SEL-SWGR-10-IN", circuit_group: "10-transformer-incomers", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-2500"}
+  - {id: "SEL-SWGR-10-BT", circuit_group: "10-bus-tie", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-2500"}
+  - {id: "SEL-SWGR-10-GT", circuit_group: "10-grounding-transformer-feeders", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
   - {id: "SEL-SWGR-10-SVG", circuit_group: "10-svg-feeders", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
   - {id: "SEL-SWGR-10-SSB", circuit_group: "10-load-station-service-backup", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
   - {id: "SEL-SWGR-10-RC", circuit_group: "10-load-reactive-and-cooling", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
   - {id: "SEL-SWGR-10-CM", circuit_group: "10-load-control-and-monitoring", device_kind: "switchgear", candidate_id: "TARGET-SWGR-10-1250"}
+
+course_completion:
+  scope:
+    status: "course_design_complete_final_engineering_models_pending"
+    purpose: "close the course-design checks for conductors, surge arresters, CT/PT, insulators, bushings and earthing switches"
+    ordering_boundary: "all supplementary rows are course target classes, not purchase specifications or construction release data"
+
+  common_assumptions:
+    thermal_stability_constant_c: 87
+    thermal_equivalent_duration_s: 1.10
+    thermal_formula: "Ith_allow_kA = C * S_mm2 / (1000 * sqrt(t_s))"
+
+  design_decisions:
+    current_limiting_reactor:
+      decision: "not_required_on_course_fault_level"
+      checks:
+        - {voltage_class: "v35", fault_profile: "35_bus", candidate_id: "TARGET-SWGR-35-3150"}
+        - {voltage_class: "v10", fault_profile: "10_bus", candidate_id: "TARGET-SWGR-10-2500"}
+      boundary: "reassess if the final grid, converter or parallel-operation study exceeds the selected 31.5kA switchgear rating"
+    high_voltage_fuse:
+      decision: "not_a_main_circuit_selection_item"
+      scope: "only a manufacturer-coordinated primary protection component inside 35kV/10kV VT panels where required"
+      boundary: "fuse type, rating and selectivity belong to the exact VT-panel manufacturer design"
+
+  grounding_source_interlock:
+    status: "course_operating_logic_defined_final_control_design_pending"
+    voltage_levels:
+      - voltage_class: "v35"
+        bus_tie_circuit_group: "35-bus-tie"
+        section_ids: ["35kV-I", "35kV-II"]
+        source_ids: ["GT35-I", "GT35-II"]
+        normal_sources_in_service: 2
+        transfer_sources_in_service: 1
+        restored_sources_in_service: 2
+        normal_rule: "one_grounding_source_per_energized_bus_section"
+        preclose_sequence: "open_the_receiving_or_faulted_section_grounding_source_before_closing_the_bus_tie"
+        close_permissive: "only_the_healthy_source_side_grounding_source_is_connected"
+        prohibited_state: "bus_tie_closed_and_two_grounding_sources_connected_in_parallel"
+        restored_rule: "after_bus_tie_opening_restore_one_grounding_source_per_energized_section"
+      - voltage_class: "v10"
+        bus_tie_circuit_group: "10-bus-tie"
+        section_ids: ["10kV-I", "10kV-II"]
+        source_ids: ["GT10-I", "GT10-II"]
+        normal_sources_in_service: 2
+        transfer_sources_in_service: 1
+        restored_sources_in_service: 2
+        normal_rule: "one_grounding_source_per_energized_bus_section"
+        preclose_sequence: "open_the_receiving_or_faulted_section_grounding_source_before_closing_the_bus_tie"
+        close_permissive: "only_the_healthy_source_side_grounding_source_is_connected"
+        prohibited_state: "bus_tie_closed_and_two_grounding_sources_connected_in_parallel"
+        restored_rule: "after_bus_tie_opening_restore_one_grounding_source_per_energized_section"
+    final_engineering_boundary: "hardwired_and_software_interlocks_control_power_failure_modes_and_protection_trip_matrix_require_final_vendor_design"
+
+  grounding_transformer_resistor_packages:
+    - id: "GRD-PKG-35"
+      voltage_class: "v35"
+      candidate_id: "TARGET-GRD-PKG-35-ZN-NGR"
+      circuit_group: "35-grounding-transformer-feeders"
+      feeder_switchgear_selection_id: "SEL-SWGR-35-GT"
+      section_ids: ["35kV-I", "35kV-II"]
+      source_ids: ["GT35-I", "GT35-II"]
+      quantity: 2
+      grounding_transformer_connection: "ZN_neutral_forming"
+      nominal_line_voltage_kv: 35
+      target_ground_fault_current_a: 400
+      short_time_s: 10
+      target_resistance_ohm: 50.5
+      maximum_resistance_deviation_percent: 1.0
+      short_time_overload_factor: 10
+      selected_transformer_capacity_kva_each: 1000
+      phase_ct_target: {ratio: "600/1A", primary_rated_current_a: 600, accuracy: "5P20 protection plus 0.5 measurement", location: "grounding-transformer feeder panel"}
+      neutral_ct_target: {ratio: "400/1A", primary_rated_current_a: 400, accuracy: "5P20 zero-sequence protection", location: "neutral resistor branch"}
+      protection_functions: ["feeder_phase_overcurrent", "neutral_zero_sequence_overcurrent", "bus_zero_sequence_overvoltage", "grounding_transformer_overtemperature", "neutral_resistor_temperature_and_continuity", "breaker_failure"]
+      final_engineering_status: "pending_exact_grounding_transformer_resistor_ct_switchgear_and_protection_vendor_coordination"
+    - id: "GRD-PKG-10"
+      voltage_class: "v10"
+      candidate_id: "TARGET-GRD-PKG-10-ZN-NGR"
+      circuit_group: "10-grounding-transformer-feeders"
+      feeder_switchgear_selection_id: "SEL-SWGR-10-GT"
+      section_ids: ["10kV-I", "10kV-II"]
+      source_ids: ["GT10-I", "GT10-II"]
+      quantity: 2
+      grounding_transformer_connection: "ZN_neutral_forming"
+      nominal_line_voltage_kv: 10
+      target_ground_fault_current_a: 200
+      short_time_s: 10
+      target_resistance_ohm: 28.9
+      maximum_resistance_deviation_percent: 1.0
+      short_time_overload_factor: 10
+      selected_transformer_capacity_kva_each: 200
+      phase_ct_target: {ratio: "300/1A", primary_rated_current_a: 300, accuracy: "5P20 protection plus 0.5 measurement", location: "grounding-transformer feeder panel"}
+      neutral_ct_target: {ratio: "200/1A", primary_rated_current_a: 200, accuracy: "5P20 zero-sequence protection", location: "neutral resistor branch"}
+      protection_functions: ["feeder_phase_overcurrent", "neutral_zero_sequence_overcurrent", "bus_zero_sequence_overvoltage", "grounding_transformer_overtemperature", "neutral_resistor_temperature_and_continuity", "breaker_failure"]
+      final_engineering_status: "pending_exact_grounding_transformer_resistor_ct_switchgear_and_protection_vendor_coordination"
+
+  busbars:
+    - id: "BUS-220-TUBE-100-90"
+      voltage_class: "v220"
+      circuit_groups: ["220-bus-section"]
+      description: "220kV aluminum-alloy tubular busbar, phi100/90mm"
+      material: "aluminum_alloy"
+      geometry: {type: "tube", outer_diameter_mm: 100, inner_diameter_mm: 90}
+      reference_ampacity: {current_a: 2000, ambient_c: 25}
+      temperature_correction:
+        enabled: true
+        project_ambient_c: 41
+        allowable_conductor_temperature_c: 70
+        formula: "sqrt((theta_allow-theta_ambient)/(theta_allow-theta_reference))"
+      dynamic_check:
+        enabled: true
+        phase_spacing_m: 3.0
+        frozen_layout_phase_spacing_m: 4.0
+        spacing_basis: "conservative calculation spacing 3.0m is not greater than the frozen AIS layout spacing 4.0m"
+        support_span_m: 8.0
+        support_span_basis: "data.design_baseline.switchyard_220kv.bus_support_span_for_course_mechanical_check_m"
+        dynamic_amplification_factor: 1.8
+        allowable_bending_stress_mpa: 70
+        formula: "f=2e-7*ip^2/a; M=f*kd*L^2/8; sigma=M/W"
+      corona_check:
+        enabled: true
+        surface_factor: 0.85
+        atmospheric_density_factor: 0.90
+        peek_constant_kv_per_cm: 21.1
+        formula: "Ucr_phase=21.1*m*delta*r_cm*ln(D_cm/r_cm)"
+      final_engineering_status: "pending_exact_conductor_and_support_manufacturer_data"
+
+    - id: "BUS-35-3X125X10"
+      voltage_class: "v35"
+      circuit_groups: ["35-transformer-incomers", "35-bus-tie", "35-bus-I", "35-bus-II"]
+      description: "35kV rectangular aluminum busbar, 3x125x10mm per phase"
+      material: "aluminum"
+      geometry: {type: "rectangular_bundle", count_per_phase: 3, width_mm: 125, thickness_mm: 10}
+      reference_ampacity: {current_a: 4194, basis: "controlled_indoor_course_table_value"}
+      temperature_correction: {enabled: false, basis: "maximum indoor design temperature controlled at 40C"}
+      dynamic_check: {enabled: false, status: "pending", reason: "support_spacing_resonance_connection_force_and_exact_busbar_arrangement_not_frozen"}
+      final_engineering_status: "pending_exact_busbar_arrangement_and_manufacturer_temperature_rise_data"
+
+    - id: "BUS-10-2X125X10"
+      voltage_class: "v10"
+      circuit_groups: ["10-transformer-incomers", "10-bus-tie"]
+      description: "10kV rectangular aluminum busbar, 2x125x10mm per phase"
+      material: "aluminum"
+      geometry: {type: "rectangular_bundle", count_per_phase: 2, width_mm: 125, thickness_mm: 10}
+      reference_ampacity: {current_a: 3282, basis: "controlled_indoor_course_table_value"}
+      temperature_correction: {enabled: false, basis: "maximum indoor design temperature controlled at 40C"}
+      dynamic_check: {enabled: false, status: "pending", reason: "support_spacing_resonance_connection_force_and_exact_busbar_arrangement_not_frozen"}
+      final_engineering_status: "pending_exact_busbar_arrangement_and_manufacturer_temperature_rise_data"
+
+  surge_arresters:
+    - id: "MOA-220"
+      voltage_class: "v220"
+      candidate_id: "TARGET-MOA-220-YH10W-204-532"
+      locations: ["220kV line entrance", "main-transformer 220kV terminal"]
+      required_continuous_voltage_factor_to_um: 0.5773502691896258
+      continuous_voltage_basis: "effectively grounded system, Um/sqrt(3)"
+      protected_equipment_liwv_kv: 950
+      minimum_protection_ratio: 1.15
+      final_engineering_status: "pending_grounding_study_energy_duty_and_exact_manufacturer_model"
+    - id: "MOA-35"
+      voltage_class: "v35"
+      candidate_id: "TARGET-MOA-35-YH5WZ-51-134"
+      locations: ["35kV overhead collector-line entrances", "35kV bus VT panels", "main-transformer 35kV terminals"]
+      interface_coverage:
+        - id: "MOA-35-OHL-ENTRY"
+          interface_type: "overhead_line_entry"
+          coverage_mode: "all_group_members"
+          covered_circuit_groups: ["35-feeder-wind-A", "35-feeder-wind-B"]
+          covered_members: ["WA-1", "WA-2", "WA-3", "WA-4", "WB-1", "WB-2", "WB-3"]
+      required_continuous_voltage_factor_to_um: 1.0
+      continuous_voltage_basis: "non-effectively grounded course upper bound, Um"
+      protected_equipment_liwv_kv: 185
+      minimum_protection_ratio: 1.15
+      final_engineering_status: "pending_grounding_study_energy_duty_and_exact_manufacturer_model"
+    - id: "MOA-10"
+      voltage_class: "v10"
+      candidate_id: "TARGET-MOA-10-YH5WZ-17-45"
+      locations: ["10kV bus VT panels", "T10 low-voltage and SVG terminals"]
+      required_continuous_voltage_factor_to_um: 1.0
+      continuous_voltage_basis: "non-effectively grounded course upper bound, Um"
+      protected_equipment_liwv_kv: 75
+      minimum_protection_ratio: 1.15
+      final_engineering_status: "pending_grounding_study_energy_duty_and_exact_manufacturer_model"
+
+  supplementary:
+    status: "course_target_table_final_models_pending"
+    ordering_boundary: "ratios, classes and withstand levels are course-design targets only, not purchase specifications; burden, saturation, transient class and exact catalog numbers remain to be engineered"
+    current_transformers:
+      - id: "CT-220-LINE"
+        covered_circuit_groups: ["220-line-bays"]
+        ratio: "1000/1A"
+        primary_rated_current_a: 1000
+        cores: ["0.2S metering", "0.5 measurement", "5P30 protection", "PX differential as required"]
+        rated_short_time: {current_ka_rms: 50, duration_s: 3}
+        rated_dynamic_current_ka_peak: 125
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+      - id: "CT-220-TRANSFORMER"
+        covered_circuit_groups: ["220-transformer-bays"]
+        ratio: "600/1A"
+        primary_rated_current_a: 600
+        cores: ["0.2S metering", "0.5 measurement", "5P30 protection", "PX differential"]
+        rated_short_time: {current_ka_rms: 50, duration_s: 3}
+        rated_dynamic_current_ka_peak: 125
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+      - id: "CT-220-TRANSFORMER-NEUTRAL"
+        covered_circuit_groups: ["220-transformer-bays"]
+        application: "dedicated main-transformer 220kV neutral CT"
+        evaluation_basis: "single_phase_ground_and_zero_sequence_study_pending"
+        exclude_from_course_precheck: true
+        ratio: "600/1A"
+        primary_rated_current_a: 600
+        cores: ["PX restricted-earth-fault protection", "5P30 neutral overcurrent protection"]
+        rated_short_time: {current_ka_rms: 50, duration_s: 3}
+        rated_dynamic_current_ka_peak: 125
+        final_engineering_status: "pending_grounding_fault_study_burden_knee_point_and_exact_model"
+      - id: "CT-220-BUS-SECTION"
+        covered_circuit_groups: ["220-bus-section"]
+        ratio: "1000/1A"
+        primary_rated_current_a: 1000
+        cores: ["0.5 measurement", "5P30 bus protection", "PX bus differential"]
+        rated_short_time: {current_ka_rms: 50, duration_s: 3}
+        rated_dynamic_current_ka_peak: 125
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+      - id: "CT-35-INCOMER-TIE"
+        covered_circuit_groups: ["35-transformer-incomers", "35-bus-tie"]
+        ratio: "4000/1A"
+        primary_rated_current_a: 4000
+        cores: ["0.2S metering", "0.5 measurement", "5P30 protection", "PX differential"]
+        rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        rated_dynamic_current_ka_peak: 80
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+      - id: "CT-35-FEEDER"
+        covered_circuit_groups: ["35-aux-transformer-feeders", "35-feeder-wind-A", "35-feeder-wind-B", "35-feeder-pv-A", "35-feeder-pv-B", "35-feeder-storage"]
+        ratio: "800/1A"
+        primary_rated_current_a: 800
+        cores: ["0.2S metering", "0.5 measurement", "5P30 protection"]
+        rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        rated_dynamic_current_ka_peak: 80
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+      - id: "CT-10-INCOMER-TIE"
+        covered_circuit_groups: ["10-transformer-incomers", "10-bus-tie"]
+        ratio: "2500/1A"
+        primary_rated_current_a: 2500
+        cores: ["0.2S metering", "0.5 measurement", "5P30 protection", "PX differential"]
+        rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        rated_dynamic_current_ka_peak: 80
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+      - id: "CT-10-FEEDER-SVG"
+        covered_circuit_groups: ["10-svg-feeders", "10-load-station-service-backup", "10-load-reactive-and-cooling", "10-load-control-and-monitoring"]
+        ratio: "1000/1A"
+        primary_rated_current_a: 1000
+        cores: ["0.2S metering", "0.5 measurement", "5P30 protection"]
+        rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        rated_dynamic_current_ka_peak: 80
+        final_engineering_status: "pending_burden_knee_point_and_exact_model"
+
+    zero_sequence_current_transformers:
+      - id: "ZCT-35-CABLE-FEEDERS"
+        interface_type: "cable_feeder_entry"
+        coverage_mode: "all_group_members"
+        covered_circuit_groups: ["35-feeder-pv-A", "35-feeder-pv-B", "35-feeder-storage"]
+        covered_members: ["PVA-1", "PVA-2", "PVB-1", "PVB-2", "ES-1"]
+        ratio: "100/1A"
+        protection_accuracy_target: "5P20_or_manufacturer_equivalent_for_residual_protection"
+        target_primary_residual_current_a: 400
+        minimum_linear_primary_residual_current_a: 400
+        installation: "window_ZCT_over_all_three_cable_phase_conductors_with_shield_grounding_return_routed_outside_the_window"
+        final_engineering_status: "pending_window_size_cable_shield_routing_burden_knee_point_and_exact_model"
+      - id: "ZCT-10-CABLE-FEEDERS"
+        interface_type: "cable_feeder_entry"
+        coverage_mode: "all_group_members"
+        covered_circuit_groups: ["10-svg-feeders", "10-load-station-service-backup", "10-load-reactive-and-cooling", "10-load-control-and-monitoring"]
+        covered_members: ["SVG-1", "SVG-2", "station_service_backup", "reactive_compensation_and_cooling", "control_communications_and_monitoring"]
+        ratio: "50/1A"
+        protection_accuracy_target: "5P20_or_manufacturer_equivalent_for_residual_protection"
+        target_primary_residual_current_a: 200
+        minimum_linear_primary_residual_current_a: 200
+        installation: "window_ZCT_over_all_three_cable_phase_conductors_with_shield_grounding_return_routed_outside_the_window"
+        final_engineering_status: "pending_window_size_cable_shield_routing_burden_knee_point_and_exact_model"
+
+    voltage_transformers:
+      - {id: "PT-220-BUS", voltage_class: "v220", type: "single-phase CVT set", primary_ratio: "220/sqrt(3)kV", secondary_windings: ["100/sqrt(3)V measurement", "100/sqrt(3)V protection", "100/3V open-delta"], accuracy_targets: ["0.2", "3P"], final_engineering_status: "pending_burden_resonance_and_exact_model"}
+      - {id: "PT-35-BUS", voltage_class: "v35", type: "three single-phase inductive VT set", primary_ratio: "35/sqrt(3)kV", secondary_windings: ["100/sqrt(3)V measurement", "100/sqrt(3)V protection", "100/3V open-delta"], accuracy_targets: ["0.5", "3P"], final_engineering_status: "pending_burden_ferroresonance_and_exact_model"}
+      - {id: "PT-10-BUS", voltage_class: "v10", type: "three single-phase inductive VT set", primary_ratio: "10/sqrt(3)kV", secondary_windings: ["100/sqrt(3)V measurement", "100/sqrt(3)V protection", "100/3V open-delta"], accuracy_targets: ["0.5", "3P"], final_engineering_status: "pending_burden_ferroresonance_and_exact_model"}
+
+    insulators_and_bushings:
+      - id: "INS-BUSH-220"
+        voltage_class: "v220"
+        application: "outdoor post insulators and main-transformer 220kV bushings"
+        covered_circuit_groups: ["220-transformer-bays"]
+        target_highest_voltage_kv: 252
+        target_liwv_kv: 950
+        bushing_rated_continuous_current_a: 630
+        bushing_rated_short_time: {current_ka_rms: 50, duration_s: 3}
+        bushing_rated_dynamic_current_ka_peak: 125
+        pollution_level: "d"
+        pending_engineering_checks: ["creepage_distance", "cantilever_and_terminal_mechanical_load", "seismic_load", "exact_model"]
+        final_engineering_status: "pending_creepage_mechanical_load_and_exact_model"
+      - id: "INS-BUSH-35"
+        voltage_class: "v35"
+        application: "indoor supports and main-transformer or switchgear 35kV bushings"
+        covered_circuit_groups: ["35-transformer-incomers", "35-bus-tie"]
+        target_highest_voltage_kv: 40.5
+        target_liwv_kv: 185
+        bushing_rated_continuous_current_a: 4000
+        bushing_rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        bushing_rated_dynamic_current_ka_peak: 80
+        pollution_level: "d at outdoor interfaces"
+        pending_engineering_checks: ["creepage_distance", "cantilever_and_terminal_mechanical_load", "seismic_load", "exact_model"]
+        final_engineering_status: "pending_creepage_mechanical_load_and_exact_model"
+      - id: "INS-BUSH-10"
+        voltage_class: "v10"
+        application: "indoor supports and T10 or switchgear 10kV bushings"
+        covered_circuit_groups: ["10-transformer-incomers", "10-bus-tie"]
+        target_highest_voltage_kv: 12
+        target_liwv_kv: 75
+        bushing_rated_continuous_current_a: 2500
+        bushing_rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        bushing_rated_dynamic_current_ka_peak: 80
+        pollution_level: "d at outdoor interfaces"
+        pending_engineering_checks: ["creepage_distance", "cantilever_and_terminal_mechanical_load", "seismic_load", "exact_model"]
+        final_engineering_status: "pending_creepage_mechanical_load_and_exact_model"
+
+    earthing_switches:
+      - id: "ES-220-LINE"
+        covered_circuit_groups: ["220-line-bays"]
+        target_highest_voltage_kv: 252
+        rated_short_time: {current_ka_rms: 50, duration_s: 3}
+        rated_dynamic_current_ka_peak: 125
+        special_duty: "line-side induced-current switching duty pending study"
+        final_engineering_status: "pending_induced_current_class_and_exact_model"
+      - id: "ES-35-SWITCHGEAR"
+        covered_circuit_groups: ["35-transformer-incomers", "35-bus-tie", "35-aux-transformer-feeders", "35-grounding-transformer-feeders", "35-feeder-wind-A", "35-feeder-wind-B", "35-feeder-pv-A", "35-feeder-pv-B", "35-feeder-storage"]
+        target_highest_voltage_kv: 40.5
+        rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        rated_dynamic_current_ka_peak: 80
+        special_duty: "integrated switchgear earthing switch course target"
+        final_engineering_status: "pending_interlock_scheme_and_exact_model"
+      - id: "ES-10-SWITCHGEAR"
+        covered_circuit_groups: ["10-transformer-incomers", "10-bus-tie", "10-grounding-transformer-feeders", "10-svg-feeders", "10-load-station-service-backup", "10-load-reactive-and-cooling", "10-load-control-and-monitoring"]
+        target_highest_voltage_kv: 12
+        rated_short_time: {current_ka_rms: 31.5, duration_s: 4}
+        rated_dynamic_current_ka_peak: 80
+        special_duty: "integrated switchgear earthing switch course target"
+        final_engineering_status: "pending_interlock_scheme_and_exact_model"

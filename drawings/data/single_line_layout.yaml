@@ -61,7 +61,7 @@ bus_sections:
   - {id: "BUS-0P4-II", section: "0.4kV-II", x: [450, 650], y: 85, status: "in_service", label: "0.4kV II段母线"}
 
 ties:
-  - {id: "TIE-220", section: "220kV-I/II", x: 420, state: "open", label: "220kV分段（正常断开）"}
+  - {id: "TIE-220", section: "220kV-I/II", x: 420, state: "open", label: "220kV分段断路器（常断）"}
   - {id: "TIE-35", section: "35kV-I/II", x: 420, state: "open", label: "35kV母联（正常断开）"}
   - {id: "TIE-10", section: "10kV-I/II", x: 420, state: "open", label: "10kV母联（正常断开）"}
   - {id: "TIE-0P4", section: "0.4kV-I/II", x: 420, state: "closed", label: "0.4kV母联（正常闭合）"}
@@ -118,8 +118,8 @@ circuits:
       - {id: "TS2-HV", section: "10kV-II", x: 505, status: "in_service", label: "2号所用变馈线"}
     auxiliary_load_groups:
       - {id: "AUX-BACKUP", load_ref: "station_service_backup", section: "10kV-I", x: 235, label_y: 132, status: "in_service", label: "站用电备用电源"}
-      - {id: "AUX-COMM", load_ref: "control_communications_and_monitoring", section: "10kV-I", x: 360, label_y: 125, status: "in_service", label: "集控通信及监控"}
-      - {id: "AUX-COOL", load_ref: "reactive_compensation_and_cooling", section: "10kV-II", x: 600, label_y: 125, status: "in_service", label: "无功补偿及冷却"}
+      - {id: "AUX-COMM", load_ref: "control_communications_and_monitoring", section: "10kV-I", x: 360, label_y: 118, status: "in_service", label: "集控通信及监控"}
+      - {id: "AUX-COOL", load_ref: "reactive_compensation_and_cooling", section: "10kV-II", x: 600, label_y: 118, status: "in_service", label: "无功补偿及冷却"}
     reactive_compensation_feeders:
       - {id: "SVG-1", section: "10kV-I", x: 385, status: "in_service", rated_mvar: 12, label: "SVG-1 ±12Mvar"}
       - {id: "SVG-2", section: "10kV-II", x: 630, status: "in_service", rated_mvar: 12, label: "SVG-2 ±12Mvar"}
@@ -149,9 +149,10 @@ notes_layout:
 notes:
   - {id: "N-01", label: "本图为主接线简图，比例NTS；设备参数以设计基线和设备表为准。"}
   - {id: "N-02", label: "L3为预留且方案待确认的远期回路，按预留线型绘制。"}
-  - {id: "N-03", label: "220kV分段正常断开；仅调度许可且同期检查通过后条件闭合。"}
+  - {id: "N-03", label: "220kV分段断路器正常断开；仅调度许可且同期检查通过后条件闭合。"}
   - {id: "N-04", label: "35kV及10kV母联正常断开，仅在故障侧隔离并清除后投入。"}
   - {id: "N-05", label: "10kV每段设1套±12Mvar SVG；T10为2×31.5MVA、35/10.5kV、uk=8%。"}
   - {id: "N-06", label: "0.4kV母联正常闭合；图示TS1运行、TS2暗备用，运行计划可轮换。"}
   - {id: "N-07", label: "0.4kV两进线设联锁，正常及切换过程不得同时闭合。"}
   - {id: "N-08", label: "海拔≤1000m、污秽d级、保护与接地方式为课程设计假设，教师或专题资料优先覆盖。"}
+  - {id: "N-09", label: "35/10kV母联合闸前退出受电/故障段接地源，仅保留健康侧1套；禁止两套并联。"}

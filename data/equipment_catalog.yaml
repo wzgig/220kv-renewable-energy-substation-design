@@ -109,10 +109,13 @@ candidates:
       peak_withstand_current_ka: 80
       short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
     service_conditions:
-      max_ambient_c: null
+      max_ambient_c: 40
       max_altitude_m: null
       pollution_level: null
-      current_correction_factor: null
+      current_correction_factor: 1.0
+      temperature_basis: "indoor_controlled"
+      temperature_basis_source: "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c"
+      final_vendor_confirmation_required: true
 
   - id: "TARGET-SWGR-35-1250"
     kind: "switchgear"
@@ -136,12 +139,15 @@ candidates:
       peak_withstand_current_ka: 80
       short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
     service_conditions:
-      max_ambient_c: null
+      max_ambient_c: 40
       max_altitude_m: null
       pollution_level: null
-      current_correction_factor: null
+      current_correction_factor: 1.0
+      temperature_basis: "indoor_controlled"
+      temperature_basis_source: "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c"
+      final_vendor_confirmation_required: true
 
-  - id: "TARGET-SWGR-10-2000"
+  - id: "TARGET-SWGR-10-2500"
     kind: "switchgear"
     manufacturer: null
     family: null
@@ -158,21 +164,24 @@ candidates:
     availability_evidence:
       - manufacturer: "Siemens"
         family: "NXAirS or equivalent 12kV metal-clad switchgear"
-        scope: "Official manufacturer family availability only; exact 2000A/31.5kA project panel and 41C service data remain to be verified"
+        scope: "Official manufacturer family availability only; exact 2500A/31.5kA project panel and controlled-indoor service data remain to be verified"
         url: "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/"
         verified_on: "2026-07-15"
     ratings:
       highest_voltage_kv: 12
-      continuous_current_a: 2000
+      continuous_current_a: 2500
       short_circuit_breaking_current_ka_rms: 31.5
       short_circuit_making_current_ka_peak: 80
       peak_withstand_current_ka: 80
       short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
     service_conditions:
-      max_ambient_c: null
+      max_ambient_c: 40
       max_altitude_m: null
       pollution_level: null
-      current_correction_factor: null
+      current_correction_factor: 1.0
+      temperature_basis: "indoor_controlled"
+      temperature_basis_source: "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c"
+      final_vendor_confirmation_required: true
 
   - id: "TARGET-SWGR-10-1250"
     kind: "switchgear"
@@ -191,7 +200,7 @@ candidates:
     availability_evidence:
       - manufacturer: "Siemens"
         family: "NXAirS or equivalent 12kV metal-clad switchgear"
-        scope: "Official manufacturer family availability only; exact 1250A/31.5kA project panel and 41C service data remain to be verified"
+        scope: "Official manufacturer family availability only; exact 1250A/31.5kA project panel and controlled-indoor 40C service data remain to be verified"
         url: "https://www.siemens.com/zh-cn/products/energy-systems/nxairs/"
         verified_on: "2026-07-15"
     ratings:
@@ -201,6 +210,151 @@ candidates:
       short_circuit_making_current_ka_peak: 80
       peak_withstand_current_ka: 80
       short_time_withstand: {current_ka_rms: 31.5, duration_s: 4}
+    service_conditions:
+      max_ambient_c: 40
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: 1.0
+      temperature_basis: "indoor_controlled"
+      temperature_basis_source: "design_inputs.natural_conditions.indoor_switchgear_max_temperature_c"
+      final_vendor_confirmation_required: true
+
+  - id: "TARGET-GRD-PKG-35-ZN-NGR"
+    kind: "grounding_transformer_resistor_package"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "indoor_grounding_transformer_plus_neutral_grounding_resistor"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    ratings:
+      highest_voltage_kv: 40.5
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+      grounding_package: {connection: "ZN_neutral_forming", ground_fault_current_a: 400, duration_s: 10, resistor_ohm_approx: 50.5, transformer_capacity_kva: 1000}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+    final_vendor_boundary: "exact zero-sequence impedance, 10s thermal duty, insulation level, losses, temperature rise, CTs, NGR enclosure and protection interfaces require one coordinated manufacturer package"
+
+  - id: "TARGET-GRD-PKG-10-ZN-NGR"
+    kind: "grounding_transformer_resistor_package"
+    manufacturer: null
+    family: null
+    model: null
+    installation: "indoor_grounding_transformer_plus_neutral_grounding_resistor"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    ratings:
+      highest_voltage_kv: 12
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+      grounding_package: {connection: "ZN_neutral_forming", ground_fault_current_a: 200, duration_s: 10, resistor_ohm_approx: 28.9, transformer_capacity_kva: 200}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+    final_vendor_boundary: "exact zero-sequence impedance, 10s thermal duty, insulation level, losses, temperature rise, CTs, NGR enclosure and protection interfaces require one coordinated manufacturer package"
+
+  - id: "TARGET-MOA-220-YH10W-204-532"
+    kind: "surge_arrester"
+    manufacturer: null
+    family: "YH10W"
+    model: "YH10W-204/532"
+    installation: "outdoor_metal_oxide_gapless"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    ratings:
+      highest_voltage_kv: 252
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+      arrester: {rated_voltage_kv: 204, continuous_operating_voltage_kv: 159, nominal_discharge_current_ka: 10, lightning_residual_voltage_kv: 532}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "TARGET-MOA-35-YH5WZ-51-134"
+    kind: "surge_arrester"
+    manufacturer: null
+    family: "YH5WZ"
+    model: "YH5WZ-51/134"
+    installation: "indoor_or_outdoor_metal_oxide_gapless"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    ratings:
+      highest_voltage_kv: 40.5
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+      arrester: {rated_voltage_kv: 51, continuous_operating_voltage_kv: 40.8, nominal_discharge_current_ka: 5, lightning_residual_voltage_kv: 134}
+    service_conditions:
+      max_ambient_c: null
+      max_altitude_m: null
+      pollution_level: null
+      current_correction_factor: null
+
+  - id: "TARGET-MOA-10-YH5WZ-17-45"
+    kind: "surge_arrester"
+    manufacturer: null
+    family: "YH5WZ"
+    model: "YH5WZ-17/45"
+    installation: "indoor_metal_oxide_gapless"
+    evidence:
+      status: "target_only"
+      document_title: null
+      edition_or_revision: null
+      issue_date: null
+      url: null
+      page: null
+      verified_on: null
+    ratings:
+      highest_voltage_kv: 12
+      continuous_current_a: null
+      short_circuit_breaking_current_ka_rms: null
+      short_circuit_making_current_ka_peak: null
+      peak_withstand_current_ka: null
+      short_time_withstand: {current_ka_rms: null, duration_s: null}
+      arrester: {rated_voltage_kv: 17, continuous_operating_voltage_kv: 13.6, nominal_discharge_current_ka: 5, lightning_residual_voltage_kv: 45}
     service_conditions:
       max_ambient_c: null
       max_altitude_m: null

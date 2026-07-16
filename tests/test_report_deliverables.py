@@ -16,8 +16,8 @@ DEFENSE_TITLE = f"{BASE_TITLE}答辩汇报"
 PUBLIC_AUTHOR = "课程设计项目组（公开版）"
 
 PDF_PAGES = {
-    "01_220kV新能源汇集变电所_技术设计说明书.pdf": 20,
-    "02_220kV新能源汇集变电所_技术设计计算书.pdf": 17,
+    "01_220kV新能源汇集变电所_技术设计说明书.pdf": 25,
+    "02_220kV新能源汇集变电所_技术设计计算书.pdf": 18,
     "03_220kV新能源汇集变电所_课程设计总结.pdf": 4,
     "04_220kV新能源汇集变电所_答辩汇报.pdf": 11,
     "05_220kV新能源汇集变电所_答辩问题清单.pdf": 7,
@@ -36,6 +36,16 @@ PPTX_FILE = "04_220kV新能源汇集变电所_答辩汇报.pptx"
 def core_properties(archive: ZipFile) -> dict[str, str]:
     root = ET.fromstring(archive.read("docProps/core.xml"))
     return {element.tag.rsplit("}", 1)[-1]: element.text or "" for element in root}
+
+
+def document_text(path: Path) -> str:
+    with ZipFile(path) as archive:
+        root = ET.fromstring(archive.read("word/document.xml"))
+    return "".join(
+        element.text or ""
+        for element in root.iter()
+        if element.tag.rsplit("}", 1)[-1] == "t"
+    )
 
 
 class ReportDeliverableTests(unittest.TestCase):
@@ -77,6 +87,18 @@ class ReportDeliverableTests(unittest.TestCase):
                 for member in archive.namelist():
                     if member.startswith("word/") and member.endswith(".xml"):
                         self.assertIsNone(rsid_attribute.search(archive.read(member)), member)
+
+    def test_report_content_contains_latest_grounding_and_duty_boundaries(self) -> None:
+        payload = "\n".join(document_text(REPORT_DIR / name) for name in DOCX_FILES)
+        for expected in (
+            "1000kVA ZN接地变",
+            "ZCT",
+            "母联合闸前",
+            "7.385",
+            "18.798",
+            "机械/电动力待核",
+        ):
+            self.assertIn(expected, payload)
 
     def test_pptx_is_valid_public_and_has_no_generator_theme_name(self) -> None:
         path = REPORT_DIR / PPTX_FILE

@@ -41,12 +41,29 @@ class ShortCircuitCalculationTests(unittest.TestCase):
 
     def test_220kv_closed_bus_tie_fault(self) -> None:
         point = self.result["points"]["SC-220-BUS-CLOSED"]
+        separate = self.result["points"]["SC-220-I-SEPARATE"]
 
         self.assertAlmostEqual(
             point["grid_symmetrical_current_ka"], 6.4996886655, places=9
         )
         self.assertAlmostEqual(
             point["grid_peak_current_ka"], 16.5455061515, places=9
+        )
+        self.assertAlmostEqual(
+            separate["conservative_total_symmetrical_current_range_ka"]["maximum"],
+            4.0326726641,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            separate["course_total_peak_sensitivity_ka"], 10.2655086734, places=9
+        )
+        self.assertAlmostEqual(
+            point["conservative_total_symmetrical_current_range_ka"]["maximum"],
+            7.3845719606,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            point["course_total_peak_sensitivity_ka"], 18.7980512742, places=9
         )
         self.assertEqual(point["operating_status"], "maximum_base_case")
         self.assertEqual(
