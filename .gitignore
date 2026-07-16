@@ -2,6 +2,17 @@
 /materials-private/**
 !/materials-private/README.md
 
+# Course taskbook originals may contain personal data and must never be
+# committed from the repository root. Sanitized parameters belong in data/.
+/*任务书*.doc
+/*任务书*.docx
+/*任务书*.pdf
+/*任务书*.zip
+/*taskbook*.doc
+/*taskbook*.docx
+/*taskbook*.pdf
+/*taskbook*.zip
+
 # Codex/workspace runtime metadata
 /.agents/
 /.codex/

@@ -128,6 +128,7 @@ if (Test-Path -LiteralPath $gitHead) {
     }
 
     $forbiddenNamePattern = '(?i)(\.baiduyun\.uploading\.cfg$|(^|/)~\$|\.dwl2?$|\.sv\$$|\.autosave$|\.bak$|(^|/)\.env($|\.))'
+    $forbiddenTaskbookPattern = '(?i)(^|/).*?(任务书|taskbook).*?\.(doc|docx|pdf|zip)$'
     foreach ($trackedFile in $trackedFiles) {
         $normalized = $trackedFile -replace '\\', '/'
         if ($normalized.StartsWith('materials-private/') -and $normalized -ne 'materials-private/README.md') {
@@ -135,6 +136,9 @@ if (Test-Path -LiteralPath $gitHead) {
         }
         if ($normalized -match $forbiddenNamePattern) {
             $errors.Add("Temporary or sensitive file is tracked: $normalized")
+        }
+        if ($normalized -match $forbiddenTaskbookPattern) {
+            $errors.Add("Course taskbook original must remain private: $normalized")
         }
 
         $fullPath = Join-Path $root $trackedFile
