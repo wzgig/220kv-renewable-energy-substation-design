@@ -9,6 +9,7 @@ or nearby annotation text.
 from __future__ import annotations
 
 from collections.abc import Mapping
+import math
 from typing import Any
 
 from ezdxf.document import Drawing
@@ -138,11 +139,68 @@ def _add_la(block: BlockLayout) -> None:
     _add_hidden_attributes(block)
 
 
-def _add_transformer(block: BlockLayout) -> None:
+def _add_star_connection(
+    block: BlockLayout,
+    center: tuple[float, float],
+    *,
+    neutral: bool,
+) -> None:
+    """Draw the IEC single-line star winding marker inside a winding circle."""
+
+    attribs = _entity_attribs()
+    cx, cy = center
+    radius = 2.8
+    for angle_deg in (90.0, 210.0, 330.0):
+        angle = math.radians(angle_deg)
+        block.add_line(
+            (cx, cy),
+            (cx + radius * math.cos(angle), cy + radius * math.sin(angle)),
+            dxfattribs=attribs,
+        )
+    if neutral:
+        block.add_line((cx, cy), (cx + 4.2, cy), dxfattribs=attribs)
+        block.add_text(
+            "N",
+            height=1.35,
+            dxfattribs={**attribs, "style": "LATIN"},
+        ).set_placement((cx + 4.45, cy - 0.65))
+
+
+def _add_delta_connection(block: BlockLayout, center: tuple[float, float]) -> None:
+    """Draw the IEC single-line delta winding marker inside a winding circle."""
+
+    attribs = _entity_attribs()
+    cx, cy = center
+    radius = 2.8
+    points = []
+    for angle_deg in (90.0, 210.0, 330.0):
+        angle = math.radians(angle_deg)
+        points.append((cx + radius * math.cos(angle), cy + radius * math.sin(angle)))
+    block.add_lwpolyline(points, close=True, dxfattribs=attribs)
+
+
+def _add_transformer(
+    block: BlockLayout,
+    *,
+    high_connection: str,
+    low_connection: str,
+) -> None:
     attribs = _entity_attribs()
     block.add_line((0.0, 13.0), (0.0, 9.7), dxfattribs=attribs)
     block.add_circle((0.0, 4.7), 5.2, dxfattribs=attribs)
     block.add_circle((0.0, -4.7), 5.2, dxfattribs=attribs)
+    if high_connection == "YN":
+        _add_star_connection(block, (0.0, 4.7), neutral=True)
+    elif high_connection == "D":
+        _add_delta_connection(block, (0.0, 4.7))
+    else:
+        raise ValueError(f"Unsupported transformer high-side connection: {high_connection}")
+    if low_connection == "yn":
+        _add_star_connection(block, (0.0, -4.7), neutral=True)
+    elif low_connection == "d":
+        _add_delta_connection(block, (0.0, -4.7))
+    else:
+        raise ValueError(f"Unsupported transformer low-side connection: {low_connection}")
     block.add_line((0.0, -9.7), (0.0, -13.0), dxfattribs=attribs)
     _add_hidden_attributes(block)
 
@@ -159,6 +217,11 @@ def _add_grounding_transformer_resistor(block: BlockLayout) -> None:
     block.add_line((0.0, 9.0), (0.0, 6.6), dxfattribs=attribs)
     block.add_circle((0.0, 4.0), 2.8, dxfattribs=attribs)
     block.add_circle((0.0, 0.0), 2.8, dxfattribs=attribs)
+    block.add_lwpolyline(
+        [(-1.7, 5.2), (0.0, 4.0), (-1.7, 2.8), (1.7, 4.0)],
+        dxfattribs=attribs,
+    )
+    _add_star_connection(block, (0.0, 0.0), neutral=True)
     block.add_text(
         "ZN",
         height=1.4,
@@ -216,7 +279,12 @@ def ensure_symbol_blocks(doc: Drawing) -> None:
         "SLD_PT": lambda block: _add_voltage_transformer(block, "TV"),
         "SLD_CVT": lambda block: _add_voltage_transformer(block, "CVT"),
         "SLD_LA": _add_la,
-        "SLD_TX_2W": _add_transformer,
+        "SLD_TX_YND11": lambda block: _add_transformer(
+            block, high_connection="YN", low_connection="d"
+        ),
+        "SLD_TX_DYN11": lambda block: _add_transformer(
+            block, high_connection="D", low_connection="yn"
+        ),
         "SLD_GROUND": _add_ground,
         "SLD_GROUNDING_TX_RESISTOR": _add_grounding_transformer_resistor,
         "SLD_ARROW_UP": lambda block: _add_arrow(block, upward=True),

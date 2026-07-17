@@ -103,6 +103,50 @@ class SingleLineDrawingTests(unittest.TestCase):
                     f"Primary conductor segment must be orthogonal: {start} -> {end}",
                 )
 
+    def test_transformer_symbols_show_declared_winding_connections(self) -> None:
+        inserts = list(self.doc.modelspace().query("INSERT"))
+        by_type = {}
+        for insert in inserts:
+            attrs = semantic_attributes(insert)
+            by_type.setdefault(attrs.get("TYPE"), []).append(insert.dxf.name)
+
+        self.assertEqual(set(by_type["main_transformer"]), {"SLD_TX_YND11"})
+        self.assertEqual(
+            set(by_type["35_10_5kv_source_transformer"]),
+            {"SLD_TX_YND11"},
+        )
+        self.assertEqual(
+            set(by_type["station_service_transformer"]),
+            {"SLD_TX_DYN11"},
+        )
+
+        ynd = self.doc.blocks.get("SLD_TX_YND11")
+        dyn = self.doc.blocks.get("SLD_TX_DYN11")
+        self.assertEqual(len(ynd.query("LWPOLYLINE")), 1, "YNd11 must contain one delta")
+        self.assertEqual(len(dyn.query("LWPOLYLINE")), 1, "Dyn11 must contain one delta")
+        self.assertGreaterEqual(len(ynd.query("LINE")), 6, "YNd11 must contain a visible star")
+        self.assertGreaterEqual(len(dyn.query("LINE")), 6, "Dyn11 must contain a visible star")
+
+        grounding_block = self.doc.blocks.get("SLD_GROUNDING_TX_RESISTOR")
+        self.assertGreaterEqual(
+            len(grounding_block.query("LWPOLYLINE")),
+            2,
+            "ZN grounding transformer must show its zigzag winding and resistor",
+        )
+
+        expected_neutral_y = float(
+            self.data["layout"]["level_geometry"]["transformer_center_y"]["main"]
+        ) + 4.7
+        neutral_cts = [
+            insert
+            for insert in inserts
+            if semantic_attributes(insert).get("TYPE")
+            == "220kv_neutral_current_transformer"
+        ]
+        self.assertEqual(len(neutral_cts), 2)
+        for neutral_ct in neutral_cts:
+            self.assertAlmostEqual(float(neutral_ct.dxf.insert.y), expected_neutral_y)
+
         grounding = self.data["design_inputs"]["calculation_rules"]["grounding"]
         self.assertEqual(
             grounding["35kv"]["selected_grounding_transformer_capacity_kva_each"],

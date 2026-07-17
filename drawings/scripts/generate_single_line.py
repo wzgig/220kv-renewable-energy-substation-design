@@ -63,7 +63,8 @@ DEVICE_HALF_LENGTH = {
     "SLD_DS_CLOSED": 5.0,
     "SLD_DS_OPEN": 5.0,
     "SLD_CT": 5.0,
-    "SLD_TX_2W": 13.0,
+    "SLD_TX_YND11": 13.0,
+    "SLD_TX_DYN11": 13.0,
 }
 
 
@@ -839,7 +840,7 @@ def _draw_main_transformers(
             devices=[
                 {"center": 344.0, "block": "SLD_CB_CLOSED", "type": "35kv_incomer_breaker"},
                 {"center": 357.0, "block": "SLD_CT", "type": "35kv_current_transformer"},
-                {"center": center_y, "block": "SLD_TX_2W", "type": "main_transformer"},
+                {"center": center_y, "block": "SLD_TX_YND11", "type": "main_transformer"},
                 {"center": 456.0, "block": "SLD_CT", "type": "220kv_current_transformer"},
                 {"center": 469.0, "block": "SLD_CB_CLOSED", "type": "220kv_breaker"},
                 {"center": 483.0, "block": "SLD_DS_CLOSED", "type": "220kv_bus_disconnector"},
@@ -862,11 +863,12 @@ def _draw_main_transformers(
             status=str(transformer["status"]),
             section=section,
         )
-        _add_line(msp, (x, center_y), (x + 6.0, center_y), layer="E-CONDUCTOR")
+        neutral_y = center_y + 4.7
+        _add_line(msp, (x, neutral_y), (x + 6.0, neutral_y), layer="E-CONDUCTOR")
         insert_symbol(
             msp,
             "SLD_CT",
-            (x + 11.0, center_y),
+            (x + 11.0, neutral_y),
             layer="E-SYMBOL",
             bay_id=transformer_id,
             device_type="220kv_neutral_current_transformer",
@@ -875,11 +877,11 @@ def _draw_main_transformers(
             section=section,
             rotation=90.0,
         )
-        _add_line(msp, (x + 16.0, center_y), (x + 23.0, center_y), layer="E-CONDUCTOR")
+        _add_line(msp, (x + 16.0, neutral_y), (x + 23.0, neutral_y), layer="E-CONDUCTOR")
         insert_symbol(
             msp,
             "SLD_GROUND",
-            (x + 23.0, center_y - 3.0),
+            (x + 23.0, neutral_y - 3.0),
             layer="E-SYMBOL",
             bay_id=transformer_id,
             device_type="220kv_neutral_ground",
@@ -1121,7 +1123,7 @@ def _draw_source_transformers(
         )
         insert_symbol(
             msp,
-            "SLD_TX_2W",
+            "SLD_TX_YND11",
             (high_x, center_y),
             layer="E-DEVICE",
             bay_id=transformer_id,
@@ -1346,7 +1348,7 @@ def _draw_10kv_and_station_service(
             _add_line(msp, (high_x, 150.0), (low_x, center_y + 13.0), layer="E-CONDUCTOR")
         insert_symbol(
             msp,
-            "SLD_TX_2W",
+            "SLD_TX_DYN11",
             (low_x, center_y),
             layer="E-DEVICE",
             bay_id=transformer_id,
@@ -1557,7 +1559,8 @@ def validate_document(
         "SLD_PT",
         "SLD_CVT",
         "SLD_LA",
-        "SLD_TX_2W",
+        "SLD_TX_YND11",
+        "SLD_TX_DYN11",
         "SLD_GROUND",
         "SLD_GROUNDING_TX_RESISTOR",
         "SLD_ARROW_UP",
