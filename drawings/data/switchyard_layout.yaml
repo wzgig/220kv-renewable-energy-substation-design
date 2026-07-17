@@ -56,7 +56,7 @@ plan:
   fence_inset_m: 2
   ais_area_m: [8, 16, 137, 85]
   roads:
-    - {id: "perimeter-road", bounds_m: [5, 5, 140, 85], width_m: 4, kind: "loop"}
+    - {id: "perimeter-road", bounds_m: [5, 16, 140, 85], width_m: 4, kind: "loop"}
     - {id: "transformer-road", bounds_m: [34, 19, 104, 23], width_m: 4, kind: "straight"}
   bus_sections:
     - {id: "BUS-220-I", section: "220kV-I", x_m: [10, 60], center_y_m: 55}
@@ -76,8 +76,8 @@ plan:
     - {id: "CTRL", bounds_m: [8, 4, 22, 15], label: "主控通信楼"}
     - {id: "MVSWGR", bounds_m: [108, 4, 138, 15], label: "35/10kV配电楼\n含T10与SVG区域"}
   section_marks:
-    - {id: "A-A", axis: "y", coordinate_m: 18, range_m: [28, 85], label: "线路间隔断面 A-A"}
-    - {id: "B-B", axis: "y", coordinate_m: 32, range_m: [5, 60], label: "主变间隔断面 B-B"}
+    - {id: "A-A", axis: "y", coordinate_m: 18, ranges_m: [[28, 52], [58, 82]], label: "线路间隔断面 A-A"}
+    - {id: "B-B", axis: "y", coordinate_m: 32, ranges_m: [[24, 50]], label: "主变间隔断面 B-B"}
   notes:
     - "本图按A1、1:200绘制，北向上；220kV线路向西北出线。"
     - "220kV采用户外AIS分相中型布置，单母线分段；分段断路器正常断开。"
@@ -92,7 +92,7 @@ sections:
   panels:
     - id: "A-A"
       title: "线路间隔断面 A-A"
-      paper_origin_mm: [50, 110]
+      paper_origin_mm: [50, 155]
       width_m: 34
       ground_elevation_m: 0
       equipment_sequence:
@@ -106,7 +106,7 @@ sections:
         - {id: "LINE-GANTRY", kind: "line_gantry", x_m: 31, terminal_elevation_m: 14.5, label: "出线构架"}
     - id: "B-B"
       title: "主变间隔断面 B-B"
-      paper_origin_mm: [430, 110]
+      paper_origin_mm: [430, 155]
       width_m: 34
       ground_elevation_m: 0
       equipment_sequence:

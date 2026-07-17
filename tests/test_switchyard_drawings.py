@@ -153,7 +153,7 @@ class SwitchyardDrawingTests(unittest.TestCase):
         ]
         self.assertEqual(len(line_labels), 3)
         for label in line_labels:
-            self.assertAlmostEqual(label.dxf.insert.y, 536.0)
+            self.assertAlmostEqual(label.dxf.insert.y, 532.0)
 
     def test_section_contains_two_typical_bays_and_clearance_dimensions(self) -> None:
         self.assertEqual(self.section_summary["acadver"], "AC1032")
@@ -169,6 +169,30 @@ class SwitchyardDrawingTests(unittest.TestCase):
         self.assertIn("DL/T 5352-2018", payload)
         self.assertIn("线路侧隔离开关+常开ES", payload)
         self.assertIn("ES(NO)", payload)
+
+        section_polylines = list(self.section_doc.modelspace().query("LWPOLYLINE"))
+        self.assertFalse(
+            any(
+                entity.dxf.layer == "C-CONDUCTOR" and len(list(entity.get_points("xy"))) >= 7
+                for entity in section_polylines
+            ),
+            "SEC-220-01 must not reconnect all equipment centers as one saw-tooth polyline",
+        )
+        self.assertGreaterEqual(len(self.section_doc.modelspace().query("SPLINE")), 10)
+
+    def test_plan_layers_and_site_objects_do_not_collide(self) -> None:
+        plan = self.data["layout"]["plan"]
+        loop = next(item for item in plan["roads"] if item["kind"] == "loop")
+        self.assertEqual(loop["bounds_m"], [5, 16, 140, 85])
+        for building in plan["buildings"]:
+            self.assertLessEqual(float(building["bounds_m"][3]), float(loop["bounds_m"][1]))
+
+        active_device_entities = [
+            entity
+            for entity in self.plan_doc.modelspace()
+            if entity.dxf.layer == "C-EQUIPMENT"
+        ]
+        self.assertTrue(active_device_entities)
 
     def test_line_bay_detail_contains_complete_chain_grounding_and_parameters(self) -> None:
         self.assertEqual(self.detail_summary["acadver"], "AC1032")

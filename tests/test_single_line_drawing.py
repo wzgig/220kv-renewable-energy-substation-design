@@ -78,6 +78,31 @@ class SingleLineDrawingTests(unittest.TestCase):
         self.assertEqual([item["state"] for item in incomers].count("closed"), 1)
         self.assertEqual([item["state"] for item in incomers].count("open"), 1)
 
+    def test_transformer_chains_are_collinear_and_primary_conductors_are_orthogonal(self) -> None:
+        layout = self.data["layout"]
+        by_id = {
+            item["id"]: item
+            for group in layout["transformers"].values()
+            for item in group
+        }
+        incomers = {
+            item["id"]: item
+            for key in ("source_transformer_incomers", "station_service_feeders")
+            for item in layout["circuits"]["10kv"][key]
+        }
+        self.assertEqual(float(incomers["T10-2-IN"]["x"]), float(by_id["T10-2"]["x"]))
+        self.assertEqual(float(incomers["TS2-HV"]["x"]), float(by_id["TS2"]["x"]))
+
+        for polyline in self.doc.modelspace().query("LWPOLYLINE"):
+            if polyline.dxf.layer != "E-CONDUCTOR":
+                continue
+            points = [(float(x), float(y)) for x, y in polyline.get_points("xy")]
+            for start, end in zip(points, points[1:]):
+                self.assertTrue(
+                    abs(start[0] - end[0]) < 1e-9 or abs(start[1] - end[1]) < 1e-9,
+                    f"Primary conductor segment must be orthogonal: {start} -> {end}",
+                )
+
         grounding = self.data["design_inputs"]["calculation_rules"]["grounding"]
         self.assertEqual(
             grounding["35kv"]["selected_grounding_transformer_capacity_kva_each"],

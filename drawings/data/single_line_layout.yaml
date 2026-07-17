@@ -55,10 +55,10 @@ bus_sections:
   - {id: "BUS-220-II", section: "220kV-II", x: [455, 785], y: 500, status: "in_service", label: "220kV II段母线"}
   - {id: "BUS-35-I", section: "35kV-I", x: [55, 390], y: 330, status: "in_service", label: "35kV I段母线"}
   - {id: "BUS-35-II", section: "35kV-II", x: [450, 785], y: 330, status: "in_service", label: "35kV II段母线"}
-  - {id: "BUS-10-I", section: "10kV-I", x: [195, 390], y: 180, status: "in_service", label: "10kV I段母线"}
-  - {id: "BUS-10-II", section: "10kV-II", x: [450, 645], y: 180, status: "in_service", label: "10kV II段母线"}
-  - {id: "BUS-0P4-I", section: "0.4kV-I", x: [190, 390], y: 85, status: "in_service", label: "0.4kV I段母线"}
-  - {id: "BUS-0P4-II", section: "0.4kV-II", x: [450, 650], y: 85, status: "in_service", label: "0.4kV II段母线"}
+  - {id: "BUS-10-I", section: "10kV-I", x: [195, 390], y: 180, label_x: 292, label_y: 191, status: "in_service", label: "10kV I段母线"}
+  - {id: "BUS-10-II", section: "10kV-II", x: [450, 645], y: 180, label_x: 548, label_y: 191, status: "in_service", label: "10kV II段母线"}
+  - {id: "BUS-0P4-I", section: "0.4kV-I", x: [190, 390], y: 85, label_x: 225, label_y: 96, status: "in_service", label: "0.4kV I段母线"}
+  - {id: "BUS-0P4-II", section: "0.4kV-II", x: [450, 650], y: 85, label_x: 495, label_y: 96, status: "in_service", label: "0.4kV II段母线"}
 
 ties:
   - {id: "TIE-220", section: "220kV-I/II", x: 420, state: "open", label: "220kV分段断路器（常断）"}
@@ -109,13 +109,13 @@ circuits:
   10kv:
     source_transformer_incomers:
       - {id: "T10-1-IN", section: "10kV-I", x: 335, status: "in_service", label: "T10-1进线"}
-      - {id: "T10-2-IN", section: "10kV-II", x: 570, status: "in_service", label: "T10-2进线"}
+      - {id: "T10-2-IN", section: "10kV-II", x: 505, status: "in_service", label: "T10-2进线"}
     voltage_transformers:
       - {id: "PT-10-I", section: "10kV-I", x: 210, status: "in_service", label: "10kV I段PT"}
       - {id: "PT-10-II", section: "10kV-II", x: 465, status: "in_service", label: "10kV II段PT"}
     station_service_feeders:
       - {id: "TS1-HV", section: "10kV-I", x: 270, status: "in_service", label: "1号所用变馈线"}
-      - {id: "TS2-HV", section: "10kV-II", x: 505, status: "in_service", label: "2号所用变馈线"}
+      - {id: "TS2-HV", section: "10kV-II", x: 570, status: "in_service", label: "2号所用变馈线"}
     auxiliary_load_groups:
       - {id: "AUX-BACKUP", load_ref: "station_service_backup", section: "10kV-I", x: 235, label_y: 132, status: "in_service", label: "站用电备用电源"}
       - {id: "AUX-COMM", load_ref: "control_communications_and_monitoring", section: "10kV-I", x: 360, label_y: 118, status: "in_service", label: "集控通信及监控"}

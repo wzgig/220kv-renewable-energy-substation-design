@@ -563,7 +563,10 @@ def _draw_buses_and_ties(
             _add_mtext(
                 msp,
                 str(section["label"]),
-                ((x1 + x2) / 2.0, y + 8.0),
+                (
+                    float(section.get("label_x", (x1 + x2) / 2.0)),
+                    float(section.get("label_y", y + 8.0)),
+                ),
                 height=float(heights["section_title"]),
                 width=x2 - x1,
                 layer="E-TEXT",
@@ -1591,6 +1594,13 @@ def validate_document(
 
 
 def _rounded_point(value: Any) -> list[float]:
+    if not hasattr(value, "x"):
+        values = list(value)
+        return [
+            round(float(values[0]), 6),
+            round(float(values[1]), 6),
+            round(float(values[2] if len(values) > 2 else 0.0), 6),
+        ]
     return [
         round(float(value.x), 6),
         round(float(value.y), 6),
@@ -1621,6 +1631,12 @@ def _canonical_entity(entity: Any) -> dict[str, Any]:
         record.update(
             center=_rounded_point(entity.dxf.center),
             radius=round(float(entity.dxf.radius), 6),
+        )
+    elif entity_type == "SPLINE":
+        record.update(
+            degree=int(entity.dxf.degree),
+            fit_points=[_rounded_point(point) for point in entity.fit_points],
+            control_points=[_rounded_point(point) for point in entity.control_points],
         )
     elif entity_type == "MTEXT":
         record.update(

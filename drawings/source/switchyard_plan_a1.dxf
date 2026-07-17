@@ -553,7 +553,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-19B
+19C
   9
 $SURFTAB1
  70
@@ -1327,9 +1327,9 @@ ISM
   0
 CLASS
   1
-ACDBPLACEHOLDER
+LAYOUT
   2
-AcDbPlaceHolder
+AcDbLayout
   3
 ObjectDBX Classes
  90
@@ -1343,9 +1343,9 @@ ObjectDBX Classes
   0
 CLASS
   1
-LAYOUT
+ACDBPLACEHOLDER
   2
-AcDbLayout
+AcDbPlaceHolder
   3
 ObjectDBX Classes
  90
@@ -2239,7 +2239,7 @@ ACAD
   0
 APPID
   5
-198
+199
 330
 3
 100
@@ -2253,7 +2253,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-199
+19A
 330
 3
 100
@@ -3243,11 +3243,11 @@ AcDbPolyline
  10
 70.0
  20
-115.0
+170.0
  10
 745.0
  20
-115.0
+170.0
  10
 745.0
  20
@@ -3275,11 +3275,11 @@ AcDbPolyline
  10
 90.0
  20
-135.0
+190.0
  10
 725.0
  20
-135.0
+190.0
  10
 725.0
  20
@@ -3303,7 +3303,7 @@ AcDbMText
  10
 407.5
  20
-315.0
+342.5
  30
 0.0
  40
@@ -4573,7 +4573,7 @@ CIRCLE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4593,7 +4593,7 @@ LINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4617,7 +4617,7 @@ CIRCLE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4637,7 +4637,7 @@ LINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4661,7 +4661,7 @@ CIRCLE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4681,7 +4681,7 @@ LINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4705,7 +4705,7 @@ LWPOLYLINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -4737,7 +4737,7 @@ LINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4761,7 +4761,7 @@ LWPOLYLINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -4793,7 +4793,7 @@ LINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4817,7 +4817,7 @@ LWPOLYLINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -4849,7 +4849,7 @@ LINE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4873,7 +4873,7 @@ CIRCLE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4893,7 +4893,7 @@ CIRCLE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4913,7 +4913,7 @@ A0
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4933,7 +4933,7 @@ A1
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4953,7 +4953,7 @@ A2
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -4977,7 +4977,7 @@ A3
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -4997,7 +4997,7 @@ A4
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5021,7 +5021,7 @@ A5
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5045,7 +5045,7 @@ A6
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5069,7 +5069,7 @@ A7
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5089,7 +5089,7 @@ A8
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5113,7 +5113,7 @@ A9
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5133,7 +5133,7 @@ AA
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5157,7 +5157,7 @@ AB
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5181,7 +5181,7 @@ AC
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5205,7 +5205,7 @@ AD
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5225,7 +5225,7 @@ AE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5249,7 +5249,7 @@ AF
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5269,7 +5269,7 @@ B0
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5293,7 +5293,7 @@ B1
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5317,7 +5317,7 @@ B2
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5341,7 +5341,7 @@ B3
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5361,7 +5361,7 @@ B4
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5381,7 +5381,7 @@ B5
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5401,7 +5401,7 @@ B6
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5421,7 +5421,7 @@ B7
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5441,7 +5441,7 @@ B8
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5461,7 +5461,7 @@ B9
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -5493,7 +5493,7 @@ BA
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -5525,7 +5525,7 @@ BB
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -5557,7 +5557,7 @@ BC
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-TEXT
 100
 AcDbMText
  10
@@ -5619,9 +5619,9 @@ AcDbLine
  30
 0.0
  11
-115.0
+121.0
  21
-532.5
+525.0
  31
 0.0
   0
@@ -5637,15 +5637,15 @@ C-CONDUCTOR
 100
 AcDbLine
  10
-115.0
+121.0
  20
-532.5
+525.0
  30
 0.0
  11
-115.77037818075159
+121.99096817211289
  21
-528.57488631265
+521.1246958723399
  31
 0.0
   0
@@ -5661,15 +5661,15 @@ C-CONDUCTOR
 100
 AcDbLine
  10
-115.0
+121.0
  20
-532.5
+525.0
  30
 0.0
  11
-118.92511368734995
+124.9623773726686
  21
-531.7296218192485
+524.4526741769623
  31
 0.0
   0
@@ -5681,13 +5681,13 @@ C1
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-TEXT
 100
 AcDbMText
  10
 135.0
  20
-536.0
+532.0
  30
 0.0
  40
@@ -5781,7 +5781,7 @@ C5
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5801,7 +5801,7 @@ C6
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5825,7 +5825,7 @@ C7
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5845,7 +5845,7 @@ C8
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5869,7 +5869,7 @@ C9
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -5889,7 +5889,7 @@ CA
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5913,7 +5913,7 @@ CB
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -5945,7 +5945,7 @@ CC
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -5969,7 +5969,7 @@ CD
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -6001,7 +6001,7 @@ CE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6025,7 +6025,7 @@ CF
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -6057,7 +6057,7 @@ D0
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6081,7 +6081,7 @@ D1
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6101,7 +6101,7 @@ D2
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6121,7 +6121,7 @@ D3
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6141,7 +6141,7 @@ D4
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6161,7 +6161,7 @@ D5
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6185,7 +6185,7 @@ D6
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6205,7 +6205,7 @@ D7
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6229,7 +6229,7 @@ D8
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6253,7 +6253,7 @@ D9
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6277,7 +6277,7 @@ DA
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6297,7 +6297,7 @@ DB
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6321,7 +6321,7 @@ DC
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6341,7 +6341,7 @@ DD
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6365,7 +6365,7 @@ DE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6389,7 +6389,7 @@ DF
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6413,7 +6413,7 @@ E0
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6433,7 +6433,7 @@ E1
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6457,7 +6457,7 @@ E2
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6477,7 +6477,7 @@ E3
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6501,7 +6501,7 @@ E4
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6525,7 +6525,7 @@ E5
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbLine
  10
@@ -6549,7 +6549,7 @@ E6
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6569,7 +6569,7 @@ E7
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6589,7 +6589,7 @@ E8
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6609,7 +6609,7 @@ E9
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6629,7 +6629,7 @@ EA
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6649,7 +6649,7 @@ EB
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbCircle
  10
@@ -6669,7 +6669,7 @@ EC
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -6701,7 +6701,7 @@ ED
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -6733,7 +6733,7 @@ EE
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-EQUIPMENT
 100
 AcDbPolyline
  90
@@ -6765,7 +6765,7 @@ EF
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-TEXT
 100
 AcDbMText
  10
@@ -6827,9 +6827,9 @@ AcDbLine
  30
 0.0
  11
-570.0
+576.0
  21
-532.5
+525.0
  31
 0.0
   0
@@ -6845,15 +6845,15 @@ C-CONDUCTOR
 100
 AcDbLine
  10
-570.0
+576.0
  20
-532.5
+525.0
  30
 0.0
  11
-570.7703781807515
+576.9909681721128
  21
-528.57488631265
+521.1246958723399
  31
 0.0
   0
@@ -6869,15 +6869,15 @@ C-CONDUCTOR
 100
 AcDbLine
  10
-570.0
+576.0
  20
-532.5
+525.0
  30
 0.0
  11
-573.92511368735
+579.9623773726686
  21
-531.7296218192485
+524.4526741769623
  31
 0.0
   0
@@ -6889,13 +6889,13 @@ F4
 100
 AcDbEntity
   8
-C-CONDUCTOR
+C-TEXT
 100
 AcDbMText
  10
 590.0
  20
-536.0
+532.0
  30
 0.0
  40
@@ -8035,9 +8035,9 @@ AcDbLine
  30
 0.0
  11
-640.0
+646.0
  21
-532.5
+525.0
  31
 0.0
   0
@@ -8053,15 +8053,15 @@ C-RESERVED
 100
 AcDbLine
  10
-640.0
+646.0
  20
-532.5
+525.0
  30
 0.0
  11
-640.7703781807515
+646.9909681721128
  21
-528.57488631265
+521.1246958723399
  31
 0.0
   0
@@ -8077,15 +8077,15 @@ C-RESERVED
 100
 AcDbLine
  10
-640.0
+646.0
  20
-532.5
+525.0
  30
 0.0
  11
-643.92511368735
+649.9623773726686
  21
-531.7296218192485
+524.4526741769623
  31
 0.0
   0
@@ -8103,7 +8103,7 @@ AcDbMText
  10
 660.0
  20
-536.0
+532.0
  30
 0.0
  40
@@ -9873,11 +9873,11 @@ AcDbLine
  11
 135.0
  21
-515.0
+350.0
  31
 0.0
   0
-MTEXT
+LINE
   5
 171
 330
@@ -9887,11 +9887,35 @@ AcDbEntity
   8
 C-CENTER
 100
+AcDbLine
+ 10
+135.0
+ 20
+380.0
+ 30
+0.0
+ 11
+135.0
+ 21
+500.0
+ 31
+0.0
+  0
+MTEXT
+  5
+172
+330
+17
+100
+AcDbEntity
+  8
+C-TEXT
+100
 AcDbMText
  10
 135.0
  20
-520.0
+505.0
  30
 0.0
  40
@@ -9907,7 +9931,7 @@ HZTXT
   0
 LINE
   5
-172
+173
 330
 17
 100
@@ -9919,31 +9943,31 @@ AcDbLine
  10
 205.0
  20
-115.0
+210.0
  30
 0.0
  11
 205.0
  21
-390.0
+340.0
  31
 0.0
   0
 MTEXT
   5
-173
+174
 330
 17
 100
 AcDbEntity
   8
-C-CENTER
+C-TEXT
 100
 AcDbMText
  10
 205.0
  20
-395.0
+345.0
  30
 0.0
  40
@@ -9959,7 +9983,7 @@ HZTXT
   0
 LINE
   5
-174
+175
 330
 17
 100
@@ -9983,7 +10007,7 @@ AcDbLine
   0
 LINE
   5
-175
+176
 330
 17
 100
@@ -10007,7 +10031,7 @@ AcDbLine
   0
 LINE
   5
-176
+177
 330
 17
 100
@@ -10031,7 +10055,7 @@ AcDbLine
   0
 MTEXT
   5
-177
+178
 330
 17
 100
@@ -10059,30 +10083,6 @@ HZTXT
   0
 LINE
   5
-178
-330
-17
-100
-AcDbEntity
-  8
-C-DIM
-100
-AcDbLine
- 10
-45.0
- 20
-90.0
- 30
-0.0
- 11
-45.0
- 21
-78.0
- 31
-0.0
-  0
-LINE
-  5
 179
 330
 17
@@ -10093,13 +10093,13 @@ C-DIM
 100
 AcDbLine
  10
-770.0
+45.0
  20
 90.0
  30
 0.0
  11
-770.0
+45.0
  21
 78.0
  31
@@ -10117,6 +10117,30 @@ C-DIM
 100
 AcDbLine
  10
+770.0
+ 20
+90.0
+ 30
+0.0
+ 11
+770.0
+ 21
+78.0
+ 31
+0.0
+  0
+LINE
+  5
+17B
+330
+17
+100
+AcDbEntity
+  8
+C-DIM
+100
+AcDbLine
+ 10
 45.0
  20
 78.0
@@ -10131,7 +10155,7 @@ AcDbLine
   0
 LINE
   5
-17B
+17C
 330
 17
 100
@@ -10155,7 +10179,7 @@ AcDbLine
   0
 LINE
   5
-17C
+17D
 330
 17
 100
@@ -10179,7 +10203,7 @@ AcDbLine
   0
 MTEXT
   5
-17D
+17E
 330
 17
 100
@@ -10207,30 +10231,6 @@ HZTXT
   0
 LINE
   5
-17E
-330
-17
-100
-AcDbEntity
-  8
-C-DIM
-100
-AcDbLine
- 10
-770.0
- 20
-90.0
- 30
-0.0
- 11
-782.0
- 21
-90.0
- 31
-0.0
-  0
-LINE
-  5
 17F
 330
 17
@@ -10243,13 +10243,13 @@ AcDbLine
  10
 770.0
  20
-540.0
+90.0
  30
 0.0
  11
 782.0
  21
-540.0
+90.0
  31
 0.0
   0
@@ -10265,6 +10265,30 @@ C-DIM
 100
 AcDbLine
  10
+770.0
+ 20
+540.0
+ 30
+0.0
+ 11
+782.0
+ 21
+540.0
+ 31
+0.0
+  0
+LINE
+  5
+181
+330
+17
+100
+AcDbEntity
+  8
+C-DIM
+100
+AcDbLine
+ 10
 782.0
  20
 90.0
@@ -10279,7 +10303,7 @@ AcDbLine
   0
 LINE
   5
-181
+182
 330
 17
 100
@@ -10303,7 +10327,7 @@ AcDbLine
   0
 LINE
   5
-182
+183
 330
 17
 100
@@ -10327,7 +10351,7 @@ AcDbLine
   0
 MTEXT
   5
-183
+184
 330
 17
 100
@@ -10357,30 +10381,6 @@ HZTXT
   0
 LINE
   5
-184
-330
-17
-100
-AcDbEntity
-  8
-C-DIM
-100
-AcDbLine
- 10
-135.0
- 20
-500.0
- 30
-0.0
- 11
-135.0
- 21
-515.0
- 31
-0.0
-  0
-LINE
-  5
 185
 330
 17
@@ -10391,13 +10391,13 @@ C-DIM
 100
 AcDbLine
  10
-205.0
+135.0
  20
 500.0
  30
 0.0
  11
-205.0
+135.0
  21
 515.0
  31
@@ -10415,6 +10415,30 @@ C-DIM
 100
 AcDbLine
  10
+205.0
+ 20
+500.0
+ 30
+0.0
+ 11
+205.0
+ 21
+515.0
+ 31
+0.0
+  0
+LINE
+  5
+187
+330
+17
+100
+AcDbEntity
+  8
+C-DIM
+100
+AcDbLine
+ 10
 135.0
  20
 515.0
@@ -10429,7 +10453,7 @@ AcDbLine
   0
 LINE
   5
-187
+188
 330
 17
 100
@@ -10453,7 +10477,7 @@ AcDbLine
   0
 LINE
   5
-188
+189
 330
 17
 100
@@ -10477,7 +10501,7 @@ AcDbLine
   0
 MTEXT
   5
-189
+18A
 330
 17
 100
@@ -10505,30 +10529,6 @@ HZTXT
   0
 LINE
   5
-18A
-330
-17
-100
-AcDbEntity
-  8
-C-DIM
-100
-AcDbLine
- 10
-95.0
- 20
-365.0
- 30
-0.0
- 11
-95.0
- 21
-320.0
- 31
-0.0
-  0
-LINE
-  5
 18B
 330
 17
@@ -10539,13 +10539,13 @@ C-DIM
 100
 AcDbLine
  10
-345.0
+95.0
  20
 365.0
  30
 0.0
  11
-345.0
+95.0
  21
 320.0
  31
@@ -10563,6 +10563,30 @@ C-DIM
 100
 AcDbLine
  10
+345.0
+ 20
+365.0
+ 30
+0.0
+ 11
+345.0
+ 21
+320.0
+ 31
+0.0
+  0
+LINE
+  5
+18D
+330
+17
+100
+AcDbEntity
+  8
+C-DIM
+100
+AcDbLine
+ 10
 95.0
  20
 320.0
@@ -10577,7 +10601,7 @@ AcDbLine
   0
 LINE
   5
-18D
+18E
 330
 17
 100
@@ -10601,7 +10625,7 @@ AcDbLine
   0
 LINE
   5
-18E
+18F
 330
 17
 100
@@ -10625,7 +10649,7 @@ AcDbLine
   0
 MTEXT
   5
-18F
+190
 330
 17
 100
@@ -10653,7 +10677,7 @@ HZTXT
   0
 MTEXT
   5
-190
+191
 330
 17
 100
@@ -10681,7 +10705,7 @@ HZTXT
   0
 LWPOLYLINE
   5
-191
+192
 330
 17
 100
@@ -10697,47 +10721,19 @@ AcDbPolyline
  10
 320.0
  20
-120.0
+215.0
  10
-455.0
+470.0
  20
-120.0
+215.0
  10
-455.0
+470.0
  20
-205.0
+315.0
  10
 320.0
  20
-205.0
-  0
-MTEXT
-  5
-192
-330
-17
-100
-AcDbEntity
-  8
-C-NOTE
-100
-AcDbMText
- 10
-387.5
- 20
-200.0
- 30
-0.0
- 40
-3.0
- 41
-129.0
- 71
-8
-  1
-设计说明
-  7
-HZTXT
+315.0
   0
 MTEXT
   5
@@ -10751,19 +10747,19 @@ C-NOTE
 100
 AcDbMText
  10
-325.0
+395.0
  20
-192.0
+310.0
  30
 0.0
  40
-2.1
+3.0
  41
-125.0
+144.0
  71
-1
+8
   1
-1. 本图按A1、1:200绘制，北向上；220kV线路向西北出线。
+设计说明
   7
 HZTXT
   0
@@ -10781,17 +10777,17 @@ AcDbMText
  10
 325.0
  20
-179.0
+302.0
  30
 0.0
  40
 2.1
  41
-125.0
+140.0
  71
 1
   1
-2. 220kV采用户外AIS分相中型布置，单母线分段；分段断路器正常断开。
+1. 本图按A1、1:200绘制，北向上；220kV线路向西北出线。
   7
 HZTXT
   0
@@ -10809,17 +10805,17 @@ AcDbMText
  10
 325.0
  20
-166.0
+289.0
  30
 0.0
  40
 2.1
  41
-125.0
+140.0
  71
 1
   1
-3. 母线相间距4.0m、间隔几何和设备轮廓为课程设计值；安全净距不得小于表列A1/A2/B1/B2/C/D。
+2. 220kV采用户外AIS分相中型布置，单母线分段；分段断路器正常断开。
   7
 HZTXT
   0
@@ -10837,17 +10833,17 @@ AcDbMText
  10
 325.0
  20
-153.0
+276.0
  30
 0.0
  40
 2.1
  41
-125.0
+140.0
  71
 1
   1
-4. L3及其间隔为远期预留；35/10kV采用室内开关柜，在配电楼内布置。
+3. 母线相间距4.0m、间隔几何和设备轮廓为课程设计值；安全净距不得小于表列A1/A2/B1/B2/C/D。
   7
 HZTXT
   0
@@ -10865,13 +10861,41 @@ AcDbMText
  10
 325.0
  20
-140.0
+263.0
  30
 0.0
  40
 2.1
  41
-125.0
+140.0
+ 71
+1
+  1
+4. L3及其间隔为远期预留；35/10kV采用室内开关柜，在配电楼内布置。
+  7
+HZTXT
+  0
+MTEXT
+  5
+198
+330
+17
+100
+AcDbEntity
+  8
+C-NOTE
+100
+AcDbMText
+ 10
+325.0
+ 20
+250.0
+ 30
+0.0
+ 40
+2.1
+ 41
+140.0
  71
 1
   1
@@ -11869,7 +11893,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-19A
+19B
   0
 DICTIONARYVAR
   5
@@ -11885,7 +11909,7 @@ DictionaryVariables
   0
 DICTIONARYVAR
   5
-19A
+19B
 330
 2D
 100

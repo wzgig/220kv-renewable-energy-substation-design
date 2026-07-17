@@ -297,6 +297,15 @@ def _add_polyline(
     )
 
 
+def _add_spline(
+    msp: Any,
+    points: Iterable[tuple[float, float]],
+    *,
+    layer: str,
+) -> Any:
+    return msp.add_spline(fit_points=list(points), dxfattribs={"layer": layer})
+
+
 def _add_rect(msp: Any, bounds: Iterable[float], *, layer: str) -> Any:
     x1, y1, x2, y2 = map(float, bounds)
     return _add_polyline(
@@ -642,7 +651,9 @@ def _draw_plan(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
     _add_mtext(msp, "220kV分段间隔\n正常断开", mapper.point(tie_center, 66), height=2.7, width=80, layer="C-TEXT")
 
     for bay in plan["line_bays"]:
-        layer = "C-RESERVED" if bay["status"] == "reserved" else "C-CONDUCTOR"
+        conductor_layer = "C-RESERVED" if bay["status"] == "reserved" else "C-CONDUCTOR"
+        equipment_layer = "C-RESERVED" if bay["status"] == "reserved" else "C-EQUIPMENT"
+        text_layer = "C-RESERVED" if bay["status"] == "reserved" else "C-TEXT"
         cx = float(bay["center_x_m"])
         bus_y = float(bay["bus_y_m"])
         gantry_y = float(bay["gantry_y_m"])
@@ -650,7 +661,7 @@ def _draw_plan(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
             _add_polyline(
                 msp,
                 [mapper.point(cx + offset, bus_y + bus_offset), mapper.point(cx + offset, gantry_y)],
-                layer=layer,
+                layer=conductor_layer,
             )
         for y_m, kind, has_es in (
             (62, "disconnector", False),
@@ -666,7 +677,7 @@ def _draw_plan(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
                 cx,
                 y_m,
                 kind,
-                layer=layer,
+                layer=equipment_layer,
                 earthing_switch=has_es,
             )
         _add_mtext(
@@ -675,24 +686,24 @@ def _draw_plan(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
             mapper.point(cx + 7.2, 74),
             height=2.0,
             width=mapper.length(11),
-            layer=layer,
+            layer=text_layer,
             attachment=4,
         )
         gantry_x, gantry_y_paper = mapper.point(cx, gantry_y)
-        _add_line(msp, (gantry_x - mapper.length(5), gantry_y_paper), (gantry_x + mapper.length(5), gantry_y_paper), layer="C-STRUCTURE" if layer != "C-RESERVED" else layer)
+        _add_line(msp, (gantry_x - mapper.length(5), gantry_y_paper), (gantry_x + mapper.length(5), gantry_y_paper), layer="C-STRUCTURE" if conductor_layer != "C-RESERVED" else conductor_layer)
         _draw_arrow(
             msp,
             mapper.point(cx, gantry_y + 0.5),
-            mapper.point(cx - 4.0, gantry_y + 4.5),
-            layer=layer,
+            mapper.point(cx - 2.8, gantry_y + 3.0),
+            layer=conductor_layer,
         )
         _add_mtext(
             msp,
             f"{bay['label']}\n{bay['direction']}出线",
-            mapper.point(cx, 89.2),
+            mapper.point(cx, 88.4),
             height=2.5,
             width=80,
-            layer=layer,
+            layer=text_layer,
             attachment=2,
         )
 
@@ -742,11 +753,14 @@ def _draw_plan(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
 
     for mark in plan["section_marks"]:
         coordinate = float(mark["coordinate_m"])
-        start, end = map(float, mark["range_m"])
         if mark["axis"] == "y":
-            _add_line(msp, mapper.point(coordinate, start), mapper.point(coordinate, end), layer="C-CENTER")
-            _add_mtext(msp, mark["id"], mapper.point(coordinate, end + 1), height=2.6, width=30, layer="C-CENTER")
+            ranges = mark.get("ranges_m", [mark.get("range_m")])
+            for start, end in ranges:
+                _add_line(msp, mapper.point(coordinate, float(start)), mapper.point(coordinate, float(end)), layer="C-CENTER")
+            end = max(float(value[1]) for value in ranges)
+            _add_mtext(msp, mark["id"], mapper.point(coordinate, end + 1), height=2.6, width=30, layer="C-TEXT")
         else:
+            start, end = map(float, mark["range_m"])
             _add_line(msp, mapper.point(start, coordinate), mapper.point(end, coordinate), layer="C-CENTER")
 
     north = mapper.point(139, 74)
@@ -783,7 +797,7 @@ def _draw_plan(data: dict[str, dict[str, Any]]) -> ezdxf.document.Drawing:
         layer="C-NOTE",
         attachment=1,
     )
-    note_box = mapper.bounds([55, 6, 82, 23])
+    note_box = mapper.bounds([55, 25, 85, 45])
     _add_rect(msp, note_box, layer="C-NOTE")
     _add_mtext(
         msp,
@@ -853,6 +867,8 @@ def _draw_section_equipment(
     msp: Any,
     mapper: Mapper,
     item: dict[str, Any],
+    *,
+    aligned: bool = False,
 ) -> tuple[float, float]:
     kind = str(item["kind"])
     x_m = float(item["x_m"])
@@ -868,7 +884,7 @@ def _draw_section_equipment(
         for offset in (-0.8, 0.8):
             _draw_insulator_stack(msp, mapper, x_m + offset, terminal - 0.4)
         left = mapper.point(x_m - 0.8, terminal - 0.4)
-        right = mapper.point(x_m + 0.8, terminal)
+        right = mapper.point(x_m + 0.8, terminal - 0.4 if aligned else terminal)
         _add_line(msp, left, right, layer=layer)
         if bool(item.get("earthing_switch")):
             live_contact = mapper.point(x_m + 0.8, terminal - 0.4)
@@ -953,7 +969,57 @@ def _draw_section_equipment(
             layer="C-TEXT",
             attachment=2,
         )
-    return mapper.point(x_m, terminal)
+    return mapper.point(x_m, terminal - 0.4 if aligned and kind == "disconnector" else terminal)
+
+
+def _section_ports(mapper: Mapper, item: dict[str, Any]) -> tuple[tuple[float, float], tuple[float, float]]:
+    x_m = float(item["x_m"])
+    terminal = float(item["terminal_elevation_m"])
+    kind = str(item["kind"])
+    if kind == "disconnector":
+        elevation = terminal - 0.4
+        return mapper.point(x_m - 0.8, elevation), mapper.point(x_m + 0.8, elevation)
+    if kind == "circuit_breaker":
+        return mapper.point(x_m - 0.65, terminal), mapper.point(x_m + 0.65, terminal)
+    point = mapper.point(x_m, terminal)
+    return point, point
+
+
+def _connect_section_chain(
+    msp: Any,
+    mapper: Mapper,
+    items: list[dict[str, Any]],
+) -> None:
+    for left_item, right_item in zip(items, items[1:]):
+        _, start = _section_ports(mapper, left_item)
+        end, _ = _section_ports(mapper, right_item)
+        dx = end[0] - start[0]
+        _add_spline(
+            msp,
+            [start, (start[0] + dx * 0.35, start[1]), (start[0] + dx * 0.65, end[1]), end],
+            layer="C-CONDUCTOR",
+        )
+
+
+def _draw_section_shunt_branches(
+    msp: Any,
+    mapper: Mapper,
+    panel: dict[str, Any],
+) -> None:
+    items = {str(item["id"]): item for item in panel["equipment_sequence"]}
+    branch_ids = [item_id for item_id in ("CVT", "LA") if item_id in items]
+    if not branch_ids:
+        return
+    source = items["DS-LINE"] if "DS-LINE" in items else items["CT"]
+    _, source_port = _section_ports(mapper, source)
+    branch_elevation = max(source_port[1], *(mapper.point(0, float(items[item_id]["terminal_elevation_m"]))[1] for item_id in branch_ids)) + mapper.length(0.8)
+    junction = (source_port[0], branch_elevation)
+    _add_line(msp, source_port, junction, layer="C-CONDUCTOR")
+    _add_circle(msp, source_port, mapper.length(0.10), layer="C-CONDUCTOR")
+    for item_id in branch_ids:
+        terminal = mapper.point(float(items[item_id]["x_m"]), float(items[item_id]["terminal_elevation_m"]))
+        _add_polyline(msp, [junction, (terminal[0], branch_elevation), terminal], layer="C-CONDUCTOR")
+        _add_circle(msp, terminal, mapper.length(0.08), layer="C-CONDUCTOR")
 
 
 def _draw_section_panel(
@@ -977,22 +1043,25 @@ def _draw_section_panel(
     _add_mtext(msp, "±0.000", mapper.point(0.5, 0.3), height=2.4, width=45, layer="C-DIM", attachment=1)
 
     terminal_points = [
-        _draw_section_equipment(msp, mapper, item)
+        _draw_section_equipment(msp, mapper, item, aligned=True)
         for item in panel["equipment_sequence"]
     ]
-    _add_polyline(msp, terminal_points, layer="C-CONDUCTOR")
+    shunt_ids = {"CVT", "LA"}
+    series_items = [item for item in panel["equipment_sequence"] if str(item["id"]) not in shunt_ids]
+    _connect_section_chain(msp, mapper, series_items)
+    _draw_section_shunt_branches(msp, mapper, panel)
     if panel["id"] == "A-A":
-        last = terminal_points[-1]
+        _, last = _section_ports(mapper, series_items[-1])
         _draw_arrow(msp, last, (last[0] + 35, last[1] + 18), layer="C-CONDUCTOR")
 
     equipment_x = [float(item["x_m"]) for item in panel["equipment_sequence"]]
-    for left, right in zip(equipment_x, equipment_x[1:]):
+    for index, (left, right) in enumerate(zip(equipment_x, equipment_x[1:])):
         _dimension_horizontal(
             msp,
             mapper.point(left, 0)[0],
             mapper.point(right, 0)[0],
             ground_y,
-            mapper.point(0, -1.3)[1],
+            mapper.point(0, -1.3 - (index % 2) * 0.8)[1],
             f"{right-left:.1f}",
         )
     _dimension_horizontal(
