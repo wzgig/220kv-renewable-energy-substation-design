@@ -32,8 +32,8 @@ SUBJECT = "发电厂电气部分课程设计"
 PUBLIC_THEME_NAME = "课程设计主题"
 PUBLIC_TIMESTAMP = "2026-07-15T00:00:00Z"
 DOCX_PAGE_COUNTS = {
-    "01_": 25,
-    "02_": 18,
+    "01_": 35,
+    "02_": 29,
     "03_": 4,
     "05_": 7,
 }

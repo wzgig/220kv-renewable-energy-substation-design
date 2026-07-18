@@ -6,7 +6,7 @@
 
 | 类别 | 成果 | 位置与格式 | 本地验证 |
 | --- | --- | --- | --- |
-| 正式报告 | 技术设计说明书、计算书、课程设计总结、答辩问题清单 | `report/`，DOCX/PDF，正式 PDF 为25/18/4/7页 A4 | 逐页终审及 DOCX 隐私/可访问性/审阅残留检查 PASS |
+| 正式报告 | 技术设计说明书、计算书、课程设计总结、答辩问题清单 | `report/`，DOCX/PDF，正式 PDF 为35/29/4/7页 A4 | 逐页终审及 DOCX 隐私/可访问性/审阅残留检查 PASS |
 | 答辩汇报 | 220kV 新能源汇集变电所答辩汇报 | `report/`，PPTX/PDF，11 页 16:9 | 逐页渲染、画布溢出、PDF 页数和公开元数据检查 PASS |
 | 电气主接线简图 | `single_line_a1` | 公开 DXF/PDF/PNG；DWG 本地生成 | AutoCAD AUDIT、A1 PDF/PNG 目检和生成测试通过 |
 | 配电装置平面布置图 | `switchyard_plan_a1` | 公开 DXF/PDF/PNG；DWG 本地生成 | AutoCAD AUDIT、A1 PDF/PNG 目检和生成测试通过 |
@@ -34,7 +34,7 @@
 - [x] SLD-01 已核对线路侧ES位置、35/10kV接地变容量、母联接地源联锁、7回架空入口MOA、35/10kV电缆ZCT和三相CT职责分离。
 - [x] 公开版姓名、学号、班级和签字字段保持留空。
 - [x] 完成本轮当前树隐私与公开边界扫描；公开文件未发现身份、邮箱、绝对用户路径或生成器残留。
-- [x] 复跑 62 项测试并完成 68 项 `scripts/project_health_check.ps1` 检查。
+- [x] 复跑 70 项测试并完成 68 项 `scripts/project_health_check.ps1` 检查。
 - [x] 核对实际提交文件、Office/PDF 元数据、CAD PDF/PNG 与可打开性。
 - [x] 经授权完成含旧身份/DWG 的公开历史改写和精确租约强推，并核对 `main` 可达历史、GitHub Actions、远端提交和工作树状态。
 

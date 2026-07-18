@@ -283,13 +283,14 @@ def add_page_field(paragraph) -> None:
     run._r.extend([fld_char1, instr_text, fld_char2])
 
 
-def set_page_number_start(section, value: int = 1) -> None:
+def set_page_number_start(section, value: int = 1, fmt: str = "decimal") -> None:
     sect_pr = section._sectPr
     pg_num_type = sect_pr.find(qn("w:pgNumType"))
     if pg_num_type is None:
         pg_num_type = OxmlElement("w:pgNumType")
         sect_pr.append(pg_num_type)
     pg_num_type.set(qn("w:start"), str(value))
+    pg_num_type.set(qn("w:fmt"), fmt)
 
 
 def add_update_fields_setting(doc: Document) -> None:
@@ -301,7 +302,7 @@ def add_update_fields_setting(doc: Document) -> None:
     update.set(qn("w:val"), "true")
 
 
-def configure_front_section(section) -> None:
+def configure_cover_section(section) -> None:
     set_section_geometry(section)
     section.header.is_linked_to_previous = False
     section.footer.is_linked_to_previous = False
@@ -309,6 +310,17 @@ def configure_front_section(section) -> None:
         p.clear()
     for p in section.footer.paragraphs:
         p.clear()
+
+
+def configure_front_section(section) -> None:
+    configure_cover_section(section)
+    footer = section.footer
+    fp = footer.paragraphs[0]
+    fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    add_page_field(fp)
+    for run in fp.runs:
+        set_east_asia_font(run, name="宋体", size=9)
+    set_page_number_start(section, 1, fmt="lowerRoman")
 
 
 def configure_main_section(section, running_title: str) -> None:
@@ -328,7 +340,7 @@ def configure_main_section(section, running_title: str) -> None:
     add_page_field(fp)
     for run in fp.runs:
         set_east_asia_font(run, name="宋体", size=9)
-    set_page_number_start(section, 1)
+    set_page_number_start(section, 1, fmt="decimal")
 
 
 def compact_break_paragraph(paragraph) -> None:
@@ -500,8 +512,10 @@ def add_body(doc: Document, text: str, *, bold_lead: str | None = None):
 
 
 def get_list_num_id(doc: Document, ordered: bool) -> int:
-    cache_name = "_course_ordered_num_id" if ordered else "_course_bullet_num_id"
-    cached = getattr(doc, cache_name, None)
+    # Each ordered-list block gets its own numbering definition so it restarts
+    # at 1. Bullet lists can safely share one definition throughout a document.
+    cache_name = None if ordered else "_course_bullet_num_id"
+    cached = getattr(doc, cache_name, None) if cache_name else None
     if cached is not None:
         return cached
     numbering = doc.part.numbering_part.element
@@ -519,9 +533,15 @@ def get_list_num_id(doc: Document, ordered: bool) -> int:
     num_id = max(num_ids, default=0) + 1
     abstract = OxmlElement("w:abstractNum")
     abstract.set(qn("w:abstractNumId"), str(abstract_id))
+    nsid = OxmlElement("w:nsid")
+    nsid.set(qn("w:val"), f"{0xC0DE0000 + abstract_id:08X}")
+    abstract.append(nsid)
     multi = OxmlElement("w:multiLevelType")
     multi.set(qn("w:val"), "singleLevel")
     abstract.append(multi)
+    template_id = OxmlElement("w:tmpl")
+    template_id.set(qn("w:val"), f"{0xB10C0000 + abstract_id:08X}")
+    abstract.append(template_id)
     lvl = OxmlElement("w:lvl")
     lvl.set(qn("w:ilvl"), "0")
     start = OxmlElement("w:start")
@@ -531,7 +551,7 @@ def get_list_num_id(doc: Document, ordered: bool) -> int:
     num_fmt.set(qn("w:val"), "decimal" if ordered else "bullet")
     lvl.append(num_fmt)
     lvl_text = OxmlElement("w:lvlText")
-    lvl_text.set(qn("w:val"), "%1." if ordered else "•")
+    lvl_text.set(qn("w:val"), "%1." if ordered else "\uf0b7")
     lvl.append(lvl_text)
     lvl_jc = OxmlElement("w:lvlJc")
     lvl_jc.set(qn("w:val"), "left")
@@ -548,15 +568,35 @@ def get_list_num_id(doc: Document, ordered: bool) -> int:
     ind.set(qn("w:hanging"), "300")
     p_pr.append(ind)
     lvl.append(p_pr)
+    if not ordered:
+        r_pr = OxmlElement("w:rPr")
+        r_fonts = OxmlElement("w:rFonts")
+        r_fonts.set(qn("w:ascii"), "Symbol")
+        r_fonts.set(qn("w:hAnsi"), "Symbol")
+        r_fonts.set(qn("w:hint"), "default")
+        r_pr.append(r_fonts)
+        lvl.append(r_pr)
     abstract.append(lvl)
-    numbering.append(abstract)
+    first_num = numbering.find(qn("w:num"))
+    if first_num is None:
+        numbering.append(abstract)
+    else:
+        numbering.insert(list(numbering).index(first_num), abstract)
     num = OxmlElement("w:num")
     num.set(qn("w:numId"), str(num_id))
     abs_ref = OxmlElement("w:abstractNumId")
     abs_ref.set(qn("w:val"), str(abstract_id))
     num.append(abs_ref)
+    if ordered:
+        lvl_override = OxmlElement("w:lvlOverride")
+        lvl_override.set(qn("w:ilvl"), "0")
+        start_override = OxmlElement("w:startOverride")
+        start_override.set(qn("w:val"), "1")
+        lvl_override.append(start_override)
+        num.append(lvl_override)
     numbering.append(num)
-    setattr(doc, cache_name, num_id)
+    if cache_name:
+        setattr(doc, cache_name, num_id)
     return num_id
 
 
@@ -590,7 +630,7 @@ def add_equation(
     number: str | None = None,
     *,
     compact: bool = False,
-) -> None:
+):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.first_line_indent = Cm(0)
@@ -603,6 +643,19 @@ def add_equation(
     if number:
         p.add_run("\t")
         set_east_asia_font(p.add_run(f"({number})"), name="宋体", size=10.5)
+    return p
+
+
+def add_formula_terms(doc: Document, text: str):
+    paragraph = add_body(doc, f"式中：{text}", bold_lead="式中：")
+    paragraph.paragraph_format.keep_together = True
+    return paragraph
+
+
+def add_result_analysis(doc: Document, text: str):
+    paragraph = add_body(doc, f"结果分析：{text}", bold_lead="结果分析：")
+    paragraph.paragraph_format.keep_together = True
+    return paragraph
 
 
 def add_table(
@@ -722,8 +775,13 @@ def add_note_box(doc: Document, title: str, text: str) -> None:
     set_east_asia_font(p.add_run(text), name="宋体", size=10.5)
 
 
-def add_references(doc: Document, references: list[str]) -> None:
-    add_heading(doc, "参考文献", 1)
+def add_references(
+    doc: Document,
+    references: list[str],
+    *,
+    page_break_before: bool = True,
+) -> None:
+    add_heading(doc, "参考文献", 1, page_break_before=page_break_before)
     for index, item in enumerate(references, 1):
         p = doc.add_paragraph()
         p.paragraph_format.first_line_indent = Cm(-0.74)
@@ -754,7 +812,7 @@ def new_document(document_type: str) -> Document:
     remove_all_body_content(doc)
     style_document(doc)
     section = doc.sections[0]
-    configure_front_section(section)
+    configure_cover_section(section)
     add_cover(doc, document_type)
     return doc
 
@@ -762,7 +820,23 @@ def new_document(document_type: str) -> Document:
 def build_design_description(data: dict) -> Path:
     load = data["load"]
     sc = data["sc"]
+    equipment = data["equipment"]
     baseline = data["baseline"]
+    load35 = load["load_35kv"]
+    load10 = load["load_10kv"]
+    main_transformer = load["main_transformer"]
+    reactive = load["reactive_compensation"]
+    station_service = load["station_service"]
+    outgoing = load["outgoing_220kv"]
+    outgoing_ampacity = load["outgoing_220kv_conductor_ampacity"]
+    sc_points = sc["points"]
+    course_completion = equipment["course_completion"]
+    busbars = {item["id"]: item for item in course_completion["busbars"]}
+    arresters = {item["id"]: item for item in course_completion["surge_arresters"]}
+    grounding_packages = {
+        item["id"]: item
+        for item in course_completion["grounding_transformer_resistor_packages"]
+    }
     doc = new_document("技术设计说明书")
 
     front = doc.add_section(WD_SECTION.NEW_PAGE)
@@ -802,6 +876,18 @@ def build_design_description(data: dict) -> Path:
         "经两台220/35kV主变升压后由两回220kV线路送出，并预留第三回线路。10kV系统承担站用备用电源、"
         "无功补偿、冷却和集控通信等辅助负荷，0.4kV系统向站内低压负荷供电。",
     )
+    add_body(
+        doc,
+        "本设计的工作链条由原始资料整理、运行方式冻结、负荷与容量计算、短路等值、设备职责确定、"
+        "配电装置布置和图纸校核组成。说明书重点回答“为什么采用该方案、方案在什么条件下成立”，"
+        "计算书则给出公式、代入和数值校验；两者均读取同一组YAML参数及计算结果，避免表格、图纸与正文各自取值。",
+    )
+    add_body(
+        doc,
+        "参数采用分级证据管理：任务书和教师口径优先；现行标准及正式厂家资料用于补充；仍缺少唯一值时，"
+        "采用偏保守的课程设计假设并在边界章节中单列。海拔不超过1000m、污秽d级、保护及开断时间、"
+        "SVG容量和接地设备参数均属于可被后续真实资料覆盖的课程冻结值。",
+    )
     add_table(
         doc,
         "表1-1 主要原始资料",
@@ -821,6 +907,12 @@ def build_design_description(data: dict) -> Path:
         [3.2, 6.4, 5.9],
         9.3,
     )
+    add_result_analysis(
+        doc,
+        "原始资料决定了本站属于“多回35kV电源汇集、少回220kV集中送出”的典型结构。"
+        "主变容量、220kV线路N-1载流量和35/10kV母联事故转供能力因此成为全设计的三条控制主线；"
+        "第三回220kV线路仅作远期预留，不参加本期负荷和短路基准计算。",
+    )
     add_note_box(
         doc,
         "设计边界",
@@ -836,6 +928,17 @@ def build_design_description(data: dict) -> Path:
         "正常运行时尽量保持各电源分列，事故转供前先隔离故障源，避免通过母联形成未经许可的系统并列。",
     )
     principles_paragraph.paragraph_format.keep_together = True
+    add_body(
+        doc,
+        "可靠性评价不只看断路器数量，还要检查任一线路、主变或母线段退出后的停电范围和恢复路径。"
+        "本期方案允许通过母联进行事故转供，但转供能力受存活主变或T10额定容量、线路载流量、短路水平及"
+        "接地源联锁共同约束，不能把“母联可以闭合”等同于“所有负荷均可无条件恢复”。",
+    )
+    add_body(
+        doc,
+        "经济性评价以满足本期回路规模和远期扩建为前提，避免为有限回路数配置过多母线、隔离开关和占地。"
+        "运行灵活性则通过分段、预留间隔、明确的正常断开点和可执行的事故操作顺序实现，而不是依赖长期并列运行。",
+    )
     add_bullets(
         doc,
         [
@@ -847,6 +950,12 @@ def build_design_description(data: dict) -> Path:
     )
 
     add_heading(doc, "1.3 220kV主接线方案比较", 2)
+    add_body(
+        doc,
+        "220kV侧本期包括两回线路、两台主变和一回远期预留线路。候选接线必须同时适应线路与主变成组运行、"
+        "母线分区故障、设备检修以及第三回线路扩建。比较时不单纯追求断路器最少，而是综合回路规模、故障影响、"
+        "倒闸复杂度、占地投资和课程图纸可表达性。",
+    )
     add_table(
         doc,
         "表1-2 220kV候选方案技术比较",
@@ -856,7 +965,7 @@ def build_design_description(data: dict) -> Path:
             ["单母线分段", "接线清晰、经济；母线故障限制在一段；预留扩建方便", "一段检修时该段线路和主变退出", "采用"],
             ["双母线不带旁路", "检修灵活、供电可靠、扩建方便", "隔离开关多、占地及投资高、倒闸复杂", "可靠性要求提高时升级"],
         ],
-        [3.0, 4.8, 4.8, 2.9],
+        [3.4, 4.6, 4.6, 2.9],
         9.2,
     )
     scheme_conclusion = add_body(
@@ -865,8 +974,32 @@ def build_design_description(data: dict) -> Path:
         "L3按远期预留间隔设置。分段断路器正常断开；只有调度许可且同期检查通过后才允许条件闭合。",
     )
     scheme_conclusion.paragraph_format.keep_together = True
+    add_body(
+        doc,
+        "内桥接线虽然断路器数量少、初投资较低，但新增第三回线路时桥臂和运行方式均需较大调整，且线路、"
+        "主变之间的操作关联较强。双母线方案检修灵活，却会显著增加隔离开关、母线构架、倒闸步骤和占地，"
+        "与本期有限回路数不匹配。单母线分段使每段形成“1回线路+1台主变”的清晰单元，母线故障影响限制在一段，"
+        "同时为L3保留独立间隔，是本期可靠性与经济性的折中方案。",
+    )
+    add_result_analysis(
+        doc,
+        "正常分段运行时系统1和系统2不经本站并列；分段断路器闭合只作为调度许可下的条件方式。"
+        "因此设备短路预筛既保留分列运行职责，也对分段闭合场景进行条件性校核，但不把该场景写成默认运行方式。",
+    )
 
     add_heading(doc, "1.4 35kV、10kV与0.4kV接线", 2)
+    add_body(
+        doc,
+        "35kV侧回路数量最多，是本站一次接线组织的重点。两台主变分别接入I、II段母线，12回本期集电线路按6+6分配，"
+        "同一风电或光伏场站的多回线路尽量跨段布置，以降低单段母线故障导致整个场站同时退出的概率。"
+        "每段另设一回T10高压侧馈线和一回远期预留间隔，母联正常断开。",
+    )
+    add_body(
+        doc,
+        "10kV系统由两台35/10.5kV T10分别供电，每段配置一套SVG及相应辅助馈线。采用独立T10而不从主变第三绕组直接取电，"
+        "可使10kV无功补偿和辅助系统与主变220/35kV主送出功能分开组织，并便于分段检修；代价是增加两台电源变及相应间隔。"
+        "0.4kV系统采用两台所用变轮换暗备用，正常一台运行、母联闭合、另一台进线断开。",
+    )
     add_table(
         doc,
         "表1-3 各电压等级接线与正常状态",
@@ -891,13 +1024,29 @@ def build_design_description(data: dict) -> Path:
         [2.6, 7.2, 2.4, 3.3],
         9.2,
     )
+    add_body(
+        doc,
+        "35kV-I段接入130MW，II段接入140MW，两段本期馈线数量相同但负荷构成不同。按基础单回电流累加，"
+        "I、II段分别为2230.732A和2404.371A；主变进线及母联设备仍按单台180MVA主变额定电流的1.05倍，"
+        "即3117.691A确定持续职责，从而覆盖事故转供而不是只覆盖正常分段负荷。",
+    )
+    add_result_analysis(
+        doc,
+        "分段接线的价值在于把故障影响和检修范围局部化。其成立条件是母联不用于两台健康电源长期并列，"
+        "并且事故转供前完成故障隔离、容量核对和接地源切换。主接线图中的常开点、预留间隔和接地设备因此都属于运行逻辑的一部分。",
+    )
     add_figure(
         doc,
         ROOT / "drawings" / "exports" / "single_line_a1.png",
         "图1-1 SLD-01 220kV新能源汇集变电所电气主接线简图（A1，NTS，课程设计底图）",
     )
 
-    add_heading(doc, "1.5 正常、条件与禁止运行方式", 2, page_break_before=True)
+    add_heading(doc, "1.5 正常、条件与禁止运行方式", 2, page_break_before=False)
+    add_body(
+        doc,
+        "运行方式是后续持续电流和短路电流选取的前提。正常方式强调电源分列、故障影响受控；条件方式用于事故转供或"
+        "系统许可下的临时操作；禁止方式只保留为误操作敏感性和联锁设计依据，不得用来提高日常设备负荷能力。",
+    )
     add_table(
         doc,
         "表1-5 运行方式门控",
@@ -911,8 +1060,26 @@ def build_design_description(data: dict) -> Path:
             ["禁止", "35/10kV母联闭合且两套接地源同时投入", "低电阻并联会改变接地故障电流与保护配合"],
             ["禁止", "两台所用变经0.4kV并列", "两进线与母联设置电气、机械联锁"],
         ],
-        [2.2, 6.1, 7.2],
+        [2.8, 5.8, 6.9],
         9.2,
+    )
+    add_body(doc, "发生主变或T10故障时，事故转供按下列顺序进行：")
+    add_bullets(
+        doc,
+        [
+            "保护动作切除故障设备，并确认相应断路器、隔离开关已形成可靠电气隔离。",
+            "核对健康电源、母线和联络回路的电压、容量、持续电流及短路职责，确认转供后不超过本报告的控制值。",
+            "35kV或10kV母联合闸前，先退出受电侧或故障侧接地变+低电阻，仅保留健康电源侧1套接地源。",
+            "满足同期、闭锁和调度许可后闭合母联；主变N-1时同步执行新能源限发，使存活主变负荷不超过180MVA。",
+            "故障设备恢复、母联重新断开后，再恢复每个独立带电母线段各1套接地源。",
+        ],
+        ordered=True,
+    )
+    add_result_analysis(
+        doc,
+        "两套低电阻接地源经母联并联会降低等效接地电阻、改变目标单相接地电流和保护配合，"
+        "因此“母联已闭合且两套接地源同时投入”被明确列为禁止状态。相同地，两台健康主变或T10并列会显著抬高短路电流，"
+        "两台所用变并列还可能形成低压环流，均应由电气和机械联锁阻止。",
     )
 
     add_heading(doc, "第二章 负荷计算及变压器选择", 1)
@@ -924,6 +1091,28 @@ def build_design_description(data: dict) -> Path:
     )
     add_equation(doc, "Sᵢ = Pᵢ / cosφᵢ", "2-1")
     add_equation(doc, "I = S / (√3 U)", "2-2")
+    add_formula_terms(
+        doc,
+        "Pᵢ、Sᵢ分别为第i类负荷的有功功率和视在功率，cosφᵢ为功率因数；U为三相线电压，"
+        "当S以MVA、U以kV代入时，I的结果为kA，换算为A需乘1000。",
+    )
+    add_body(
+        doc,
+        "35kV五类负荷的视在功率分别为84.210526、63.157895、61.224490、40.816327和31.578947MVA，"
+        f"标量合计为{load35['gross_apparent_mva']:.6f}MVA。主变容量按下式计入同时出力和线损：",
+    )
+    add_equation(
+        doc,
+        f"S35 = {load35['gross_apparent_mva']:.6f} × {load35['group_factor']:.2f} × "
+        f"(1 + {load35['loss_rate']:.2f}) = {load35['with_losses_mva']:.6f} MVA",
+        "2-3",
+    )
+    add_body(
+        doc,
+        f"10kV三类辅助负荷原始视在功率合计{load10['gross_apparent_mva']:.6f}MVA，"
+        f"按0.80同时系数和5%线损得到{load10['with_losses_mva']:.6f}MVA。"
+        "该负荷在主变主校核中不与35kV汇集容量重复叠加，只作为保守敏感性保留。",
+    )
     add_table(
         doc,
         "表2-1 综合负荷计算结果",
@@ -938,6 +1127,13 @@ def build_design_description(data: dict) -> Path:
         [5.0, 3.6, 6.9],
         9.5,
     )
+    add_result_analysis(
+        doc,
+        f"将各项视在功率标量相加得到{load35['with_losses_mva']:.6f}MVA，属于偏保守的课程口径；"
+        f"若先分别合成P、Q再求模，结果为{load35['vector_with_losses_mva']:.6f}MVA，"
+        f"两者相差{load35['with_losses_mva'] - load35['vector_with_losses_mva']:.6f}MVA。"
+        "为与任务书和既有容量计算保持一致，主变选择采用前者，向量结果只用于数量级复核。",
+    )
 
     add_heading(doc, "2.2 主变压器选择", 2)
     add_body(
@@ -946,6 +1142,36 @@ def build_design_description(data: dict) -> Path:
         "220kV星形中性点经专用中性点CT直接接地，35kV侧为三角形绕组。两台正常运行时"
         "每台承担140.143MVA，负载率77.857%。一台退出时，另一台额定容量只能覆盖64.220%的最大计算负荷，"
         "缺口100.286MVA，因此按任务书允许的新能源限发策略，基准限发比例为35.780%。",
+    )
+    add_body(
+        doc,
+        "主变采用220/35kV双绕组方案，并以两台独立35/10.5kV T10承担10kV电源功能。与三绕组主变相比，"
+        "该方案使10kV辅助系统和SVG运行方式更独立，便于两段母线分别检修与控制；同时会增加T10及其35kV馈线间隔。"
+        "结合任务书已给的2×180MVA容量和当前辅助系统规模，本阶段采用双绕组主变加T10方案。",
+    )
+    add_equation(
+        doc,
+        f"Snormal,each = {main_transformer['total_required_mva']:.6f} / 2 = "
+        f"{main_transformer['per_transformer_mva']:.6f} MVA",
+        "2-4",
+    )
+    add_equation(
+        doc,
+        f"βnormal = {main_transformer['per_transformer_mva']:.6f} / 180 × 100% = "
+        f"{main_transformer['normal_loading_percent']:.3f}%",
+        "2-5",
+    )
+    add_equation(
+        doc,
+        f"KN-1 = 180 / {main_transformer['total_required_mva']:.6f} × 100% = "
+        f"{main_transformer['n_minus_one_supply_percent']:.3f}%",
+        "2-6",
+    )
+    add_equation(
+        doc,
+        f"Kcurtail = (1 − 180 / {main_transformer['total_required_mva']:.6f}) × 100% = "
+        f"{100 - main_transformer['n_minus_one_supply_percent']:.3f}%",
+        "2-7",
     )
     add_table(
         doc,
@@ -962,6 +1188,12 @@ def build_design_description(data: dict) -> Path:
         [5.0, 4.0, 6.5],
         9.5,
     )
+    add_result_analysis(
+        doc,
+        "2×180MVA能够满足正常方式，但不能在不采取控制措施时满足全部最大出力下的主变N-1。"
+        "方案成立的运行条件是新能源场站具备快速限发能力，并在事故转供前把存活主变负荷限制在180MVA以内。"
+        "1.05系数仅用于主变回路设备持续电流预筛，不表示主变本体可以长期按189MVA运行。",
+    )
 
     add_heading(doc, "2.3 10kV电源变与无功补偿", 2)
     add_body(
@@ -969,6 +1201,35 @@ def build_design_description(data: dict) -> Path:
         "10kV由2×31.5MVA、35/10.5kV、YNd11、uk=8%的T10供电，每段配置±12Mvar SVG。"
         "按目标功率因数0.98，需补偿21.8875Mvar；选24Mvar后裕度9.65%，pf≈0.98147。"
         "T10正常负载率39.58%，N-1最严吸收工况79.17%。",
+    )
+    add_body(
+        doc,
+        "无功补偿按不抵扣新能源变流器自身无功裕度的保守口径计算。35kV汇集负荷与10kV辅助负荷计损耗后，"
+        f"合计有功P={reactive['basis']['p35_mw'] + reactive['basis']['p10_mw']:.3f}MW，"
+        f"无功Q={reactive['basis']['q35_mvar'] + reactive['basis']['q10_mvar']:.6f}Mvar。"
+        "目标功率因数对应的允许无功为P·tan(arccos0.98)，两者之差即所需补偿容量。",
+    )
+    add_equation(doc, "Qc = Q − P tan(arccos cosφtarget)", "2-8")
+    add_equation(
+        doc,
+        f"Qc = {reactive['basis']['q35_mvar'] + reactive['basis']['q10_mvar']:.6f} − "
+        f"{reactive['basis']['p35_mw'] + reactive['basis']['p10_mw']:.3f} × tan(arccos0.98) "
+        f"= {reactive['calculated_required_mvar_conservative_with_10kv_auxiliary']:.6f} Mvar",
+        "2-9",
+    )
+    add_equation(
+        doc,
+        f"Kmargin = (24 / {reactive['calculated_required_mvar_conservative_with_10kv_auxiliary']:.6f} − 1) × 100% "
+        f"= {reactive['selected_margin_percent']:.2f}%",
+        "2-10",
+    )
+    add_body(
+        doc,
+        f"每台T10正常均衡承担{reactive['source_transformers']['normal_balanced_mva_each']:.6f}MVA，"
+        f"负载率{reactive['source_transformers']['normal_balanced_loading_percent']:.3f}%；"
+        f"N-1全吸收无功工况为{reactive['source_transformers']['n_minus_one_full_absorbing_mva']:.6f}MVA，"
+        f"负载率{reactive['source_transformers']['n_minus_one_full_absorbing_loading_percent']:.3f}%。"
+        "因此2×31.5MVA既覆盖正常分段运行，也为单台T10事故承担两套SVG的最严课程场景保留约20%的容量余量。",
     )
     add_table(
         doc,
@@ -978,9 +1239,15 @@ def build_design_description(data: dict) -> Path:
             ["T10-1、T10-2", "2×31.5MVA，35/10.5kV，YNd11，uk=8%", "各带一段10kV母线", "N-1最严79.17%"],
             ["SVG-1、SVG-2", "2×±12Mvar", "每段一套，电压/无功/功率因数控制", "补偿后pf≈0.98147"],
         ],
-        [3.1, 5.2, 4.0, 3.2],
+        [3.7, 4.9, 3.8, 3.1],
         9.2,
         "容量属于任务书缺项下的课程冻结值，最终由无功电压与谐波专题覆盖。",
+    )
+    add_result_analysis(
+        doc,
+        "两套SVG分置于10kV-I、II段可在正常方式下就地调节电压、无功或功率因数。"
+        "24Mvar只比计算需求高9.65%，属于合理但不宽裕的课程选择；最终容量仍须由并网点电压偏差、"
+        "动态响应、谐波和变流器持续过载能力专题复核。",
     )
 
     add_heading(doc, "2.4 所用变压器选择", 2)
@@ -991,9 +1258,51 @@ def build_design_description(data: dict) -> Path:
         "正常一台供电且0.4kV母联闭合，另一台及进线暗备用。",
     )
     station_service_paragraph.paragraph_format.keep_together = True
+    add_body(
+        doc,
+        "所用电负荷按连续、经常短时和不经常短时分类。基准场景取全部连续负荷96.3kW加空气压缩机同时投入值22.0kW，"
+        "合计118.3kW；最严经常场景把两台空气压缩机44.0kW全部计入，合计140.3kW。"
+        "110kV配电装置和110kV断路器加热负荷因本项目无该电压等级而明确剔除。",
+    )
+    add_equation(doc, "ST = Pscenario (1 + Km) / cosφ", "2-11")
+    add_formula_terms(doc, "Km为容量裕度，本设计取10%；所用电综合功率因数按课程假设取0.80。")
+    add_equation(
+        doc,
+        f"Sbase = {station_service['base_scenario_kw_before_margin']:.1f} × 1.10 / 0.80 = "
+        f"{station_service['base_required_kva']:.4f} kVA",
+        "2-12",
+    )
+    add_equation(
+        doc,
+        f"Sworst = {station_service['worst_frequent_kw_before_margin']:.1f} × 1.10 / 0.80 = "
+        f"{station_service['worst_frequent_required_kva']:.4f} kVA",
+        "2-13",
+    )
+    add_result_analysis(
+        doc,
+        "按最严场景选择200kVA标准容量，每台所用变均可单独承担全部课程负荷。暗备用方式避免两台变压器并列，"
+        "同时通过母联闭合保证正常仅一台运行即可带两段低压母线；备用投入前仍须先切除故障进线并满足防并列联锁。",
+    )
 
     add_heading(doc, "第三章 最大持续工作电流及短路计算", 1)
     add_heading(doc, "3.1 各回路最大持续工作电流", 2)
+    add_body(
+        doc,
+        "最大持续工作电流用于确定断路器、隔离开关、CT、母线和开关柜的额定电流。馈线按本类最大出力、实际回路数和5%线损计算，"
+        "不再乘全站0.95同时出力系数；主变、T10和SVG回路则按设备额定容量乘1.05选型裕度确定。不同口径服务于不同对象，不能相互替代。",
+    )
+    add_equation(doc, "Ifeeder = P (1 + kloss) / (n √3 U cosφ)", "3-1")
+    add_formula_terms(doc, "n为同类负荷回路数，kloss=0.05；馈线计算反映单回线路可能承担的本类最大出力。")
+    add_equation(
+        doc,
+        "IES = 30 × 1.05 / (1 × √3 × 35 × 0.95) × 1000 = 546.963 A",
+        "3-2",
+    )
+    add_body(
+        doc,
+        "储能馈线只有1回，因而形成35kV单回馈线最大电流546.963A；风电A、B虽总容量不同，但80MW/4回与60MW/3回的单回有功均为20MW，"
+        "故两者单回设计电流相同，均为364.642A。",
+    )
     feeder_rows = []
     for item in load["load_35kv"]["items"]:
         feeder_rows.append(
@@ -1030,8 +1339,28 @@ def build_design_description(data: dict) -> Path:
         [5.0, 3.7, 6.8],
         9.2,
     )
+    add_body(
+        doc,
+        "35kV母线段存在三个容易混淆的电流口径。按未计线损的各馈线基础电流和实际分配累加，I、II段分别为2230.732A和2404.371A；"
+        "若按各馈线基础视在功率标量求和后统一施加0.95同时系数和5%线损，则分别约为2225.155A和2398.360A；"
+        "按各段P、Q向量合成则分别为2221.564A和2394.612A。若把每回馈线均按自身最大值计5%线损后直接相加，"
+        "则分别约为2342.268A和2524.590A。前三者用于不同的正常负荷分析，最后一种是各馈线同时满出的保守和。",
+    )
+    add_result_analysis(
+        doc,
+        "主变进线、35kV母联及35kV主母线的最终设备持续职责不采用上述较小的正常段电流，而按单台主变额定电流1.05倍取3117.691A，"
+        "以覆盖事故转供。35kV 3150A开关柜相对该职责仅余32.309A，后续必须维持室内温度不高于40℃并取得厂家温升确认。",
+    )
 
     add_heading(doc, "3.2 220kV线路导线校核与N-1", 2)
+    add_body(
+        doc,
+        "任务书指定220kV送出导线为LGJ-400/50。课程参考载流量592A对应环境25℃、导体允许温度70℃，"
+        "本站最高环境温度为41℃，因此必须先进行温度修正，再分别与正常双回和单回事故电流比较。",
+    )
+    add_equation(doc, "KT = √[(θallow − θproject)/(θallow − θreference)]", "3-3")
+    add_equation(doc, "KT = √[(70 − 41)/(70 − 25)] = 0.802773", "3-4")
+    add_equation(doc, "Iallow,41 = 592 × 0.802773 = 475.242 A", "3-5")
     conductor_paragraph = add_body(
         doc,
         "LGJ-400/50课程参考载流量为592A（25℃环境、70℃导体）。41℃修正系数0.802773，课程允许值"
@@ -1039,6 +1368,19 @@ def build_design_description(data: dict) -> Path:
         "472.377A，余量2.864A，因此当前仍由主变容量控制。",
     )
     conductor_paragraph.paragraph_format.keep_together = True
+    add_equation(
+        doc,
+        f"Kline-curtail = (1 − {outgoing_ampacity['corrected_ampacity_a']:.3f} / "
+        f"{outgoing['single_circuit_contingency_current_a']:.3f}) × 100% = "
+        f"{outgoing_ampacity['line_only_required_curtailment_percent']:.3f}%",
+        "3-6",
+    )
+    add_result_analysis(
+        doc,
+        f"主变N-1限发后，220kV线路电流为{outgoing_ampacity['main_transformer_n_minus_one_current_a']:.3f}A，"
+        f"比课程允许值只低{outgoing_ampacity['margin_after_main_transformer_n_minus_one_a']:.3f}A。"
+        "主变限发比例虽然略严于导线单独约束，但线路热裕度非常小；真实工程必须用明确风速、日照、环境和导体温度条件下的厂家热额定值覆盖本课程参考。",
+    )
     add_note_box(
         doc,
         "证据边界",
@@ -1052,11 +1394,34 @@ def build_design_description(data: dict) -> Path:
         "初步忽略电阻；主变电抗按uk=14%，T10按uk=8%。新能源和SVG贡献在敏感性中按额定电流1.1~1.2倍"
         "算术叠加，峰值采用课程系数k=1.8。该方法用于课程设备等级预筛，不替代GB/T 15544.1-2023完整计算。",
     )
-    add_equation(doc, "X*sys = xc × SB / Ssys", "3-1", compact=True)
-    add_equation(doc, "X*line = xL × SB / UB²", "3-2", compact=True)
-    add_equation(doc, "X*T = (uk% / 100) × SB / SN", "3-3", compact=True)
-    add_equation(doc, "Ik = SB / (√3 UB XΣ*)", "3-4", compact=True)
-    add_equation(doc, "ip = √2 k Ik", "3-5", compact=True)
+    add_body(
+        doc,
+        "计算时先把系统、线路和变压器电抗统一换算到100MVA基准，再按实际运行方式进行串并联组合。"
+        "220kV分列时每段只有对应系统和线路路径；220kV分段条件闭合时两条路径并联；向35kV、10kV计算点继续串入主变和T10电抗。",
+    )
+    add_equation(doc, "X*sys = xc × SB / Ssys", "3-7", compact=True)
+    add_equation(doc, "X*line = xL × SB / UB²", "3-8", compact=True)
+    add_equation(doc, "X*T = (uk% / 100) × SB / SN", "3-9", compact=True)
+    add_equation(doc, "Ik = SB / (√3 UB XΣ*)", "3-10", compact=True)
+    add_equation(doc, "ip = √2 k Ik", "3-11", compact=True)
+    add_formula_terms(
+        doc,
+        "xc为系统在自身容量基准上的标幺电抗，x为线路单位长度电抗，L为线路长度，uk为变压器短路电压百分数；"
+        "XΣ*为故障点至各电源的等值标幺电抗。",
+    )
+    add_body(
+        doc,
+        "系统1、系统2连同L1、L2后的路径电抗分别为0.069597和0.086772，分段闭合后的并联等值为0.038621。"
+        f"220kV分段闭合电网分量为{sc_points['SC-220-BUS-CLOSED']['grid_symmetrical_current_ka']:.3f}kA，"
+        f"叠加新能源上界后为{sc_points['SC-220-BUS-CLOSED']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA。",
+    )
+    add_body(
+        doc,
+        f"35kV条件性最大综合短路电流为{sc_points['SC-35-II-220-CLOSED']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA，"
+        f"10kV条件性最大值为{sc_points['SC-10-I-220-CLOSED']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA。"
+        f"两台健康主变或两台健康T10并列时分别升至{sc_points['SC-35-BOTH-TRANSFORMERS-SENSITIVITY']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA和"
+        f"{sc_points['SC-10-BOTH-T10-SENSITIVITY']['conservative_total_symmetrical_current_range_ka']['maximum']:.3f}kA，只用于联锁和误操作风险提示。",
+    )
     add_table(
         doc,
         "表3-3 短路职责分级（禁止并列值仅作联锁与误操作风险提示）",
@@ -1071,6 +1436,12 @@ def build_design_description(data: dict) -> Path:
         margin_x=75,
         margin_y=50,
     )
+    add_result_analysis(
+        doc,
+        "开关设备的条件性预校核职责取220/35/10kV的7.385、16.291和15.638kA，"
+        "而不是只取正常分列的较小值。禁止并列敏感性不作为日常必选开断职责，但若联锁不能可靠阻止该方式，"
+        "就必须重新提高设备等级或改变系统运行方案。",
+    )
 
     add_heading(doc, "第四章 主要电气设备选择", 1)
     add_heading(doc, "4.1 选择与校验原则", 2)
@@ -1084,6 +1455,17 @@ def build_design_description(data: dict) -> Path:
     add_equation(doc, "Ue ≥ Un；Ie ≥ Imax", "4-1")
     add_equation(doc, "Ibr ≥ Ik；ipeak,rated ≥ ip", "4-2")
     add_equation(doc, "Ith² tr ≥ Ik² t", "4-3")
+    add_formula_terms(
+        doc,
+        "Ue、Ie为设备额定电压和额定电流；Ibr为断路器额定开断电流；ipeak,rated为额定峰值耐受或关合能力；"
+        "Ith、tr为设备短时耐受电流及其额定持续时间。",
+    )
+    add_body(
+        doc,
+        "设备选择按“先确定回路职责、再选择额定值等级、最后逐项比较”的顺序进行。持续电流取正常或事故方式中的较大值；"
+        "短路开断和峰值采用条件性最大课程职责；热稳定等值时间由1.00s后备保护和0.08s全开断时间相加后向上取1.10s。"
+        "同一设备只有所有适用数值条件满足，且未完成的厂家/环境项目被明确保留时，才能写为“课程预筛通过”。",
+    )
 
     add_heading(doc, "4.2 断路器、隔离开关和开关柜", 2)
     add_table(
@@ -1100,10 +1482,28 @@ def build_design_description(data: dict) -> Path:
             ["10kV SVG/辅助馈线柜", "12kV金属铠装", "1250", "31.5", "80", "31.5kA/4s"],
             ["10kV接地变馈线柜", "12kV金属铠装", "1250", "31.5", "80", "31.5kA/4s"],
         ],
-        [4.4, 3.2, 2.2, 2.0, 1.9, 1.8],
+        [4.0, 2.9, 2.0, 1.8, 1.8, 3.0],
         8.8,
         "35kV 3150A相对3117.691A仅余32.309A（约1.04%）；10kV已升级为2500A，相对1909.586A"
         "余590.414A。接地变馈线分别覆盖400A/200A课程职责。35/10kV柜统一按室内受控≤40℃，仍须由厂家温升和精确柜型确认。",
+        nowrap_header_columns={2, 3, 4, 5},
+        nowrap_body_columns={2, 3, 4, 5},
+    )
+    add_body(
+        doc,
+        "以35kV主变进线柜为例，额定电流3150A与职责3117.691A相比仅有32.309A裕度，约为1.04%；"
+        "额定开断电流31.5kA高于条件性短路职责16.291kA，额定峰值耐受80kA高于41.470kA。"
+        "热稳定比较为31.5²×4=3969kA²·s，大于16.291²×1.10=291.936kA²·s。",
+    )
+    add_body(
+        doc,
+        "10kV进线和母联采用2500A而非较低等级，是因为T10按10kV设备口径并计1.05裕度后的职责达到1909.586A。"
+        "2500A方案保留590.414A裕度，31.5kA开断和80kA峰值等级也分别覆盖15.638kA和39.808kA课程职责。",
+    )
+    add_result_analysis(
+        doc,
+        "35kV 3150A等级的短路和热稳定裕度较大，但持续电流裕度很小，故其通过结论必须附带“开关室≤40℃、"
+        "通风空调可靠、厂家温升试验和精确柜型确认”的条件。不能因短路裕度充足而忽略长期发热控制。",
     )
 
     add_table(
@@ -1117,6 +1517,12 @@ def build_design_description(data: dict) -> Path:
         ],
         [3.0, 4.0, 8.5],
         9.0,
+    )
+    add_body(
+        doc,
+        "负面设备选择同样需要给出计算依据。35kV和10kV条件性短路职责分别为16.291kA和15.638kA，"
+        "均明显低于所选31.5kA开关设备能力，因此本课程方案不设置限流电抗器。高压熔断器只可能作为PT柜成套保护元件，"
+        "不承担主回路开断；阻波器则取决于通信专业是否采用电力线载波，当前任务书未给该条件。",
     )
 
     add_heading(doc, "4.3 CT与PT/CVT课程配置", 2)
@@ -1146,6 +1552,18 @@ def build_design_description(data: dict) -> Path:
         8.2,
         "短时栏峰值单位为kA；ZCT职责与三相CT分开，三相电缆芯线同穿窗口而屏蔽接地回流线不得穿入。课程芯级组合不作为订货清册。",
     )
+    add_body(
+        doc,
+        "CT一次变比先按最大持续电流选择，再检查短时、峰值及保护用途。35kV进线4000/1A覆盖3117.691A，"
+        "10kV进线2500/1A覆盖1909.586A，35kV馈线800/1A覆盖最大单回546.963A；相同电压级内不机械统一变比，"
+        "以避免馈线测量分辨率过低。0.2S/0.5级分别面向计量和测量，5P30及PX课程目标用于过流、差动或母差保护。",
+    )
+    add_body(
+        doc,
+        "主变220kV中性点CT的持续和短路职责不能沿用主变相回路的三相短路电流。其600/1A、PX+5P30仅为课程配置目标，"
+        "最终必须依据单相接地、零序网络、保护负担和拐点电压专题确定。35/10kV电缆回路另设ZCT，"
+        "用于剩余电流和单相接地保护，窗口尺寸及屏蔽层接地回流路径需与电缆敷设共同复核。",
+    )
     add_table(
         doc,
         "表4-4 PT/CVT课程目标配置",
@@ -1158,6 +1576,11 @@ def build_design_description(data: dict) -> Path:
         [2.2, 4.2, 6.7, 2.4],
         8.5,
         "容量、铁磁谐振、同期抽取和厂家精确型号仍待二次专业复核。",
+    )
+    add_result_analysis(
+        doc,
+        "PT/CVT配置满足测量、保护和开口三角零序电压取得的课程功能，但一次/二次电压和准确级并不能代替容量校验。"
+        "最终二次负荷、导线压降、铁磁谐振抑制、CVT暂态特性及同期抽取回路应由保护计量清册和厂家资料闭合。",
     )
 
     add_heading(doc, "4.4 MOA、中性点接地与接地开关", 2)
@@ -1175,7 +1598,27 @@ def build_design_description(data: dict) -> Path:
         "仅为课程预筛；35kV的TOV、能量、引线压降、线路放电等级和精确型号待专题复核。",
         keep_note_with_table=True,
     )
-    doc.add_page_break()
+    add_body(
+        doc,
+        "MOA课程预筛包括持续运行电压和雷电保护裕度两项。持续运行电压Uc应覆盖相应接地方式下的长期相对地电压，"
+        "保护裕度以被保护设备雷电冲击耐受电压LIWV与避雷器残压之比进行初步判断。",
+    )
+    add_equation(doc, "Uc ≥ Uc,required；Kp = LIWV / Ures", "4-4")
+    add_body(
+        doc,
+        f"220kV设备最高电压252kV，有效接地课程口径下Uc,required=252/√3="
+        f"{arresters['MOA-220']['calculated']['required_continuous_voltage_kv']:.3f}kV；"
+        f"选用159kV Uc后裕度{arresters['MOA-220']['calculated']['continuous_voltage_margin_kv']:.3f}kV，"
+        f"LIWV/残压={arresters['MOA-220']['calculated']['protection_ratio']:.3f}。",
+    )
+    add_body(
+        doc,
+        f"35kV系统按非有效接地课程上界取Uc,required="
+        f"{arresters['MOA-35']['calculated']['required_continuous_voltage_kv']:.3f}kV，"
+        f"所选40.8kV Uc仅余{arresters['MOA-35']['calculated']['continuous_voltage_margin_kv']:.3f}kV，"
+        f"约{arresters['MOA-35']['calculated']['continuous_voltage_margin_kv'] / arresters['MOA-35']['calculated']['required_continuous_voltage_kv'] * 100:.2f}%。"
+        "该裕度是本组MOA预筛中最薄弱的一项，必须由10s TOV、能量和厂家曲线复核。",
+    )
     add_table(
         doc,
         "表4-6 接地参数与接地开关课程配置",
@@ -1191,6 +1634,33 @@ def build_design_description(data: dict) -> Path:
         [3.1, 4.5, 4.2, 3.7],
         8.1,
     )
+    grounding_method_paragraph = add_body(
+        doc,
+        "35kV和10kV绕组均不能直接提供中性点，因此每段采用ZN接地变形成中性点，并串入低电阻限制单相接地电流。"
+        "电阻和接地变容量按相电压、目标接地电流及10s短时热容量计算。",
+    )
+    grounding_method_paragraph.paragraph_format.keep_together = True
+    add_equation(doc, "Uφ = Un/√3；R = Uφ/Ig；Seq = Uφ Ig", "4-5")
+    add_equation(doc, "ST,min = Seq / Koverload", "4-6")
+    add_body(
+        doc,
+        f"35kV系统Uφ={grounding_packages['GRD-PKG-35']['calculated']['phase_to_earth_voltage_kv']:.4f}kV，"
+        f"R={grounding_packages['GRD-PKG-35']['calculated']['resistance_ohm']:.3f}Ω，取50.5Ω；"
+        f"10s等效功率{grounding_packages['GRD-PKG-35']['calculated']['short_time_equivalent_power_mva']:.3f}MVA，"
+        f"按10倍短时过载折算最小容量{grounding_packages['GRD-PKG-35']['calculated']['minimum_transformer_capacity_kva_at_overload_factor']:.3f}kVA，故选1000kVA。",
+    )
+    add_body(
+        doc,
+        f"10kV系统相应得到R={grounding_packages['GRD-PKG-10']['calculated']['resistance_ohm']:.3f}Ω，取28.9Ω；"
+        f"10s等效功率{grounding_packages['GRD-PKG-10']['calculated']['short_time_equivalent_power_mva']:.3f}MVA，"
+        f"最小接地变容量{grounding_packages['GRD-PKG-10']['calculated']['minimum_transformer_capacity_kva_at_overload_factor']:.3f}kVA，故选200kVA。"
+        "上述容量采用课程短时过载系数，不能直接作为订货参数。",
+    )
+    add_result_analysis(
+        doc,
+        "每段设置1套接地源可使分列运行时各母线都有明确的零序回路；母联合闸时只保留健康侧1套，"
+        "既维持接地故障电流目标，又避免两套电阻并联。最终仍需由接地变/NGR厂家统一校核零序阻抗、损耗、温升、CT饱和和保护配合。",
+    )
     add_note_box(
         doc,
         "防雷与接地边界",
@@ -1198,12 +1668,20 @@ def build_design_description(data: dict) -> Path:
         "避雷针保护范围、接地网电阻、接触电压或跨步电压。",
     )
 
-    add_heading(doc, "4.5 母线、绝缘子与套管", 2, page_break_before=True)
+    add_heading(doc, "4.5 母线、绝缘子与套管", 2, page_break_before=False)
     add_body(
         doc,
         "母线型式已从原则选择推进到课程级截面和性能预筛。220kV管母完成载流、热稳、简化弯曲和电晕；"
         "35/10kV矩形母线只完成载流与热稳，电动力、支撑机械、连接金具和厂家温升仍待复核。",
     )
+    add_body(
+        doc,
+        "母线热稳定采用铝导体课程常数C=87和等值时间1.10s。先由几何尺寸求截面积，再计算允许短时电流，"
+        "并与本电压级条件性最大短路职责比较。长期载流量另按参考载流量、环境温度和布置方式校核。",
+    )
+    add_equation(doc, "Ith,allow = C S / (1000 √t)", "4-7")
+    add_equation(doc, "Smin = 1000 Ik √t / C", "4-8")
+    add_formula_terms(doc, "S为单相导体总截面积，单位mm²；Ith,allow和Ik以kA计，t=1.10s。")
     add_table(
         doc,
         "表4-7 母线课程级选择",
@@ -1215,6 +1693,25 @@ def build_design_description(data: dict) -> Path:
         ],
         [2.2, 4.0, 5.5, 3.8],
         8.1,
+    )
+    add_body(
+        doc,
+        f"220kV Φ100/90mm管母截面积为{busbars['BUS-220-TUBE-100-90']['calculated']['cross_section_area_mm2']:.3f}mm²，"
+        f"41℃修正后载流量{busbars['BUS-220-TUBE-100-90']['calculated']['corrected_ampacity_a']:.3f}A，"
+        f"1.10s热稳定允许电流{busbars['BUS-220-TUBE-100-90']['calculated']['thermal_allowable_current_ka']:.3f}kA。"
+        f"两者分别高于735.559A持续职责和7.385kA短路职责。",
+    )
+    add_body(
+        doc,
+        f"简化电动力计算按3.0m相距、8.0m支撑跨距和1.8动载系数进行，得到弯曲应力"
+        f"{busbars['BUS-220-TUBE-100-90']['calculated']['dynamic']['calculated_bending_stress_mpa']:.3f}MPa，低于70MPa课程允许值；"
+        f"Peek公式得到电晕起始相电压{busbars['BUS-220-TUBE-100-90']['calculated']['corona']['critical_disruptive_phase_voltage_kv']:.3f}kV，"
+        f"高于最高运行相电压{busbars['BUS-220-TUBE-100-90']['calculated']['corona']['highest_operating_phase_voltage_kv']:.3f}kV。",
+    )
+    add_result_analysis(
+        doc,
+        "220kV管母已形成载流、热稳、简化机械和电晕的完整课程链。35/10kV矩形母线虽在载流和热稳定上裕度充足，"
+        "但缺少支撑跨距、相间距、固有频率、连接受力和厂家温升资料，因此只能写为“已完成电气与热稳定预筛，机械动稳定待核”。",
     )
     add_table(
         doc,
@@ -1230,7 +1727,7 @@ def build_design_description(data: dict) -> Path:
         "当前35/10kV方案无裸母线直接穿墙，独立裸母线穿墙套管不单列；方案改变时重新选择。",
     )
 
-    add_heading(doc, "第五章 配电装置设计与运行", 1)
+    add_heading(doc, "第五章 配电装置设计与运行", 1, page_break_before=False)
     add_heading(doc, "5.1 配电装置型式", 2)
     add_table(
         doc,
@@ -1244,6 +1741,17 @@ def build_design_description(data: dict) -> Path:
         ],
         [2.5, 5.2, 7.8],
         9.4,
+    )
+    add_body(
+        doc,
+        "220kV侧本期回路数量较少，户外AIS能够把母线、隔离开关、断路器、CT/CVT、MOA和构架的设备链清晰展开，"
+        "便于检修隔离、远期L3扩建以及课程平面与断面表达。GIS虽占地较小、环境适应性好，但设备集成度和投资较高，"
+        "且任务书未给出必须采用紧凑布置的场址约束，因此本阶段不选。",
+    )
+    add_body(
+        doc,
+        "35kV和10kV回路多、分段与馈线组织明确，采用室内金属铠装移开式开关柜可缩短户外导体长度并便于防误联锁。"
+        "0.4kV低压柜则围绕两进线一母联的暗备用方式配置，正常只有一台所用变进线带电。",
     )
 
     add_heading(doc, "5.2 220kV户外AIS课程几何", 2)
@@ -1281,6 +1789,18 @@ def build_design_description(data: dict) -> Path:
         9.4,
         "取自课程讲义表7-2的220J列；施工设计仍须按DL/T 5352-2018全文复核。",
     )
+    add_body(
+        doc,
+        "平面与断面图共用145m×90m站区、4m道路、4m相间距和14m典型功能中心距。母线、线路构架及主变构架标高分别为9.0m、"
+        "14.5m和11.5m，使电气净距、设备检修通道和导线引接关系能够在两类图纸中相互核对。课程几何不等于厂家基础图，"
+        "但所有尺寸均有统一数据源，避免平面图、断面图各自估算。",
+    )
+    add_result_analysis(
+        doc,
+        "A1、A2、B1、B2、C、D净距分别按1800、2000、2550、1900、4300和3800mm控制课程底图。"
+        "这些值用于建立可手绘临摹、可复核的布置基线；施工设计阶段仍须结合现行标准全文、海拔、设备外形、端子方向、"
+        "运输荷载和基础尺寸重新校核。",
+    )
     add_heading(doc, "5.3 事故运行与联锁", 2)
     operation_paragraph = add_body(
         doc,
@@ -1290,6 +1810,16 @@ def build_design_description(data: dict) -> Path:
         "35/10kV母联合闸前还须退出受电侧接地源，仅保留健康电源侧1套；禁止母联闭合且两套低电阻接地源并联。",
     )
     operation_paragraph.paragraph_format.keep_together = True
+    add_body(
+        doc,
+        "一回220kV线路退出时，剩余线路不能直接承担280.286MVA全部出力，因为41℃课程允许载流量只有475.242A。"
+        "执行主变N-1限发后线路电流为472.377A，虽然满足当前课程参考，但仅余2.864A，因此事故运行时应同时监视主变容量和线路温度。",
+    )
+    add_body(
+        doc,
+        "T10事故转供除检查31.5MVA容量外，还应限制两套SVG在吸收无功方向的最严组合；课程计算得到单台T10最大负载率79.17%。"
+        "所用变切换则遵循“先断故障进线、再确认母联和备用进线闭锁、最后投入备用”的顺序，防止两台低压变压器并列。",
+    )
     add_figure(
         doc,
         ROOT / "drawings" / "exports" / "switchyard_plan_a1.png",
@@ -1312,6 +1842,11 @@ def build_design_description(data: dict) -> Path:
 
     add_heading(doc, "第六章 结论与设计边界", 1)
     add_heading(doc, "6.1 主要设计结论", 2)
+    add_body(
+        doc,
+        "本设计形成了从主接线、负荷、短路到设备和布置的同源闭环。各项结论并非孤立的表格结果："
+        "主接线确定运行方式，运行方式决定持续电流与短路职责，职责再控制设备等级、母线截面和事故操作边界。",
+    )
     add_bullets(
         doc,
         [
@@ -1325,7 +1860,17 @@ def build_design_description(data: dict) -> Path:
             "CAD按三张必交图加SEC-220-L1-01增强详图组织，共四张A1图。",
         ],
     )
+    add_result_analysis(
+        doc,
+        "本方案的主要约束是主变N-1限发35.780%、LGJ-400/50高温事故载流裕度很小、35kV 3150A柜持续电流裕度约1.04%，"
+        "以及35kV MOA持续电压裕度仅约0.74%。这些项目均已在计算书中保留完整计算链，并在最终工程边界中列为优先复核项。",
+    )
     add_heading(doc, "6.2 课程假设与待复核项目", 2)
+    add_body(
+        doc,
+        "课程设计必须在信息不完备时形成可检验方案，但不能把假设写成施工结论。下表按“当前已完成的课程闭环”和"
+        "“仍需真实场址、标准全文、保护专题或厂家资料关闭的项目”进行分层，便于后续替换输入时同步重算、重绘和重写。",
+    )
     add_table(
         doc,
         "表6-1 课程冻结值与最终工程边界",
@@ -1362,7 +1907,7 @@ def build_design_description(data: dict) -> Path:
         8.5,
         margin_y=55,
     )
-    add_references(doc, REFERENCES)
+    add_references(doc, REFERENCES, page_break_before=False)
 
     path = REPORT_DIR / "01_220kV新能源汇集变电所_技术设计说明书.docx"
     finalize_document(doc, path)
@@ -1373,6 +1918,22 @@ def build_calculation_book(data: dict) -> Path:
     load = data["load"]
     sc = data["sc"]
     equipment = data["equipment"]
+    load35 = load["load_35kv"]
+    load10 = load["load_10kv"]
+    main_transformer = load["main_transformer"]
+    reactive = load["reactive_compensation"]
+    station_service = load["station_service"]
+    outgoing = load["outgoing_220kv"]
+    outgoing_ampacity = load["outgoing_220kv_conductor_ampacity"]
+    sc_points = sc["points"]
+    network = sc["network"]
+    course_completion = equipment["course_completion"]
+    busbars = {item["id"]: item for item in course_completion["busbars"]}
+    arresters = {item["id"]: item for item in course_completion["surge_arresters"]}
+    grounding_packages = {
+        item["id"]: item
+        for item in course_completion["grounding_transformer_resistor_packages"]
+    }
     doc = new_document("技术设计计算书")
 
     front = doc.add_section(WD_SECTION.NEW_PAGE)
@@ -1387,6 +1948,18 @@ def build_calculation_book(data: dict) -> Path:
         "本计算书保留负荷、容量、持续电流、标幺电抗、短路电流和设备校验的公式、代入和中间结果。"
         "除特别说明外，功率单位采用MW/Mvar/MVA，电压采用kV，电流采用A或kA。短路计算为任务书"
         "X-only课程初算，最终工程值仍须按现行标准和厂家模型复核。",
+    )
+    add_body(
+        doc,
+        "计算遵循“原始数据—通用公式—参数代入—中间结果—判据比较—结论”的顺序。"
+        "表格用于汇总同类对象，关键选择不直接从表格读取结论，而是在正文中给出至少一个完整代入示例和控制因素分析。"
+        "所有未取整数值由计算脚本保存，正文通常保留3~6位小数，设备等级按额定标准值向上选择。",
+    )
+    add_body(
+        doc,
+        "标量相加、P-Q向量合成、正常分段、事故转供和禁止并列属于不同计算口径。"
+        "本书在每次使用这些口径时均说明适用对象；禁止方式仅用于敏感性，不自动转化为日常设备必选职责。"
+        "课程假设值在式中正常参与计算，但最终结论仍保留被教师口径、标准全文或厂家数据覆盖的接口。",
     )
     add_table(
         doc,
@@ -1413,11 +1986,34 @@ def build_calculation_book(data: dict) -> Path:
         "X*为标幺电抗；Ik为三相短路初始对称电流；ip为课程峰值电流；Ith和tr分别为设备短时耐受电流及持续时间。",
     )
     symbol_paragraph.paragraph_format.keep_together = True
+    add_body(
+        doc,
+        "下标B表示基准量，N表示额定量，Σ表示故障点至电源的总等值量；normal表示正常运行，N-1表示任一关键元件退出，"
+        "closed表示分段或母联条件闭合。式中电压均取线电压，除接地电阻计算明确使用相电压Uφ外，不混用相、线电压。",
+    )
 
-    add_heading(doc, "前置计算 负荷及变压器容量", 1)
-    add_heading(doc, "A.1 35kV新能源负荷", 2)
-    add_equation(doc, "Sᵢ = Pᵢ / cosφᵢ", "A-1")
-    add_equation(doc, "Qᵢ = Pᵢ tan(arccos(cosφᵢ))", "A-2")
+    add_heading(doc, "第一章 负荷及变压器容量计算", 1)
+    add_heading(doc, "1.1 35kV新能源负荷", 2)
+    add_body(
+        doc,
+        "35kV负荷由风电场A/B、光伏电站A/B和储能电站组成。容量计算先把各项有功功率按自身功率因数折算为视在功率和无功功率；"
+        "主变综合容量再统一施加0.95最大同时出力系数和5%线损。单回馈线电流另按该类最大出力除以实际回路数计算，不施加0.95系数。",
+    )
+    add_equation(doc, "Sᵢ = Pᵢ / cosφᵢ", "1-1")
+    add_equation(doc, "Qᵢ = Pᵢ tan(arccos(cosφᵢ))", "1-2")
+    add_formula_terms(
+        doc,
+        "Pᵢ以MW计，Sᵢ以MVA计，Qᵢ以Mvar计；单回设计电流Iᵢ=Pᵢ(1+0.05)/(n√3Ucosφᵢ)，其中n为回路数。",
+    )
+    add_body(doc, "以风电场A为例：")
+    add_equation(doc, "SWA = 80 / 0.95 = 84.210526 MVA", compact=True)
+    add_equation(doc, "QWA = 80 × tan(arccos0.95) = 26.294728 Mvar", compact=True)
+    add_equation(doc, "IWA = 84.210526 × 1.05 / (4 × √3 × 35) × 1000 = 364.642 A", compact=True)
+    add_body(
+        doc,
+        "风电场B为60MW、3回，单回有功同样为20MW，因此与风电场A得到相同的单回电流364.642A。"
+        "光伏电站A功率因数较高但每回承担30MW，单回电流增至530.220A；储能只有1回线路，形成全站最大35kV单回馈线电流546.963A。",
+    )
     rows = []
     for item in load["load_35kv"]["items"]:
         rows.append(
@@ -1433,7 +2029,7 @@ def build_calculation_book(data: dict) -> Path:
         )
     add_table(
         doc,
-        "表A-1 35kV负荷逐项计算",
+        "表1-1 35kV负荷逐项计算",
         ["负荷", "P/MW", "cosφ", "回路", "S/MVA", "Q/Mvar", "单回设计电流/A"],
         rows,
         [2.6, 1.9, 1.8, 1.7, 2.0, 2.1, 3.4],
@@ -1443,15 +2039,39 @@ def build_calculation_book(data: dict) -> Path:
         nowrap_body_columns={1, 2, 3, 4, 5, 6},
         margin_x=75,
     )
-    add_equation(doc, "ΣS = 280.988185 MVA", "A-3")
-    add_equation(doc, "S35 = 280.988185 × 0.95 × 1.05 = 280.285714 MVA", "A-4")
+    add_equation(doc, "ΣS = 280.988185 MVA", "1-3")
+    add_equation(doc, "S35 = 280.988185 × 0.95 × 1.05 = 280.285714 MVA", "1-4")
+    add_body(
+        doc,
+        f"逐项无功合计为{load35['gross_reactive_mvar']:.6f}Mvar。若按P、Q向量合成，计同时系数和线损后的有功、无功分别为"
+        f"{load35['with_losses_active_mw']:.3f}MW和{load35['with_losses_reactive_mvar']:.6f}Mvar，故：",
+    )
+    add_equation(
+        doc,
+        f"S35,vector = √({load35['with_losses_active_mw']:.3f}² + "
+        f"{load35['with_losses_reactive_mvar']:.6f}²) = {load35['vector_with_losses_mva']:.6f} MVA",
+        compact=True,
+    )
     add_body(
         doc,
         "向量法按P、Q分别计同时系数和线损得到279.840482MVA；任务书课程主口径采用逐项视在功率和的"
         "标量处理，得到280.285714MVA。两者接近，正式容量校验取后者。",
     )
+    add_result_analysis(
+        doc,
+        f"标量口径比向量口径高{load35['with_losses_mva'] - load35['vector_with_losses_mva']:.6f}MVA，"
+        "保持了课程计算的偏保守性。后续主变容量和220kV送出电流均以280.285714MVA为主结果，"
+        "单回馈线电流仍按各类自身最大值计算，以免同时系数被重复使用。",
+    )
 
-    add_heading(doc, "A.2 10kV辅助负荷", 2)
+    add_heading(doc, "1.2 10kV辅助负荷", 2)
+    add_body(
+        doc,
+        "10kV负荷包括站用电备用电源、无功补偿及冷却系统、集控通信及监控系统。综合容量计算采用0.80同时系数和5%线损；"
+        "各馈线设备电流仍按本回路额定最大负荷计5%线损，不乘0.80，以保证单回路选型不因全站同时系数而偏小。",
+    )
+    add_equation(doc, "ΣS10 = 0.8/0.85 + 0.6/0.85 + 0.4/0.90 = 2.091503 MVA", compact=True)
+    add_equation(doc, "Istation-backup = 0.8×1.05/(√3×10×0.85)×1000 = 57.056 A", compact=True)
     rows = []
     for item in load["load_10kv"]["items"]:
         rows.append(
@@ -1465,35 +2085,59 @@ def build_calculation_book(data: dict) -> Path:
         )
     add_table(
         doc,
-        "表A-2 10kV辅助负荷逐项计算",
+        "表1-2 10kV辅助负荷逐项计算",
         ["负荷", "P/MW", "cosφ", "S/MVA", "单回设计电流/A"],
         rows,
         [5.0, 2.0, 2.0, 2.7, 3.8],
         9.2,
     )
-    add_equation(doc, "S10 = 2.091503 × 0.80 × 1.05 = 1.756863 MVA", "A-5")
+    add_equation(doc, "S10 = 2.091503 × 0.80 × 1.05 = 1.756863 MVA", "1-5")
+    add_result_analysis(
+        doc,
+        "1.756863MVA用于10kV辅助负荷综合分析；57.056A、42.792A和26.943A分别用于三类单回馈线额定电流选择。"
+        "两种结果的用途不同，不能用101.433A的综合母线电流替代任一具体馈线，也不能用单回最大值简单推回主变综合容量。",
+    )
 
-    add_heading(doc, "A.3 主变压器容量与N-1", 2)
-    add_equation(doc, "Snormal,each = 280.285714 / 2 = 140.142857 MVA", "A-6")
-    add_equation(doc, "βnormal = 140.142857 / 180 × 100% = 77.857%", "A-7")
-    add_equation(doc, "KN-1 = 180 / 280.285714 × 100% = 64.220%", "A-8")
-    add_equation(doc, "ΔS = 280.285714 − 180 = 100.285714 MVA", "A-9")
-    add_equation(doc, "Kcurtail = (1 − 180 / 280.285714) × 100% = 35.7798%", "A-10")
+    add_heading(doc, "1.3 主变压器容量与N-1", 2)
+    add_body(
+        doc,
+        "主变容量按35kV新能源汇集主口径280.285714MVA校验。正常方式下两台主变均衡分担；N-1方式假定任一台退出，"
+        "另一台不允许超过180MVA额定容量，超出部分由新能源限发消除。该策略适用于可控新能源汇集站，但必须作为运行约束写入说明书。",
+    )
+    add_equation(doc, "Snormal,each = 280.285714 / 2 = 140.142857 MVA", "1-6")
+    add_equation(doc, "βnormal = 140.142857 / 180 × 100% = 77.857%", "1-7")
+    add_equation(doc, "KN-1 = 180 / 280.285714 × 100% = 64.220%", "1-8")
+    add_equation(doc, "ΔS = 280.285714 − 180 = 100.285714 MVA", "1-9")
+    add_equation(doc, "Kcurtail = (1 − 180 / 280.285714) × 100% = 35.7798%", "1-10")
     add_body(
         doc,
         "主变课程型式冻结为2×180MVA、220/35kV双绕组、YNd11、uk=14%；220kV星形中性点经专用CT"
         "直接接地，35kV侧为三角形绕组。",
     )
+    add_equation(doc, "IT,220 = 180/(√3×220) = 472.377 A", compact=True)
+    add_equation(doc, "Imax,T,220 = 1.05×472.377 = 495.996 A", compact=True)
+    add_equation(doc, "IT,35 = 180/(√3×35) = 2969.230 A", compact=True)
+    add_equation(doc, "Imax,T,35 = 1.05×2969.230 = 3117.691 A", compact=True)
     add_body(
         doc,
         "若保守叠加10kV辅助负荷，所需容量为282.042577MVA，正常负载率78.345%，N-1缺口"
         "102.042577MVA。该值作为敏感性，不改变主校核口径。",
     )
+    add_result_analysis(
+        doc,
+        "正常负载率77.857%说明2×180MVA容量配置在日常方式下具有合理裕度；N-1覆盖率64.220%则表明该裕度不足以无条件承担全站最大出力。"
+        "1.05系数只用于回路设备额定电流选择，不能被解释为主变本体允许长期过载5%。",
+    )
 
-    add_heading(doc, "A.4 所用变压器", 2)
+    add_heading(doc, "1.4 所用变压器", 2)
+    add_body(
+        doc,
+        "所用电清单先按项目电压等级筛选，110kV配电装置电源和110kV断路器加热两项因本站无110kV系统而剔除。"
+        "其余负荷按连续、经常短时和不经常短时分类；空气压缩机总装机44kW，基准场景按一台22kW同时投入，最严经常场景按44kW全部投入。",
+    )
     add_table(
         doc,
-        "表A-3 所用电负荷统计结果",
+        "表1-3 所用电负荷统计结果",
         ["统计口径", "功率/kW"],
         [
             ["连续适用负荷", "96.3"],
@@ -1505,34 +2149,93 @@ def build_calculation_book(data: dict) -> Path:
             ["短时同时投入值", "22.0"],
         ],
         [9.5, 6.0],
-        9.5,
+        9.2,
+        margin_y=45,
     )
-    add_equation(doc, "Sbase = 118.3 × 1.10 / 0.80 = 162.6625 kVA", "A-11")
-    add_equation(doc, "Sworst = 140.3 × 1.10 / 0.80 = 192.9125 kVA", "A-12")
-    add_body(doc, "选用2×200kVA、10/0.4kV、SCB14干式、Dyn11、uk=4%的所用变，暗备用；正常一台运行。")
-
-    add_heading(doc, "A.5 SVG与T10", 2)
-    add_equation(doc, "Qc = P [tanφ1 − tanφ2]", "A-13")
     add_body(
         doc,
-        "T10冻结为2×31.5MVA、35/10.5kV、YNd11、uk=8%，两段各设±12Mvar SVG。计入10kV辅助无功后"
-        "需21.8875Mvar，选24Mvar，裕度9.65%，补偿后功率因数0.98147。式(A-17)按10.5kV绕组电压计算，"
-        "式(A-18)按10kV开关设备校核电压计算，二者校核对象不同。",
+        "连续负荷96.3kW包括主变风机、充电及通风、照明和冬季加热等项目。基准场景Pbase=96.3+22.0=118.3kW；"
+        "最严经常场景Pworst=96.3+44.0=140.3kW。容量计算统一取功率因数0.80并留10%裕度。",
     )
-    add_equation(doc, "IT10,35 = 31.5 / (√3 × 35) = 519.615 A", "A-14")
-    add_equation(doc, "1.05 IT10,35 = 545.596 A", "A-15")
-    add_equation(doc, "IT10,10.5 = 31.5 / (√3 × 10.5) = 1732.051 A", "A-16")
-    add_equation(doc, "1.05 IT10,10.5 = 1818.653 A", "A-17")
-    add_equation(doc, "1.05 IT10,10kV设备口径 = 31.5/(√3×10)×1.05 = 1909.586 A", "A-18")
-    add_heading(doc, "第五章 各回路最大持续工作电流计算书", 1)
-    add_heading(doc, "5.1 通用公式与主变回路", 2)
-    add_equation(doc, "Imax = Smax / (√3 Un)", "5-1")
-    add_equation(doc, "IT,220 = 180 / (√3 × 220) × 1.05 = 495.996 A", "5-2")
-    add_equation(doc, "IT,35 = 180 / (√3 × 35) × 1.05 = 3117.691 A", "5-3")
-    add_equation(doc, "IL,normal = 280.285714 / (2√3 × 220) = 367.780 A", "5-4")
-    add_equation(doc, "IL,N-1 = 280.285714 / (√3 × 220) = 735.559 A", "5-5")
+    add_equation(doc, "ST = Pscenario(1+Km)/cosφ", compact=True)
+    add_formula_terms(doc, "Km=0.10，cosφ=0.80；标准容量从100、125、160、200、250、315kVA序列中向上选取。")
+    add_equation(doc, "Sbase = 118.3 × 1.10 / 0.80 = 162.6625 kVA", "1-11")
+    add_equation(doc, "Sworst = 140.3 × 1.10 / 0.80 = 192.9125 kVA", "1-12")
+    add_body(doc, "选用2×200kVA、10/0.4kV、SCB14干式、Dyn11、uk=4%的所用变，暗备用；正常一台运行。")
+    add_result_analysis(
+        doc,
+        "192.9125kVA决定标准容量取200kVA。两台设备并非各承担一半负荷，而是每台都应能独立承担最严课程场景；"
+        "正常一台运行、0.4kV母联闭合，备用投入时必须防止两进线并列。电动机启动压降和精确负荷功率因数仍需在最终设备资料齐全后复核。",
+    )
 
-    add_heading(doc, "5.2 35kV馈线与母线段", 2)
+    add_heading(doc, "1.5 SVG与T10", 2)
+    add_equation(doc, "Qc = P [tanφ1 − tanφ2]", "1-13")
+    add_body(
+        doc,
+        "T10冻结为2×31.5MVA、35/10.5kV、YNd11、uk=8%，两段各设±12Mvar SVG。补偿计算不抵扣新能源变流器自身无功裕度，"
+        "先对35kV汇集负荷计算，再保守叠加10kV辅助负荷。",
+    )
+    add_equation(
+        doc,
+        "Qc,35 = 75.991709 − 269.325×tan(arccos0.98) = 21.302935 Mvar",
+        "1-14",
+    )
+    add_equation(
+        doc,
+        "Qc,Σ = 76.883260 − 270.837×tan(arccos0.98) = 21.887462 Mvar",
+        "1-15",
+    )
+    add_equation(doc, "Kmargin = (24/21.887462 − 1)×100% = 9.65%", "1-16")
+    add_equation(
+        doc,
+        "cosφ' = 270.837 / √[270.837² + (76.883260−24)²] = 0.98147",
+        "1-17",
+    )
+    add_body(
+        doc,
+        "T10容量按两套SVG的无功交换范围和10kV辅助有功共同校验。正常均衡时每台承担一半辅助有功、辅助无功和一套12Mvar SVG；"
+        "N-1最严吸收工况由单台T10承担全部辅助负荷和两套SVG吸收无功。",
+    )
+    add_equation(
+        doc,
+        "ST10,normal = √[(1.512/2)² + (12+0.891552/2)²] = 12.468716 MVA，β=39.583%",
+        "1-18",
+    )
+    add_equation(
+        doc,
+        "ST10,N-1 = √[1.512² + (24+0.891552)²] = 24.937431 MVA，β=79.166%",
+        "1-19",
+    )
+    add_equation(doc, "IT10,35 = 31.5 / (√3 × 35) = 519.615 A", "1-20")
+    add_equation(doc, "1.05 IT10,35 = 545.596 A", "1-21")
+    add_equation(doc, "IT10,10.5 = 31.5 / (√3 × 10.5) = 1732.051 A", "1-22")
+    add_equation(doc, "1.05 IT10,10.5 = 1818.653 A", "1-23")
+    add_equation(doc, "1.05 IT10,10kV设备口径 = 31.5/(√3×10)×1.05 = 1909.586 A", "1-24")
+    add_result_analysis(
+        doc,
+        "2×±12Mvar使补偿后功率因数达到0.98147，且单台T10在最严N-1吸收工况下负载率仍低于80%。"
+        "式(1-23)按10.5kV绕组电压计算，式(1-24)按10kV开关设备校核电压计算，二者对象不同；"
+        "最终仍须由无功电压、谐波和SVG厂家持续过载曲线覆盖。",
+    )
+    add_heading(doc, "第二章 各回路最大持续工作电流计算", 1)
+    add_heading(doc, "2.1 通用公式与主变回路", 2)
+    add_body(
+        doc,
+        "持续电流必须针对具体回路和运行方式确定。主变回路按设备额定容量乘1.05选型裕度；220kV线路正常按两回均分，"
+        "N-1按单回承担全部本期送出；母联按可能转供的最大设备容量确定。1.05只用于电器及导体选型，不改变变压器额定容量。",
+    )
+    add_equation(doc, "Imax = Smax / (√3 Un)", "2-1")
+    add_equation(doc, "IT,220 = 180 / (√3 × 220) × 1.05 = 495.996 A", "2-2")
+    add_equation(doc, "IT,35 = 180 / (√3 × 35) × 1.05 = 3117.691 A", "2-3")
+    add_equation(doc, "IL,normal = 280.285714 / (2√3 × 220) = 367.780 A", "2-4")
+    add_equation(doc, "IL,N-1 = 280.285714 / (√3 × 220) = 735.559 A", "2-5")
+    add_result_analysis(
+        doc,
+        "220kV线路与分段回路的持续职责取735.559A，以覆盖一回线路退出或一段事故转供。主变高、低压侧分别取495.996A和3117.691A。"
+        "这些值来自不同事故路径，不能用正常双回每回367.780A替代主变或母联设备职责。",
+    )
+
+    add_heading(doc, "2.2 35kV馈线与母线段", 2)
     feeder_rows = []
     for item in load["load_35kv"]["items"]:
         feeder_rows.append(
@@ -1546,23 +2249,44 @@ def build_calculation_book(data: dict) -> Path:
         )
     add_table(
         doc,
-        "表5-1 35kV馈线持续电流",
+        "表2-1 35kV馈线持续电流",
         ["负荷", "回路数", "单回基础S/MVA", "计损耗S/MVA", "Imax/A"],
         feeder_rows,
         [3.5, 2.0, 3.0, 3.0, 4.0],
         9.0,
+        margin_y=45,
     )
-    add_equation(doc, "I35-I = 2230.732 A；I35-II = 2404.371 A", "5-6")
+    add_equation(doc, "I35-I,base = 2230.732 A；I35-II,base = 2404.371 A", "2-6")
     add_body(
         doc,
-        "母线段电流按实际馈线分配累加，不把全站4623.515A简单平均。35kV母联按一台主变额定电流"
-        "1.05倍，即3117.691A承担事故转供职责。",
+        "式(2-6)按各馈线未计线损的基础电流和实际分配累加，不把全站4623.515A简单平均。"
+        "为避免与表2-1的计损耗单回电流混淆，还需并列说明另外两种口径。",
+    )
+    add_equation(doc, "I35-I,group = 2225.155 A；I35-II,group = 2398.360 A", compact=True)
+    add_body(
+        doc,
+        "上式按各馈线基础视在功率标量求和后统一乘0.95同时系数和1.05线损，适合与全站课程主口径对应。"
+        "若按各段P、Q分别合成，则I、II段分别为2221.564A和2394.612A；若把每回馈线都按自身最大出力计5%线损后直接相加，"
+        "I、II段分别为2342.268A和2524.590A，表示各馈线同时达到各自最大值的保守和。",
+    )
+    add_equation(doc, "I35-I,vector = 2221.564 A；I35-II,vector = 2394.612 A", compact=True)
+    add_equation(doc, "I35-I,max-sum = 2342.268 A；I35-II,max-sum = 2524.590 A", compact=True)
+    add_result_analysis(
+        doc,
+        "2230.732/2404.371A、2225.155/2398.360A、2221.564/2394.612A和2342.268/2524.590A分别对应基础分配、"
+        "标量综合、P-Q向量综合和逐馈线最大值四种口径。"
+        "35kV主变进线、母联及主母线设备最终仍按3117.691A事故转供职责选型，不采用其中任何较小值。",
     )
 
-    add_heading(doc, "5.3 10kV及SVG回路", 2)
+    add_heading(doc, "2.3 10kV及SVG回路", 2)
+    add_body(
+        doc,
+        "10kV进线和母联按T10额定容量在10kV开关设备电压基准下计算，SVG按12Mvar、10.5kV额定端电流计算，"
+        "其他馈线按各自有功、功率因数和5%线损计算。下表的最大值服务于单个回路选型，不代表10kV母线综合负荷。",
+    )
     add_table(
         doc,
-        "表5-2 10kV主要回路持续电流",
+        "表2-2 10kV主要回路持续电流",
         ["回路", "Imax/A", "计算依据"],
         [
             ["T10进线/10kV母联", "1909.586", "31.5MVA按10kV设备口径×1.05"],
@@ -1574,32 +2298,65 @@ def build_calculation_book(data: dict) -> Path:
         [5.0, 3.5, 7.0],
         9.4,
     )
+    add_equation(doc, "ISVG = 12/(√3×10.5)×1.05×1000 = 692.820 A", compact=True)
+    add_equation(doc, "Ibackup = 0.8×1.05/(√3×10×0.85)×1000 = 57.056 A", compact=True)
+    add_result_analysis(
+        doc,
+        "10kV进线/母联1909.586A控制开关柜额定电流，SVG 692.820A控制SVG馈线柜；其余辅助馈线均远低于1250A等级。"
+        "进线选择2500A后保留590.414A裕度，同时避免把按10.5kV绕组计算的1818.653A直接用于10kV柜口径。",
+    )
 
-    add_heading(doc, "5.4 LGJ-400/50温度修正", 2)
-    add_equation(doc, "KT = √[(70−41)/(70−25)] = 0.802773", "5-7")
-    add_equation(doc, "Iallow,41 = 592 × 0.802773 = 475.242 A", "5-8")
-    add_equation(doc, "Kline-curtail = (1−475.242/735.559)×100% = 35.390%", "5-9")
-    add_equation(doc, "Imain-T-N-1 = 180/(√3×220) = 472.377 A", "5-10")
+    add_heading(doc, "2.4 LGJ-400/50温度修正", 2)
     add_body(
+        doc,
+        "导线载流量随环境温度升高而下降。课程采用参考环境25℃、允许导体温度70℃和参考载流量592A，"
+        "按平方根温度修正公式换算至本站最高41℃。该方法未包含风速、日照、导体表面状态和动态热额定，因此只作课程保守校核。",
+    )
+    add_equation(doc, "KT = √[(70−41)/(70−25)] = 0.802773", "2-7")
+    add_equation(doc, "Iallow,41 = 592 × 0.802773 = 475.242 A", "2-8")
+    add_equation(doc, "Kline-curtail = (1−475.242/735.559)×100% = 35.390%", "2-9")
+    add_equation(doc, "Imain-T-N-1 = 180/(√3×220) = 472.377 A", "2-10")
+    line_ampacity_paragraph = add_body(
         doc,
         "主变N-1后的线路电流472.377A，小于课程允许值475.242A，余量2.864A。因此主变限发35.780%"
         "略严于线路限发35.390%，但厂家热额定资料到位后必须覆盖复核。",
     )
+    line_ampacity_paragraph.paragraph_format.keep_together = True
+    add_result_analysis(
+        doc,
+        "正常双回每回367.780A有107.462A裕度；单回承担全部出力时短缺260.318A，不能无条件运行。"
+        "主变N-1限发恰好把线路电流压至472.377A，但2.864A裕度极小，所以事故运行时主变容量和线路热稳定是同时存在的控制条件。",
+    )
 
-    add_heading(doc, "第六章 短路电流计算书", 1)
-    add_heading(doc, "6.1 标幺值与等值网络", 2)
-    add_equation(doc, "ZB,220 = UB²/SB = 230²/100 = 529 Ω", "6-1")
-    add_equation(doc, "X*sys1 = 0.40×100/2400 = 0.016667", "6-2")
-    add_equation(doc, "X*sys2 = 0.45×100/2000 = 0.022500", "6-3")
-    add_equation(doc, "X*L1 = 0.40×70×100/230² = 0.052930", "6-4")
-    add_equation(doc, "X*L2 = 0.40×85×100/230² = 0.064272", "6-5")
-    add_equation(doc, "X*path1 = 0.069597；X*path2 = 0.086772", "6-6")
-    add_equation(doc, "X*parallel = X1X2/(X1+X2) = 0.038621", "6-7")
-    add_equation(doc, "X*T = 0.14×100/180 = 0.077778", "6-8")
-    add_equation(doc, "X*T10 = 0.08×100/31.5 = 0.253968", "6-9")
+    add_heading(doc, "第三章 短路电流计算", 1, page_break_before=False)
+    add_heading(doc, "3.1 标幺值与等值网络", 2)
+    add_body(
+        doc,
+        "本章采用100MVA统一基准和230/37/10.5kV平均额定电压，电阻在课程初算中忽略。"
+        "标幺法先求各电压级基准阻抗、基准电流，再把系统、线路和变压器电抗换算到同一基准。"
+        "计算得到的是三相短路初始对称电流，用于设备等级预筛。",
+    )
+    add_equation(doc, "ZB = UB²/SB；IB = SB/(√3UB)；Ik = IB/XΣ*", compact=True)
+    add_equation(doc, "IB,220 = 100/(√3×230) = 0.251022 kA", compact=True)
+    add_equation(doc, "IB,35 = 100/(√3×37) = 1.560562 kA", compact=True)
+    add_equation(doc, "IB,10 = 100/(√3×10.5) = 5.498574 kA", compact=True)
+    add_body(
+        doc,
+        "系统电抗按自身容量基准换算，线路电抗按xL/ZB换算，变压器电抗按短路电压百分数和额定容量换算。"
+        "系统1经L1、系统2经L2构成两条220kV电源路径；分段闭合时两路径并联，向低电压侧继续串入主变和T10电抗。",
+    )
+    add_equation(doc, "ZB,220 = UB²/SB = 230²/100 = 529 Ω", "3-1")
+    add_equation(doc, "X*sys1 = 0.40×100/2400 = 0.016667", "3-2")
+    add_equation(doc, "X*sys2 = 0.45×100/2000 = 0.022500", "3-3")
+    add_equation(doc, "X*L1 = 0.40×70×100/230² = 0.052930", "3-4")
+    add_equation(doc, "X*L2 = 0.40×85×100/230² = 0.064272", "3-5")
+    add_equation(doc, "X*path1 = 0.069597；X*path2 = 0.086772", "3-6")
+    add_equation(doc, "X*parallel = X1X2/(X1+X2) = 0.038621", "3-7")
+    add_equation(doc, "X*T = 0.14×100/180 = 0.077778", "3-8")
+    add_equation(doc, "X*T10 = 0.08×100/31.5 = 0.253968", "3-9")
     add_table(
         doc,
-        "表6-1 元件标幺电抗",
+        "表3-1 元件标幺电抗",
         ["元件", "X*/pu", "说明"],
         [
             ["系统1", "0.016667", "以2400MVA为原基准"],
@@ -1615,43 +2372,95 @@ def build_calculation_book(data: dict) -> Path:
         [5.0, 3.0, 7.5],
         9.4,
     )
+    add_body(
+        doc,
+        "新能源场站和SVG短路贡献采用额定电流1.1~1.2倍的RMS算术上界。对任一变流器支路，"
+        "课程最大贡献按Iconv,max=1.2Sr/(√3U)计算；综合对称电流为电网分量与变流器上界相加。",
+    )
+    add_equation(doc, "Icourse,max = Ik,grid + ΣIconv,max", compact=True)
+    add_equation(doc, "ip,course = √2 × 1.8 × Icourse,max", compact=True)
+    add_result_analysis(
+        doc,
+        "固定k=1.8同时作用于电网和变流器RMS算术上界，只用于形成保守的设备峰值预筛。"
+        "完整工程计算还需考虑R/X、电压系数、变压器修正、开断时刻以及厂家变流器限流波形，因此本章不声称实现了GB/T 15544.1-2023全部方法。",
+    )
 
-    add_heading(doc, "6.2 220kV短路点", 2)
-    add_equation(doc, "Ik,220-I = 100/(√3×230×0.069597) = 3.607 kA", "6-10")
+    add_heading(doc, "3.2 220kV短路点", 2)
+    add_body(
+        doc,
+        "220kV分列运行时，I段和II段分别由系统1+L1、系统2+L2供电。分段条件闭合时两路径并联，"
+        "等值电抗下降到0.038621，故该场景形成220kV设备预筛的最大电网分量。",
+    )
+    add_equation(doc, "Ik,220-I = 100/(√3×230×0.069597) = 3.607 kA", "3-10")
     add_body(doc, "计I段新能源贡献上界0.426kA，课程控制职责为4.033kA，课程峰值10.266kA；3.607kA仅为电网分量。")
-    add_equation(doc, "Ik,220-II = 100/(√3×230×0.086772) = 2.893 kA", "6-11")
+    add_equation(doc, "I220-I,total = 3.606806 + 0.425867 = 4.032673 kA", compact=True)
+    add_equation(doc, "ip,220-I = √2×1.8×4.032673 = 10.265509 kA", compact=True)
+    add_equation(doc, "Ik,220-II = 100/(√3×230×0.086772) = 2.893 kA", "3-11")
     add_body(doc, "计II段新能源贡献上界0.459kA，课程综合上限为3.352kA。")
-    add_equation(doc, "Ik,220-closed = 100/(√3×230×0.038621) = 6.500 kA", "6-12")
+    add_equation(doc, "Ik,220-closed = 100/(√3×230×0.038621) = 6.500 kA", "3-12")
     add_body(
         doc,
         "6.500kA和电网峰值16.546kA仅为电网分量。计全部新能源贡献上界0.885kA后，条件性控制职责"
         "为7.385kA，课程峰值18.798kA；该场景必须以系统允许并列为前提。",
     )
+    add_equation(doc, "I220,closed,total = 6.499689 + 0.884883 = 7.384572 kA", compact=True)
+    add_equation(doc, "ip,220,closed = √2×1.8×7.384572 = 18.798051 kA", compact=True)
+    add_result_analysis(
+        doc,
+        "正常分列时I段综合4.033kA大于II段3.352kA；条件闭合时升至7.385kA。"
+        "设备条件性预校核采用7.385/18.798kA，而运行规程仍把分段闭合作为需调度许可和同期检查的条件方式。",
+    )
 
-    add_heading(doc, "6.3 35kV短路点", 2)
-    add_equation(doc, "XΣ,35-I = 0.069597 + 0.077778 = 0.147375", "6-13")
-    add_equation(doc, "Ik,35-I,grid = 100/(√3×37×0.147375) = 10.588 kA", "6-14")
+    add_heading(doc, "3.3 35kV短路点", 2)
+    add_body(
+        doc,
+        "35kV故障路径在220kV电源路径后串入一台主变电抗0.077778。正常分列时两段上游路径不同，"
+        "因此I段电网短路电流高于II段；220kV分段闭合后，两段上游等值相同，新能源接入规模较大的II段形成条件性最大综合值。",
+    )
+    add_equation(doc, "XΣ,35-I = 0.069597 + 0.077778 = 0.147375", "3-13")
+    add_equation(doc, "Ik,35-I,grid = 100/(√3×37×0.147375) = 10.588 kA", "3-14")
     add_body(doc, "加I段新能源贡献上界2.677kA，综合上限13.265kA。")
-    add_equation(doc, "XΣ,35-II = 0.086772 + 0.077778 = 0.164550", "6-15")
-    add_equation(doc, "Ik,35-II,grid = 9.483 kA；综合上限12.368 kA", "6-16")
+    add_equation(doc, "XΣ,35-II = 0.086772 + 0.077778 = 0.164550", "3-15")
+    add_equation(doc, "Ik,35-II,grid = 9.483 kA；综合上限12.368 kA", "3-16")
     add_body(
         doc,
         "220kV分段条件闭合时，两段上游等值相同，35kV-II段因新能源额定电流较大形成最大综合上限"
         "16.291kA，课程峰值41.470kA。两台健康主变低压侧并列时综合敏感性25.694kA，属于禁止方式。",
     )
+    add_equation(doc, "I35-II,closed,total = 13.405738 + 2.885245 = 16.290983 kA", compact=True)
+    add_equation(doc, "ip,35,max = √2×1.8×16.290983 = 41.470074 kA", compact=True)
+    add_equation(doc, "I35,parallel,total = 25.693932 kA；ip = 65.406073 kA（禁止方式）", compact=True)
+    add_result_analysis(
+        doc,
+        "35kV开关设备按16.291kA条件职责预筛，低于31.5kA等级；25.694kA禁止并列值虽仍低于31.5kA，"
+        "但不能据此允许两台健康主变长期并列，因为其峰值、保护配合、接地方式和运行许可均发生改变。",
+    )
 
-    add_heading(doc, "6.4 10kV短路点", 2)
-    add_equation(doc, "XΣ,10-I = 0.069597+0.077778+0.253968 = 0.401343", "6-17")
-    add_equation(doc, "Ik,10-I,grid = 13.700 kA；计SVG后14.492 kA", "6-18")
-    add_equation(doc, "XΣ,10-II = 0.086772+0.077778+0.253968 = 0.418518", "6-19")
-    add_equation(doc, "Ik,10-II,grid = 13.138 kA；计SVG后13.930 kA", "6-20")
+    add_heading(doc, "3.4 10kV短路点", 2)
+    add_body(
+        doc,
+        "10kV故障路径在主变后继续串入T10电抗0.253968。由于T10电抗占总电抗比例较大，"
+        "正常分段时I、II段电网短路电流分别为13.700kA和13.138kA；每段再叠加一套SVG的1.2倍额定电流上界0.792kA。",
+    )
+    add_equation(doc, "XΣ,10-I = 0.069597+0.077778+0.253968 = 0.401343", "3-17")
+    add_equation(doc, "Ik,10-I,grid = 13.700 kA；计SVG后14.492 kA", "3-18")
+    add_equation(doc, "XΣ,10-II = 0.086772+0.077778+0.253968 = 0.418518", "3-19")
+    add_equation(doc, "Ik,10-II,grid = 13.138 kA；计SVG后13.930 kA", "3-20")
     add_body(
         doc,
         "220kV分段条件闭合时，单台T10供本段的综合上限为15.638kA，课程峰值39.808kA。两台健康T10"
         "经10kV母联并列时综合敏感性为28.472kA，仅用于联锁风险提示。",
     )
+    add_equation(doc, "I10,closed,total = 14.846300 + 0.791795 = 15.638094 kA", compact=True)
+    add_equation(doc, "ip,10,max = √2×1.8×15.638094 = 39.808089 kA", compact=True)
+    add_equation(doc, "I10,T10-parallel,total = 28.472322 kA；ip = 72.478698 kA（禁止方式）", compact=True)
+    add_result_analysis(
+        doc,
+        "10kV条件职责15.638kA低于31.5kA开关柜等级，因此课程方案不设置限流电抗器。"
+        "两台T10并列会把综合值提高到28.472kA并显著抬高峰值，必须通过母联和进线联锁阻止，不能作为可接受的正常运行方式。",
+    )
 
-    add_heading(doc, "6.5 全部计算点汇总", 2)
+    add_heading(doc, "3.5 全部计算点汇总", 2)
     status_map = {
         "permitted_separate_operation": "允许分列",
         "conditional_pending_system_parallel_permission": "条件并列",
@@ -1689,7 +2498,7 @@ def build_calculation_book(data: dict) -> Path:
         )
     add_table(
         doc,
-        "表6-2 短路计算点汇总",
+        "表3-2 短路计算点汇总",
         ["计算点", "电压/kV", "XΣ/pu", "电网Ik/kA", "综合上限/kA", "课程峰值/kA", "方式"],
         sc_rows,
         [3.0, 1.8, 1.9, 1.9, 1.9, 1.9, 3.1],
@@ -1698,22 +2507,45 @@ def build_calculation_book(data: dict) -> Path:
         margin_x=45,
         margin_y=30,
     )
+    add_result_analysis(
+        doc,
+        "汇总表将允许分列、条件并列和禁止敏感性同时列出，是为了说明设备职责的选取过程。"
+        "最终控制值为220kV 7.385kA/18.798kA、35kV 16.291kA/41.470kA和10kV 15.638kA/39.808kA；"
+        "禁止方式的25.694kA和28.472kA只用于联锁风险审查。",
+    )
 
-    add_heading(doc, "第七章 主要电气设备选择计算书", 1)
-    add_heading(doc, "7.1 校验条件", 2)
-    add_equation(doc, "Ue ≥ Un；Ie ≥ Imax", "7-1")
-    add_equation(doc, "Ibr ≥ Ik；Imaking ≥ ip；Ipeak withstand ≥ ip", "7-2")
-    add_equation(doc, "Ith² tr ≥ Ik² t；t = 1.10 s", "7-3")
+    add_heading(doc, "第四章 主要电气设备选择与校验", 1, page_break_before=False)
+    add_heading(doc, "4.1 校验条件", 2)
     add_body(
+        doc,
+        "设备选择先由额定电压确定绝缘等级，再由回路最大持续电流确定额定电流，最后以条件性最大短路电流校验开断、关合、峰值和热稳定。"
+        "禁止并列场景保留为联锁风险提示，不自动抬高正常必选职责；若最终联锁无法保证，则必须重新选择设备或调整运行方案。",
+    )
+    add_equation(doc, "Ue ≥ Un；Ie ≥ Imax", "4-1")
+    add_equation(doc, "Ibr ≥ Ik；Imaking ≥ ip；Ipeak withstand ≥ ip", "4-2")
+    add_equation(doc, "Ith² tr ≥ Ik² t；t = 1.10 s", "4-3")
+    switching_duty_paragraph = add_body(
         doc,
         "开断和峰值预筛采用条件性最大职责：220kV 7.385/18.798kA，35kV 16.291/41.470kA，"
         "10kV 15.638/39.808kA。禁止并列敏感性不抬高正常设备必选职责，但必须落实联锁。",
     )
+    switching_duty_paragraph.paragraph_format.keep_together = True
+    add_equation(doc, "teq = 1.00 + 0.08 = 1.08 s，向上取1.10 s", "4-4")
+    add_result_analysis(
+        doc,
+        "本章所有“通过”均指额定值等级的课程预筛。精确型号、41℃服务条件、厂家温升、机械荷载、CT负担饱和、MOA TOV/能量和接地保护配合"
+        "仍未取得完整输入，因此最终状态保持待复核。",
+    )
 
-    add_heading(doc, "7.2 额定电压与持续电流", 2)
+    add_heading(doc, "4.2 额定电压与持续电流", 2)
+    add_body(
+        doc,
+        "额定电流比较采用“候选额定值−所需职责”表示绝对裕度，并同时关注相对裕度。"
+        "对接近额定值的35kV进线/母联柜，即使算术上满足，也必须附加环境温度和厂家温升条件。",
+    )
     add_table(
         doc,
-        "表7-1 代表性设备持续电流校验",
+        "表4-1 代表性设备持续电流校验",
         ["设备/回路", "所需电流/A", "候选额定/A", "裕度/A", "结论"],
         [
             ["220kV线路断路器/\n隔离开关", "735.559", "3150", "2414.441", "预筛通过"],
@@ -1726,11 +2558,24 @@ def build_calculation_book(data: dict) -> Path:
         [4.5, 2.8, 2.7, 2.7, 2.8],
         8.8,
     )
+    add_equation(doc, "ΔI35 = 3150 − 3117.691 = 32.309 A", compact=True)
+    add_equation(doc, "δ35 = 32.309/3117.691×100% = 1.04%", compact=True)
+    add_equation(doc, "ΔI10 = 2500 − 1909.586 = 590.414 A", compact=True)
+    add_result_analysis(
+        doc,
+        "220kV设备额定电流裕度很大，35kV馈线和10kV SVG馈线采用1250A也有明显裕度。"
+        "真正控制持续电流的是35kV主变进线/母联3150A等级，只有在开关室受控不高于40℃、通风空调可靠且厂家温升资料确认时才可维持该选择。",
+    )
 
-    add_heading(doc, "7.3 开断、关合与动稳定", 2)
+    add_heading(doc, "4.3 开断、关合与动稳定", 2)
+    add_body(
+        doc,
+        "断路器额定开断电流应不小于故障初始对称电流，额定关合电流和设备峰值耐受应不小于课程峰值。"
+        "本项目候选等级为220kV 50kA/125kA、35kV和10kV 31.5kA/80kA。",
+    )
     add_table(
         doc,
-        "表7-2 开断和峰值校验",
+        "表4-2 开断和峰值校验",
         ["电压级", "所需开断/kA", "候选开断/kA", "所需峰值/kA", "候选峰值/kA", "结论"],
         [
             ["220kV", "7.385", "50", "18.798", "125", "预筛通过"],
@@ -1740,8 +2585,26 @@ def build_calculation_book(data: dict) -> Path:
         [2.1, 2.5, 2.5, 2.5, 2.6, 3.3],
         9.0,
     )
+    add_equation(doc, "220kV：50/7.385 = 6.77；125/18.798 = 6.65", compact=True)
+    add_equation(doc, "35kV：31.5/16.291 = 1.93；80/41.470 = 1.93", compact=True)
+    add_equation(doc, "10kV：31.5/15.638 = 2.01；80/39.808 = 2.01", compact=True)
+    add_result_analysis(
+        doc,
+        "三个电压等级均满足开断和峰值比较。35/10kV裕度约为2倍，足以覆盖当前课程条件职责；"
+        "若最终电网等值、变流器模型或允许并列方式使短路水平接近31.5kA，应重新审查限流措施和开关柜等级。",
+    )
 
-    add_heading(doc, "7.4 热稳定", 2)
+    add_heading(doc, "4.4 热稳定", 2)
+    thermal_method_paragraph = add_body(
+        doc,
+        "热稳定采用故障电流平方与持续时间的乘积比较。所需热效应按条件性最大短路电流和1.10s等值时间计算；"
+        "候选设备能力按额定短时耐受电流及其标称持续时间计算。",
+    )
+    thermal_method_paragraph.paragraph_format.keep_together = True
+    add_equation(doc, "Qk = Ik² teq；Qr = Ith² tr；要求Qr ≥ Qk", "4-5")
+    add_equation(doc, "220kV：7.384572²×1.10 = 59.985 kA²·s；50²×3 = 7500 kA²·s", compact=True)
+    add_equation(doc, "35kV：16.290983²×1.10 = 291.936 kA²·s；31.5²×4 = 3969 kA²·s", compact=True)
+    add_equation(doc, "10kV：15.638094²×1.10 = 269.005 kA²·s；31.5²×4 = 3969 kA²·s", compact=True)
     thermal_rows = []
     for level, ik, ith, tr in (
         ("220kV", 7.384571960617697, 50.0, 3.0),
@@ -1755,7 +2618,7 @@ def build_calculation_book(data: dict) -> Path:
         )
     add_table(
         doc,
-        "表7-3 热稳定I²t校验",
+        "表4-3 热稳定I²t校验",
         ["电压级", "Ik / kA", "Ik²t / kA²·s", "候选耐受", "Ith²tr / kA²·s", "结论"],
         thermal_rows,
         [2.3, 2.1, 2.4, 2.7, 2.8, 3.2],
@@ -1764,11 +2627,43 @@ def build_calculation_book(data: dict) -> Path:
         margin_x=75,
         margin_y=65,
     )
+    add_result_analysis(
+        doc,
+        "候选设备额定I²t均远高于课程所需值，因此热稳定不是当前开关设备等级的控制因素。"
+        "但该结论依赖1.10s等值时间；最终保护整定或断路器开断时间增加时，应按新的清除时间重新计算。",
+    )
 
-    add_heading(doc, "7.5 CT/PT、母线、MOA和接地开关课程预筛", 2)
+    add_heading(doc, "4.5 CT/PT、母线、MOA和接地开关课程预筛", 2)
+    add_heading(doc, "4.5.1 母线与导体", 3)
+    add_body(
+        doc,
+        "母线首先按持续载流量选择截面，再按铝导体热稳定常数C=87和1.10s等值时间校验。"
+        "220kV管母另利用已冻结的相距、支撑跨距和管形截面进行简化弯曲应力及电晕起始电压计算；"
+        "35/10kV矩形母线因缺少支撑机械参数，只进行载流和热稳定。",
+    )
+    add_equation(doc, "Ith,allow = C S/(1000√t)；Smin = 1000Ik√t/C", "4-6")
+    add_equation(
+        doc,
+        f"S220 = π(100²−90²)/4 = {busbars['BUS-220-TUBE-100-90']['calculated']['cross_section_area_mm2']:.3f} mm²",
+        compact=True,
+    )
+    add_equation(
+        doc,
+        f"Ith,220 = 87×{busbars['BUS-220-TUBE-100-90']['calculated']['cross_section_area_mm2']:.3f}/(1000√1.10) = "
+        f"{busbars['BUS-220-TUBE-100-90']['calculated']['thermal_allowable_current_ka']:.3f} kA",
+        compact=True,
+    )
+    add_equation(doc, "S35 = 3×125×10 = 3750 mm²；Ith,35 = 311.067 kA", compact=True)
+    add_equation(doc, "S10 = 2×125×10 = 2500 mm²；Ith,10 = 207.378 kA", compact=True)
+    add_equation(
+        doc,
+        "KT = √[(70−41)/(70−25)] = 0.802773；Iallow,220 = 2000×KT = 1605.546 A",
+        "4-7",
+        compact=True,
+    )
     add_table(
         doc,
-        "表7-4 母线课程预筛",
+        "表4-4 母线课程预筛",
         ["电压级", "课程选择", "持续电流校验", "补充校验"],
         [
             ["220kV", "铝合金管母Φ100/90mm", "1605.546＞735.559A", "热稳123.785＞7.385kA；应力10.048＜70MPa；电晕330.444＞145.492kV"],
@@ -1780,9 +2675,41 @@ def build_calculation_book(data: dict) -> Path:
         "220kV管母已做简化弯曲和电晕；35/10kV仅完成载流与热稳。支撑共振、连接金具、厂家温升及两级矩形母线机械校验仍待精确资料。",
         keep_note_with_table=True,
     )
+    add_body(
+        doc,
+        f"220kV管母简化电动力按峰值{busbars['BUS-220-TUBE-100-90']['requirements']['required_peak_current_ka']:.3f}kA、"
+        f"计算相距{busbars['BUS-220-TUBE-100-90']['calculated']['dynamic']['calculation_phase_spacing_m']:.1f}m和"
+        f"支撑跨距8.0m计算。单位长度电磁力为{busbars['BUS-220-TUBE-100-90']['calculated']['dynamic']['base_electromagnetic_force_n_per_m']:.3f}N/m，"
+        f"乘1.8动载系数后为{busbars['BUS-220-TUBE-100-90']['calculated']['dynamic']['design_force_n_per_m']:.3f}N/m。",
+    )
+    add_equation(doc, "f = 2×10⁻⁷ ip²/a；Mmax = 1.8fL²/8；σ = Mmax/W", compact=True)
+    add_equation(
+        doc,
+        f"σ = {busbars['BUS-220-TUBE-100-90']['calculated']['dynamic']['calculated_bending_stress_mpa']:.3f} MPa < 70 MPa",
+        compact=True,
+    )
+    add_equation(
+        doc,
+        f"Ucorona = {busbars['BUS-220-TUBE-100-90']['calculated']['corona']['critical_disruptive_phase_voltage_kv']:.3f} kV > "
+        f"Um/√3 = {busbars['BUS-220-TUBE-100-90']['calculated']['corona']['highest_operating_phase_voltage_kv']:.3f} kV",
+        compact=True,
+    )
+    add_result_analysis(
+        doc,
+        "220kV管母在持续、热稳定、简化弯曲和电晕四项课程校验中均有明显裕度。"
+        "35/10kV矩形母线的热稳定允许值虽远大于短路职责，但没有支撑跨距、固有频率和连接受力就不能宣称机械动稳定已完成。",
+    )
+
+    add_heading(doc, "4.5.2 金属氧化物避雷器", 3)
+    add_body(
+        doc,
+        "MOA按持续运行电压和雷电保护裕度预筛。持续运行电压要求与系统最高电压及接地方式有关；"
+        "保护裕度采用设备LIWV与避雷器雷电残压之比，课程下限取1.15。",
+    )
+    add_equation(doc, "Uc ≥ Uc,required；Kp = LIWV/Ures ≥ 1.15", "4-8")
     add_table(
         doc,
-        "表7-5 MOA参数与绝缘裕度",
+        "表4-5 MOA参数与绝缘裕度",
         ["型号", "Ur/Uc/In/残压", "课程校验", "边界"],
         [
             ["YH10W-204/532", "204/159kV；10kA；≤532kV", "Uc余13.508kV；950/532=1.786", "TOV/能量/厂家型号待核"],
@@ -1796,9 +2723,24 @@ def build_calculation_book(data: dict) -> Path:
         margin_x=75,
         margin_y=65,
     )
+    add_equation(doc, "220kV：Uc,required=252/√3=145.492kV；159−145.492=13.508kV；950/532=1.786", compact=True)
+    add_equation(doc, "35kV：Uc,required=40.5kV；40.8−40.5=0.300kV；185/134=1.381", compact=True)
+    add_equation(doc, "10kV：Uc,required=12kV；13.6−12=1.600kV；75/45=1.667", compact=True)
+    add_result_analysis(
+        doc,
+        "三种MOA均通过课程持续电压和LIWV/残压比检查。35kV Uc只余0.300kV、约0.74%，是最薄弱项；"
+        "最终必须结合非有效接地系统10s TOV、能量吸收、线路放电等级和引线压降重新确认，不能仅凭型号字符串定型。",
+    )
+
+    add_heading(doc, "4.5.3 CT、PT/CVT与零序CT", 3)
+    add_body(
+        doc,
+        "CT一次变比按持续电流职责向上选择，并同时检查短时电流、I²t和峰值耐受；芯级则按计量、测量、过流、差动及母差功能配置。"
+        "PT/CVT先确定一次/二次电压和准确级，容量、铁磁谐振与暂态响应仍由二次专业复核。电缆回路的ZCT承担剩余电流保护，与三相CT职责分开。",
+    )
     add_table(
         doc,
-        "表7-6 CT/PT课程目标",
+        "表4-6 CT/PT课程目标",
         ["对象", "一次变比/电压", "课程目标", "工程待核"],
         [
             ["220kV线路/分段CT", "1000/1A", "0.2S/0.5/5P30，按需PX；50kA/3s、125kA", "负担、饱和、拐点、暂态级"],
@@ -1815,9 +2757,40 @@ def build_calculation_book(data: dict) -> Path:
         [3.2, 3.3, 5.1, 3.9],
         7.7,
     )
+    add_body(
+        doc,
+        "例如35kV进线CT取4000/1A覆盖3117.691A，10kV进线CT取2500/1A覆盖1909.586A，"
+        "35kV馈线CT取800/1A覆盖最大546.963A。主变中性点CT不能沿用主变相回路三相短路职责，"
+        "其持续、短时、峰值和PX参数须由单相接地及零序专题确定。",
+    )
+    add_body(
+        doc,
+        "35kV五回电缆馈线采用100/1A ZCT，10kV SVG及辅助电缆馈线采用50/1A ZCT。"
+        "三相电缆芯线必须同穿零序CT窗口，屏蔽层接地回流线不得错误穿入；窗口尺寸、负担、拐点和保护整定在厂家协调阶段闭合。",
+    )
+    add_result_analysis(
+        doc,
+        "当前CT/PT/ZCT表完成了课程一次目标和短路等级接口，但尚不是订货清册。"
+        "在缺少二次负荷、电缆长度、饱和和铁磁谐振数据时，保留“目标配置、最终型号待核”比给出伪精确型号更符合初步设计深度。",
+    )
+
+    add_heading(doc, "4.5.4 接地设备、绝缘与适用性", 3)
+    add_body(
+        doc,
+        "35/10kV三角形绕组或不具中性点的系统通过ZN接地变形成中性点，并串联低电阻把单相接地电流限制在400A和200A。"
+        "电阻按相电压除以目标接地电流计算，接地变最小容量按10s等效功率和课程短时过载系数10折算。",
+    )
+    add_equation(doc, "Uφ=Un/√3；R=Uφ/Ig；Seq=UφIg；ST,min=Seq/Koverload", "4-9")
+    add_equation(doc, "35kV：Uφ=20.2073kV；R=50.518Ω；Seq=8.0829MVA；ST,min=808.290kVA", compact=True)
+    add_equation(doc, "10kV：Uφ=5.7735kV；R=28.868Ω；Seq=1.1547MVA；ST,min=115.470kVA", compact=True)
+    add_body(
+        doc,
+        "35kV选1000kVA、50.5Ω、400A/10s设备包，10kV选200kVA、28.9Ω、200A/10s设备包。"
+        "正常每段各1套；母联合闸前退出受电或故障段接地源，仅保留健康侧1套，重新分列后恢复每段1套。",
+    )
     add_table(
         doc,
-        "表7-7 绝缘、接地和适用性结论",
+        "表4-7 绝缘、接地和适用性结论",
         ["项目", "课程采用", "结论或边界"],
         [
             ["绝缘子/设备套管", "252/950、40.5/185、12/75kV；套管630/4000/2500A及本级短时/峰值", "电压、电流、短时和峰值课程检查通过；爬距、机械负荷和精确型号待厂家"],
@@ -1832,11 +2805,21 @@ def build_calculation_book(data: dict) -> Path:
         [3.4, 5.0, 7.1],
         8.1,
     )
+    add_result_analysis(
+        doc,
+        "接地设备包的电阻和容量算术已闭环，但零序阻抗、温升、NGR结构、CT饱和、保护定值和母联硬/软件联锁仍需厂家统一协调。"
+        "绝缘子、套管和接地开关已完成最高电压、LIWV、持续、短时和峰值课程检查；爬距、机械荷载、抗震和感应电流开合等级仍待精确资料。",
+    )
 
-    add_heading(doc, "7.6 最终工程复核边界", 2)
+    add_heading(doc, "4.6 最终工程复核边界", 2)
+    add_body(
+        doc,
+        "课程设计已经把可由现有输入确定的额定值、数量级和运行逻辑闭合，但初步设计不能替代设备订货和施工专题。"
+        "下表逐项说明当前完成深度及关闭最终状态所需的真实输入，避免把“计算脚本有结果”误写成“工程校验全部完成”。",
+    )
     add_table(
         doc,
-        "表7-8 尚未具备最终校验输入的项目",
+        "表4-8 尚未具备最终校验输入的项目",
         ["项目", "本课程已完成", "最终仍需输入"],
         [
             ["CT", "一次变比、芯级与短路等级目标", "负担、饱和、拐点、暂态级、二次负荷与电缆"],
@@ -1856,11 +2839,22 @@ def build_calculation_book(data: dict) -> Path:
         "上述额定值校验为课程等级预筛，不代表已取得精确订货型号。报告中应使用“预筛通过、最终型号待厂家资料”"
         "的表述，避免把缺少的数据按0处理或自动判为通过。",
     )
+    add_result_analysis(
+        doc,
+        "优先级最高的后续复核包括35kV 3150A柜温升、LGJ-400/50厂家热额定、35kV MOA TOV/能量、"
+        "35/10kV母线机械动稳定以及接地变/NGR与保护联锁。上述项目可能改变精确型号或运行限制，"
+        "但在当前课程假设下不改变主接线基本拓扑。",
+    )
 
-    add_heading(doc, "7.7 可追溯计算文件", 2)
+    add_heading(doc, "4.7 可追溯计算文件", 2)
+    add_body(
+        doc,
+        "正文中的关键数值均可追溯到结构化JSON/CSV结果及相应Python计算模块。"
+        "修改YAML输入后，应先重新生成负荷、短路和设备结果，再生成本计算书；不得只在Word表格中手工修改结果。",
+    )
     add_table(
         doc,
-        "表7-9 计算结果与脚本路径",
+        "表4-9 计算结果与脚本路径",
         ["内容", "结果文件", "计算脚本"],
         [
             ["负荷、变压器、持续电流", "results/load_and_transformer_\nresults.json", "load_and_transformers/\ncalculate.py"],
@@ -1870,10 +2864,17 @@ def build_calculation_book(data: dict) -> Path:
             ["设备预筛", "results/equipment_selection/\nequipment_selection_results.json", "equipment_selection/\ncalculate.py"],
         ],
         [3.2, 6.6, 5.7],
-        8.3,
+        8.1,
         "表中路径均相对于 calculations/ 目录。",
+        margin_x=70,
+        margin_y=45,
     )
-    add_references(doc, REFERENCES)
+    add_result_analysis(
+        doc,
+        "可追溯文件用于复算和一致性检查，正式报告仍保留了公式、代入和工程解释，因此即使不运行代码，"
+        "读者也能够检查主要计算链；脚本的作用是减少重复运算和数值漂移，而不是用程序输出替代课程设计论证。",
+    )
+    add_references(doc, REFERENCES, page_break_before=False)
 
     path = REPORT_DIR / "02_220kV新能源汇集变电所_技术设计计算书.docx"
     finalize_document(doc, path)
@@ -1927,7 +2928,7 @@ def build_course_summary(data: dict) -> Path:
         "表1 设计质量控制结果",
         ["检查项", "结果"],
         [
-            ["自动化测试", "当前CAD/设备源阶段62项通过；正式再生成后以最新全量结果为准"],
+            ["自动化测试", "当前全量70项通过；正式再生成后仍以最新全量结果为准"],
             ["项目健康检查", "当前68条检查通过；正式再生成后重新执行"],
             ["图纸一致性", "四图回路、设备链、编号、净距和几何基线一致"],
             ["公开仓库边界", "任务书、模板、课程资料和个人字段未公开"],
